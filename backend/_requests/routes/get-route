@@ -1,0 +1,2 @@
+#!/bin/sh
+curl --header @headers.txt http://localhost:8080/routes/1
