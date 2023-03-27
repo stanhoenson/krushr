@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"github.com/stanhoenson/krushr/internal/handlers"
+	"github.com/gin-gonic/gin"
+)
+
+func setupRouter() *gin.Engine {
+	r := gin.Default()
+	handlers.InitHandlers(r)
+	return r
+}
 
 func main() {
-	fmt.Println("Hello, world.")
+	r := setupRouter()
+	r.Run(":8080")
 }

@@ -1,4 +1,4 @@
-package main
+package models
 
 type Route struct {
 	ID       string `json:"id"`

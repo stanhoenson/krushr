@@ -1,22 +1,22 @@
-package main
+package handlers
 
 import (
-	"net/http"
-
+	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-var routes = []Route{
+var routes = []models.Route{
 	{ID: "0", Title: "Bernard's Route", StatusID: "0", UserID: "2"},
 	{ID: "1", Title: "Het Pad der 7 Zonden", StatusID: "0", UserID: "1"},
 	{ID: "2", Title: "Reflecties en Introspecties", StatusID: "1", UserID: "2"},
 }
 
-func GetRoutes(c *gin.Context) {
+func getRoutes(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, routes)
 }
 
-func GetRouteByID(c *gin.Context) {
+func getRouteByID(c *gin.Context) {
 	id := c.Param("id")
 
 	for _, r := range routes {
@@ -28,8 +28,8 @@ func GetRouteByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "route not found"})
 }
 
-func PostRoutes(c *gin.Context) {
-	var newRoute Route
+func postRoutes(c *gin.Context) {
+	var newRoute models.Route
 
 	if err := c.BindJSON(&newRoute); err != nil {
 		return
@@ -37,4 +37,16 @@ func PostRoutes(c *gin.Context) {
 
 	routes = append(routes, newRoute)
 	c.IndentedJSON(http.StatusCreated, newRoute)
+}
+
+func Routes(r *gin.Engine) {
+	routes := r.Group("/routes")
+	{
+
+		routes.GET("/", getRoutes)
+		routes.POST("/", postRoutes)
+		routes.GET("/:id", getRouteByID)
+
+	}
+
 }
