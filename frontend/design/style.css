@@ -58,6 +58,7 @@ header nav a {
 	border-radius: var(--space-2xs);
 }
 
-header nav a:hover {
+header nav a:hover,
+header nav a.active {
 	background-color: hsl(0, 0%, 91%);
 }
