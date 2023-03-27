@@ -2,11 +2,16 @@ package main
 
 import "github.com/gin-gonic/gin"
 
-func main() {
-	router := gin.Default()
-	router.GET("/routes", GetRoutes)
-	router.GET("/routes/:id", GetRouteByID)
-	router.POST("/routes", PostRoutes)
+func setupRouter() *gin.Engine {
+	r := gin.Default()
+	r.GET("/routes", GetRoutes)
+	r.GET("/routes/:id", GetRouteByID)
+	r.POST("/routes", PostRoutes)
 
-	router.Run("localhost:8080")
+	r.Run("localhost:8080")
+}
+
+func main() {
+	r := setupRouter()
+	r.Run(":8080")
 }
