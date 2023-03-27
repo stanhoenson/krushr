@@ -5,13 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	handlers.InitHandlers(r)
-	return r
-}
-
 func main() {
-	r := setupRouter()
-	r.Run(":8080")
+	var app = CreateApp()
 }
