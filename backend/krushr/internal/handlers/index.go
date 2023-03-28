@@ -6,5 +6,4 @@ import (
 
 func InitializeHandlers(r *gin.Engine) {
 	Routes(r)
-
 }

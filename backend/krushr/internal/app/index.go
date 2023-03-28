@@ -12,12 +12,11 @@ type App struct {
 }
 
 func CreateApp() (*App, error) {
-
-	var newConfig, err = config.NewConfig()
+	newConfig, err := config.NewConfig()
 	if err != nil {
 		panic("couldn't create config")
 	}
-	var app = App{
+	app := App{
 		config: newConfig,
 	}
 
@@ -25,11 +24,9 @@ func CreateApp() (*App, error) {
 }
 
 func Initialize(app *App) {
-
 	r := gin.Default()
 	handlers.InitializeHandlers(r)
-	 database.InitializeDatabase(&app.config.Database)
-	
+	database.InitializeDatabase(&app.config.Database)
 
 	r.Run()
 }

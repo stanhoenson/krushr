@@ -6,7 +6,6 @@ import (
 )
 
 func GetRoutes() []models.Route {
-
 	var routes []models.Route
 
 	result := database.Db.Find(&routes)

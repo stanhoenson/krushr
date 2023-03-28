@@ -6,7 +6,6 @@ import (
 )
 
 func GetRoutes() []models.Route {
-
-	var routes = repositories.GetRoutes()
+	routes := repositories.GetRoutes()
 	return routes
 }

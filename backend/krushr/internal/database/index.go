@@ -10,10 +10,9 @@ import (
 var Db *gorm.DB
 
 func InitializeDatabase(databaseConfig *config.DatabaseConfig) {
+	db, err := gorm.Open(sqlite.Open(databaseConfig.Name))
 
-	var db, err = gorm.Open(sqlite.Open(databaseConfig.Name))
-
-	//TODO look at ways to do this nicely
+	// TODO look at ways to do this nicely
 	db.AutoMigrate(&models.Route{})
 
 	if err != nil {
@@ -21,5 +20,4 @@ func InitializeDatabase(databaseConfig *config.DatabaseConfig) {
 	}
 
 	Db = db
-
 }

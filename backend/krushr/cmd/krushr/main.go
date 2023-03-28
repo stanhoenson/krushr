@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	var newApp, err = app.CreateApp()
+	newApp, err := app.CreateApp()
 	if err != nil {
 		panic("couldn't create app")
 	}

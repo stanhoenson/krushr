@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/stanhoenson/krushr/internal/models"
@@ -15,8 +16,8 @@ var routes = []models.Route{
 }
 
 func getRoutes(c *gin.Context) {
-
-	var routes = services.GetRoutes()
+	routes := services.GetRoutes()
+	fmt.Println(routes)
 	c.IndentedJSON(http.StatusOK, routes)
 }
 
@@ -46,11 +47,8 @@ func postRoutes(c *gin.Context) {
 func Routes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
-
-		routes.GET("/", getRoutes)
-		routes.POST("/", postRoutes)
+		routes.GET("", getRoutes)
+		routes.POST("", postRoutes)
 		routes.GET("/:id", getRouteByID)
-
 	}
-
 }
