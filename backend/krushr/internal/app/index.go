@@ -1,16 +1,35 @@
+package app
 
-func CreateApp(config *config.Config) (*App, error) {
+import (
+	"github.com/stanhoenson/krushr/internal/config"
+	"github.com/stanhoenson/krushr/internal/database"
+	"github.com/stanhoenson/krushr/internal/handlers"
+	"github.com/gin-gonic/gin"
+)
 
+type App struct {
+	config *config.Config
 }
 
-func Initialize() *gin.Engine {
+func CreateApp() (*App, error) {
+
+	var newConfig, err = config.NewConfig()
+	if err != nil {
+		panic("couldn't create config")
+	}
+	var app = App{
+		config: newConfig,
+	}
+
+	return &app, nil
+}
+
+func Initialize(app *App) {
+
 	r := gin.Default()
-	handlers.InitHandlers(r)
+	handlers.InitializeHandlers(r)
+	 database.InitializeDatabase(&app.config.Database)
+	
 
-	return r
-}
-
-func Run() {
-	r := initRouter()
-	r.Run(":8080")
+	r.Run()
 }

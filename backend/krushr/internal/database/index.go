@@ -2,14 +2,24 @@ package database
 
 import (
 	"github.com/stanhoenson/krushr/internal/config"
+	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-func initializeDatabase(databaseConfig *config.DatabaseConfig) (*gorm.DB, error) {
+var Db *gorm.DB
+
+func InitializeDatabase(databaseConfig *config.DatabaseConfig) {
 
 	var db, err = gorm.Open(sqlite.Open(databaseConfig.Name))
 
-	return db, err
+	//TODO look at ways to do this nicely
+	db.AutoMigrate(&models.Route{})
+
+	if err != nil {
+		panic("failed to initialize database")
+	}
+
+	Db = db
 
 }

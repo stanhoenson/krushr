@@ -1,9 +1,11 @@
 package handlers
 
 import (
-	"github.com/stanhoenson/krushr/internal/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/stanhoenson/krushr/internal/models"
+	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/gin-gonic/gin"
 )
 
 var routes = []models.Route{
@@ -13,6 +15,8 @@ var routes = []models.Route{
 }
 
 func getRoutes(c *gin.Context) {
+
+	var routes = services.GetRoutes()
 	c.IndentedJSON(http.StatusOK, routes)
 }
 

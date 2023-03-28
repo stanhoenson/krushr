@@ -9,8 +9,9 @@ type Config struct {
 	Database DatabaseConfig
 }
 
+// TODO maybe change the way this is done it is a little bit weird to be creating Configs
+// MOCK FOR NOW EITHER USE https://github.com/joho/godotenv OR https://github.com/spf13/viper
 func NewConfig() (*Config, error) {
-	//MOCK FOR NOW EITHER USE https://github.com/joho/godotenv OR https://github.com/spf13/viper
 
 	return &Config{
 		Port: 8080,
