@@ -9,11 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var routes = []models.Route{
-	{ID: "0", Title: "Bernard's Route", StatusID: "0", UserID: "2"},
-	{ID: "1", Title: "Het Pad der 7 Zonden", StatusID: "0", UserID: "1"},
-	{ID: "2", Title: "Reflecties en Introspecties", StatusID: "1", UserID: "2"},
-}
+// var routes = []models.Route{
+// 	{ID: "0", Title: "Bernard's Route", StatusID: "0", UserID: "2"},
+// 	{ID: "1", Title: "Het Pad der 7 Zonden", StatusID: "0", UserID: "1"},
+// 	{ID: "2", Title: "Reflecties en Introspecties", StatusID: "1", UserID: "2"},
+// }
 
 func getRoutes(c *gin.Context) {
 	routes := services.GetRoutes()
@@ -22,14 +22,14 @@ func getRoutes(c *gin.Context) {
 }
 
 func getRouteByID(c *gin.Context) {
-	id := c.Param("id")
+	// id := c.Param("id")
 
-	for _, r := range routes {
-		if r.ID == id {
-			c.IndentedJSON(http.StatusOK, r)
-			return
-		}
-	}
+	// for _, r := range routes {
+	// 	if r.ID == id {
+	// 		c.IndentedJSON(http.StatusOK, r)
+	// 		return
+	// 	}
+	// }
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "route not found"})
 }
 
@@ -40,7 +40,7 @@ func postRoutes(c *gin.Context) {
 		return
 	}
 
-	routes = append(routes, newRoute)
+	// routes = append(routes, newRoute)
 	c.IndentedJSON(http.StatusCreated, newRoute)
 }
 
