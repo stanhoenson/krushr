@@ -5,9 +5,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 )
 
-func GetRoutes() []models.Route {
-	routes := repositories.GetRoutes()
-	return routes
+func GetStatuses() []models.Status {
+	statuses := repositories.GetStatuses()
+	return statuses
 }
-
-
