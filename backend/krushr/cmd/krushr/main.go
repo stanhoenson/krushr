@@ -5,9 +5,5 @@ import (
 )
 
 func main() {
-	newApp, err := app.CreateApp()
-	if err != nil {
-		panic("couldn't create app")
-	}
-	app.Initialize(newApp)
+	app.Initialize()
 }

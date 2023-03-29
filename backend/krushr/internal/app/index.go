@@ -1,32 +1,39 @@
 package app
 
 import (
-	"github.com/stanhoenson/krushr/internal/config"
+	"log"
+	"os"
+
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/handlers"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-type App struct {
-	config *config.Config
-}
+// func CreateApp() (*App, error) {
+// 	newConfig, err := config.NewConfig()
+// 	if err != nil {
+// 		panic("couldn't create config")
+// 	}
+// 	app := App{
+// 		config: newConfig,
+// 	}
 
-func CreateApp() (*App, error) {
-	newConfig, err := config.NewConfig()
+// 	return &app, nil
+// }
+
+func Initialize() {
+	err := godotenv.Load()
 	if err != nil {
-		panic("couldn't create config")
+		log.Fatal("Error loading .env file")
 	}
-	app := App{
-		config: newConfig,
-	}
-
-	return &app, nil
-}
-
-func Initialize(app *App) {
 	r := gin.Default()
 	handlers.InitializeHandlers(r)
-	database.InitializeDatabase(&app.config.Database)
+	database.InitializeDatabase()
 
-	r.Run()
+	address := os.Getenv("ADDRESS")
+	if address == "" {
+		panic("failed to load environment variable")
+	}
+	r.Run(address)
 }
