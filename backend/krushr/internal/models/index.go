@@ -62,7 +62,7 @@ type Category struct {
 	Icon             string             `gorm:"not null" json:"icon"`
 	Weight           int                `gorm:"not null" json:"weight"`
 	TypeID           uint               `json:"type_id"`
-        Type Type `json:"type"`
+	Type             Type               `json:"type"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:categories_points_of_interest" json:"points_of_interest"`
 	Routes           []*Route           `gorm:"many2many:categories_routes" json:"routes"`
 }
