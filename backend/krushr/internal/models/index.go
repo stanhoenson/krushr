@@ -5,7 +5,7 @@ type User struct {
 	Email    string `gorm:"not null" json:"email"`
 	Password string `gorm:"not null" json:"-"`
 	RoleID   uint   `gorm:"not null" json:"role_id"`
-	Role     Role   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"role"`
+	Role     Role   `json:"role"`
 }
 
 type Role struct {
@@ -17,7 +17,9 @@ type Route struct {
 	ID               uint               `gorm:"primaryKey" json:"id"`
 	Title            string             `gorm:"not null" json:"title"`
 	StatusID         uint               `gorm:"not null" json:"status_id"`
+	Status           Status             `json:"status"`
 	UserID           uint               `gorm:"not null" json:"user_id"`
+	User             User               `json:"user"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:routes_points_of_interest" json:"points_of_interest"`
 	Entries          []*Entry           `gorm:"many2many:entries_routes" json:"entries"`
 	Categories       []*Category        `gorm:"many2many:categories_routes" json:"categories"`
@@ -49,6 +51,7 @@ type Entry struct {
 	Content          string             `gorm:"not null" json:"content"`
 	Hyperlink        string             `gorm:"not null" json:"hyperlink"`
 	TypeID           uint               `gorm:"not null" json:"type_id"`
+	Type             Type               `json:"type"`
 	Routes           []*Route           `gorm:"many2many:entries_routes" json:"routes"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:entries_points_of_interest" json:"points_of_interest"`
 }
@@ -59,6 +62,7 @@ type Category struct {
 	Icon             string             `gorm:"not null" json:"icon"`
 	Weight           int                `gorm:"not null" json:"weight"`
 	TypeID           uint               `json:"type_id"`
+        Type Type `json:"type"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:categories_points_of_interest" json:"points_of_interest"`
 	Routes           []*Route           `gorm:"many2many:categories_routes" json:"routes"`
 }
