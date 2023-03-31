@@ -17,7 +17,6 @@ import (
 
 func getRoutes(c *gin.Context) {
 	routes, err := services.GetRoutes()
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
 		return
@@ -27,7 +26,6 @@ func getRoutes(c *gin.Context) {
 
 func getRouteByID(c *gin.Context) {
 	u64, err := strconv.ParseUint(c.Param("id"), 10, 64)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
 		return
@@ -35,7 +33,6 @@ func getRouteByID(c *gin.Context) {
 	ID := uint(u64)
 
 	route, err := services.GetRouteByID(ID)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
 		return
