@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
@@ -16,21 +16,32 @@ import (
 // }
 
 func getRoutes(c *gin.Context) {
-	routes := services.GetRoutes()
-	fmt.Println(routes)
+	routes, err := services.GetRoutes()
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
+		return
+	}
 	c.IndentedJSON(http.StatusOK, routes)
 }
 
 func getRouteByID(c *gin.Context) {
-	// id := c.Param("id")
+	u64, err := strconv.ParseUint(c.Param("id"), 10, 64)
 
-	// for _, r := range routes {
-	// 	if r.ID == id {
-	// 		c.IndentedJSON(http.StatusOK, r)
-	// 		return
-	// 	}
-	// }
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "route not found"})
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
+		return
+	}
+	ID := uint(u64)
+
+	route, err := services.GetRouteByID(ID)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, route)
 }
 
 func postRoutes(c *gin.Context) {
@@ -44,7 +55,7 @@ func postRoutes(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newRoute)
 }
 
-func Routes(r *gin.Engine) {
+func RoutesRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
 		routes.GET("", getRoutes)

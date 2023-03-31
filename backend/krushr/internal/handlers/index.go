@@ -5,5 +5,6 @@ import (
 )
 
 func InitializeHandlers(r *gin.Engine) {
-	Routes(r)
+	RoutesRoutes(r)
+	PointsOfInterestRoutes(r)
 }
