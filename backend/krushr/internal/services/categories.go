@@ -9,3 +9,4 @@ func GetCategories() []models.Category {
 	categories := repositories.GetCategories()
 	return categories
 }
+
