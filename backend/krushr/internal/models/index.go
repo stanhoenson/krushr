@@ -33,8 +33,8 @@ type Status struct {
 type PointOfInterest struct {
 	ID         uint        `gorm:"primaryKey" json:"id"`
 	Title      string      `gorm:"not null" json:"title"`
-	Longitude  float64     `gorm:"type:decimal(9,6)" json:"longitude,string"`
-	Latitude   float64     `gorm:"type:decimal(9,6)" json:"latitude,string"`
+	Longitude  float64     `gorm:"type:decimal(9,6)" json:"longitude"`
+	Latitude   float64     `gorm:"type:decimal(9,6)" json:"latitude"`
 	Categories []*Category `gorm:"many2many:categories_points_of_interest" json:"categories"`
 	Routes     []*Route    `gorm:"many2many:routes_points_of_interest" json:"routes"`
 	Entries    []*Entry    `gorm:"many2many:entries_points_of_interest" json:"entries"`

@@ -44,7 +44,6 @@ func postPointOfInterest(c *gin.Context) {
 	if err := c.BindJSON(&newPointOfInterest); err != nil {
 
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
-		// c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 
@@ -52,7 +51,6 @@ func postPointOfInterest(c *gin.Context) {
 
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
-		// c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
