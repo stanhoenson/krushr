@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
-func GetPointsOfInterest(c *gin.Context) {
+func getPointsOfInterest(c *gin.Context) {
 
 	pointsOfInterest, err := services.GetPointsOfInterest()
 	if err != nil {
@@ -18,7 +19,7 @@ func GetPointsOfInterest(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, pointsOfInterest)
 }
 
-func GetPointOfInterestByID(c *gin.Context) {
+func getPointOfInterestByID(c *gin.Context) {
 	u64, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		//return error
@@ -36,10 +37,34 @@ func GetPointOfInterestByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, pointsOfInterest)
 }
 
+func postPointOfInterest(c *gin.Context) {
+
+	var newPointOfInterest models.PointOfInterest
+
+	if err := c.BindJSON(&newPointOfInterest); err != nil {
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
+		// c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	createdPoi, err := services.CreateEntity(&newPointOfInterest)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
+		// c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, createdPoi)
+
+}
+
 func PointsOfInterestRoutes(r *gin.Engine) {
 	routes := r.Group("/points-of-interest")
 	{
-		routes.GET("", GetPointsOfInterest)
-		routes.GET("/:id", GetPointOfInterestByID)
+		routes.GET("", getPointsOfInterest)
+		routes.GET("/:id", getPointOfInterestByID)
+		routes.POST("", postPointOfInterest)
 	}
 }
