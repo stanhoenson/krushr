@@ -6,6 +6,7 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,15 +21,17 @@ func getPointsOfInterest(c *gin.Context) {
 }
 
 func getPointOfInterestByID(c *gin.Context) {
-	u64, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	id := c.Param("id")
+
+	// Convert string to uint
+	u64, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
-		//return error
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
 		return
 	}
 	ID := uint(u64)
 
-	pointsOfInterest, err := services.GetPointOfInterest(ID)
+	pointsOfInterest, err := services.GetEntity[models.PointOfInterest](ID)
 
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving point of interest"})
@@ -43,7 +46,13 @@ func postPointOfInterest(c *gin.Context) {
 
 	if err := c.BindJSON(&newPointOfInterest); err != nil {
 
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := validators.ValidatePostPointOfInterest(&newPointOfInterest); err != nil {
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

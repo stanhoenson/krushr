@@ -6,6 +6,7 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,20 +26,45 @@ func getRoutes(c *gin.Context) {
 }
 
 func getRouteByID(c *gin.Context) {
-	u64, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	id := c.Param("id")
+
+	// Convert string to uint
+	u64, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
 		return
 	}
 	ID := uint(u64)
 
-	route, err := services.GetRouteByID(ID)
+	route, err := services.GetEntity[models.Route](ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, route)
+}
+func postRoute(c *gin.Context) {
+	var newRoute models.Route
+
+	if err := c.BindJSON(&newRoute); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := validators.ValidatePostRoute(&newRoute); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	createdRoute, err := services.CreateEntity(&newRoute)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, createdRoute)
 }
 
 func postRoutes(c *gin.Context) {
@@ -56,7 +82,7 @@ func RoutesRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
 		routes.GET("", getRoutes)
-		routes.POST("", postRoutes)
+		routes.POST("", postRoute)
 		routes.GET("/:id", getRouteByID)
 	}
 }

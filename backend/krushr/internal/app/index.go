@@ -6,6 +6,7 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/handlers"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -28,6 +29,7 @@ func Initialize() {
 		log.Fatal("Error loading .env file")
 	}
 	r := gin.Default()
+	validators.InitializeValidators()
 	handlers.InitializeHandlers(r)
 	database.InitializeDatabase()
 
