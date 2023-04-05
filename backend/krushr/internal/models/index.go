@@ -1,5 +1,7 @@
 package models
 
+//TODO add validation tags https://github.com/go-playground/validator
+
 type User struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
 	Email    string `gorm:"not null" json:"email"`
