@@ -40,6 +40,17 @@ func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 
 	return entity, nil
 }
+func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+	var entity T
+
+	result := database.Db.Delete(&entity, ID)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &entity, nil
+}
 
 func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
 
@@ -54,7 +65,7 @@ func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 
 // Plural
 
-func GetEntites[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
+func GetEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
 	var entities []T
 
 	result := database.Db.Find(&entities)

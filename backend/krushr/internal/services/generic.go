@@ -14,35 +14,40 @@ func GetEntity[T models.Category | models.Entry | models.PointOfInterest | model
 
 func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
 
-	return repositories.CreateEntity[T](entity)
+	return repositories.CreateEntity(entity)
 }
 
 func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
 
-	return repositories.DeleteEntity[T](entity)
+	return repositories.DeleteEntity(entity)
+}
+
+func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+
+	return repositories.DeleteEntityByID[T](ID)
 }
 
 func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
 
-	return repositories.UpdateEntity[T](entity)
+	return repositories.UpdateEntity(entity)
 }
 
 // Plural
 
 func GetEntites[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
 
-	return repositories.GetEntites[T]()
+	return repositories.GetEntities[T]()
 }
 
 func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
 
-	return repositories.CreateEntities[T](entities)
+	return repositories.CreateEntities(entities)
 }
 
 func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
-	return repositories.DeleteEntities[T](entities)
+	return repositories.DeleteEntities(entities)
 }
 
 func UpdateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
-	return repositories.UpdateEntities[T](entities)
+	return repositories.UpdateEntities(entities)
 }
