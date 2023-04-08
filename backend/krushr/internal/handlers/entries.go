@@ -11,7 +11,6 @@ import (
 )
 
 func putEntry(c *gin.Context) {
-
 	var updatedEntry models.Entry
 
 	if err := c.BindJSON(&updatedEntry); err != nil {
@@ -25,7 +24,6 @@ func putEntry(c *gin.Context) {
 	}
 
 	_, err := services.UpdateEntity(&updatedEntry)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating entry"})
 		return
@@ -35,7 +33,6 @@ func putEntry(c *gin.Context) {
 }
 
 func deleteEntryByID(c *gin.Context) {
-
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -54,14 +51,15 @@ func deleteEntryByID(c *gin.Context) {
 }
 
 func getEntries(c *gin.Context) {
-
 	entries, err := services.GetEntites[models.Entry]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving entries"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, entries)
 }
+
 func getEntryByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -80,8 +78,8 @@ func getEntryByID(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, entry)
 }
-func postEntry(c *gin.Context) {
 
+func postEntry(c *gin.Context) {
 	var newEntry models.Entry
 
 	if err := c.BindJSON(&newEntry); err != nil {
@@ -95,15 +93,14 @@ func postEntry(c *gin.Context) {
 	}
 
 	createdEntry, err := services.CreateEntity(&newEntry)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating entry"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, createdEntry)
-
 }
+
 func EntriesRoutes(r *gin.Engine) {
 	routes := r.Group("/entries")
 	{

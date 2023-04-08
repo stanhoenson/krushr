@@ -1,7 +1,6 @@
 package models
 
-//TODO add validation tags https://github.com/go-playground/validator
-
+// TODO add validation tags https://github.com/go-playground/validator
 type User struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
 	Email    string `gorm:"not null" json:"email"`
@@ -68,28 +67,3 @@ type Category struct {
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:categories_points_of_interest" json:"points_of_interest"`
 	Routes           []*Route           `gorm:"many2many:categories_routes" json:"routes"`
 }
-
-// type RoutesPointsOfInterest struct {
-// 	RouteID           uint `gorm:"primaryKey" json:"route_id"`
-// 	PointOfInterestID uint `gorm:"primaryKey" json:"point_of_interest_id"`
-// }
-
-// type EntriesRoutes struct {
-// 	EntryID uint `gorm:"primaryKey" json:"entry_id"`
-// 	RouteID uint `gorm:"primaryKey" json:"route_id"`
-// }
-
-// type EntriesPointsOfInterest struct {
-// 	EntryID           uint `gorm:"primaryKey" json:"entry_id"`
-// 	PointOfInterestID uint `gorm:"primaryKey" json:"point_of_interest_id"`
-// }
-
-// type CategoriesRoutes struct {
-// 	CategoryID uint `gorm:"primaryKey" json:"category_id"`
-// 	RouteID    uint `gorm:"primaryKey" json:"route_id"`
-// }
-
-// type CategoriesPointsOfInterest struct {
-// 	CategoryID        uint `gorm:"primaryKey" json:"category_id"`
-// 	PointOfInterestID uint `gorm:"primaryKey" json:"point_of_interest_id"`
-// }

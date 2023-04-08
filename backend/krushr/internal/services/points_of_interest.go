@@ -6,12 +6,9 @@ import (
 )
 
 func GetPointsOfInterest() (*[]models.PointOfInterest, error) {
-
 	return repositories.GetPointsOfInterest()
-
 }
 
 func GetPointOfInterest(ID uint) (*models.PointOfInterest, error) {
-
 	return repositories.GetPointOfInterest(ID)
 }

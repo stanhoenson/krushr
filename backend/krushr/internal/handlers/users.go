@@ -11,7 +11,6 @@ import (
 )
 
 func putUser(c *gin.Context) {
-
 	var updatedUser models.User
 
 	if err := c.BindJSON(&updatedUser); err != nil {
@@ -25,7 +24,6 @@ func putUser(c *gin.Context) {
 	}
 
 	_, err := services.UpdateEntity(&updatedUser)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating user"})
 		return
@@ -33,8 +31,8 @@ func putUser(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, updatedUser)
 }
-func deleteUserByID(c *gin.Context) {
 
+func deleteUserByID(c *gin.Context) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -49,16 +47,17 @@ func deleteUserByID(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting user"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, deletedUser)
 }
 
 func getUsers(c *gin.Context) {
-
 	users, err := services.GetEntites[models.User]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving users"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, users)
 }
 
@@ -76,7 +75,6 @@ func postUser(c *gin.Context) {
 	}
 
 	createdUser, err := services.CreateEntity(&newUser)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating user"})
 		return

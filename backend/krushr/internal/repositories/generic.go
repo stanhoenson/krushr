@@ -5,8 +5,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
-//Singular
-
+// Singular
 func GetEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
 	var entity T
 
@@ -20,7 +19,6 @@ func GetEntity[T models.Category | models.Entry | models.PointOfInterest | model
 }
 
 func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
-
 	result := database.Db.Create(&entity)
 
 	if result.Error != nil {
@@ -31,7 +29,6 @@ func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 }
 
 func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
-
 	result := database.Db.Delete(&entity)
 
 	if result.Error != nil {
@@ -40,6 +37,7 @@ func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 
 	return entity, nil
 }
+
 func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
 	var entity T
 
@@ -53,7 +51,6 @@ func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest 
 }
 
 func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
-
 	result := database.Db.Updates(&entity)
 
 	if result.Error != nil {
@@ -64,7 +61,6 @@ func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 }
 
 // Plural
-
 func GetEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
 	var entities []T
 
@@ -78,7 +74,6 @@ func GetEntities[T models.Category | models.Entry | models.PointOfInterest | mod
 }
 
 func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
-
 	result := database.Db.Create(&entities)
 
 	if result.Error != nil {
@@ -89,7 +84,6 @@ func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | 
 }
 
 func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
-
 	result := database.Db.Delete(&entities)
 
 	if result.Error != nil {
@@ -100,7 +94,6 @@ func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | 
 }
 
 func UpdateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
-
 	result := database.Db.Updates(&entities)
 
 	if result.Error != nil {

@@ -11,23 +11,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// func CreateApp() (*App, error) {
-// 	newConfig, err := config.NewConfig()
-// 	if err != nil {
-// 		panic("couldn't create config")
-// 	}
-// 	app := App{
-// 		config: newConfig,
-// 	}
-
-// 	return &app, nil
-// }
-
 func Initialize() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
 	r := gin.Default()
 	validators.InitializeValidators()
 	handlers.InitializeHandlers(r)
@@ -37,5 +26,6 @@ func Initialize() {
 	if address == "" {
 		panic("failed to load environment variable")
 	}
+
 	r.Run(address)
 }

@@ -16,6 +16,7 @@ func GetPointsOfInterest() (*[]models.PointOfInterest, error) {
 
 	return &pointsOfInterest, nil
 }
+
 func GetPointOfInterest(ID uint) (*models.PointOfInterest, error) {
 	var pointOfInterest models.PointOfInterest
 

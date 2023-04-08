@@ -10,14 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// var routes = []models.Route{
-// 	{ID: "0", Title: "Bernard's Route", StatusID: "0", UserID: "2"},
-// 	{ID: "1", Title: "Het Pad der 7 Zonden", StatusID: "0", UserID: "1"},
-// 	{ID: "2", Title: "Reflecties en Introspecties", StatusID: "1", UserID: "2"},
-// }
-
 func putRoute(c *gin.Context) {
-
 	var updatedRoute models.Route
 
 	if err := c.BindJSON(&updatedRoute); err != nil {
@@ -31,7 +24,6 @@ func putRoute(c *gin.Context) {
 	}
 
 	_, err := services.UpdateEntity(&updatedRoute)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating route"})
 		return
@@ -39,8 +31,8 @@ func putRoute(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, updatedRoute)
 }
-func deleteRouteByID(c *gin.Context) {
 
+func deleteRouteByID(c *gin.Context) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -55,6 +47,7 @@ func deleteRouteByID(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting route"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, deletedRoute)
 }
 
@@ -64,6 +57,7 @@ func getRoutes(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, routes)
 }
 
@@ -86,6 +80,7 @@ func getRouteByID(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, route)
 }
+
 func postRoute(c *gin.Context) {
 	var newRoute models.Route
 
@@ -100,7 +95,6 @@ func postRoute(c *gin.Context) {
 	}
 
 	createdRoute, err := services.CreateEntity(&newRoute)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route"})
 		return
@@ -116,7 +110,6 @@ func postRoutes(c *gin.Context) {
 		return
 	}
 
-	// routes = append(routes, newRoute)
 	c.IndentedJSON(http.StatusCreated, newRoute)
 }
 

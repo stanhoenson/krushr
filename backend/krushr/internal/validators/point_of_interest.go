@@ -27,6 +27,7 @@ func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
 
 	return nil
 }
+
 func ValidatePostPointOfInterest(poi *models.PointOfInterest) error {
 	if poi.Title == "" {
 		return errors.New("title is required")

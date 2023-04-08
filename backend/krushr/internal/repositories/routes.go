@@ -18,7 +18,6 @@ func GetRoutes() (*[]models.Route, error) {
 }
 
 func GetRouteById(ID uint) (*models.Route, error) {
-
 	var route models.Route
 
 	result := database.Db.First(route)

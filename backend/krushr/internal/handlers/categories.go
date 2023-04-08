@@ -11,7 +11,6 @@ import (
 )
 
 func putCategory(c *gin.Context) {
-
 	var updatedCategory models.Category
 
 	if err := c.BindJSON(&updatedCategory); err != nil {
@@ -25,7 +24,6 @@ func putCategory(c *gin.Context) {
 	}
 
 	_, err := services.UpdateEntity(&updatedCategory)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating category"})
 		return
@@ -35,7 +33,6 @@ func putCategory(c *gin.Context) {
 }
 
 func deleteCategoryByID(c *gin.Context) {
-
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -50,16 +47,17 @@ func deleteCategoryByID(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting category"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, deletedCategory)
 }
 
 func getCategories(c *gin.Context) {
-
 	categories, err := services.GetEntites[models.Category]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving categories"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, categories)
 }
 
@@ -77,7 +75,6 @@ func postCategory(c *gin.Context) {
 	}
 
 	createdCategory, err := services.CreateEntity(&newCategory)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating category"})
 		return
@@ -85,6 +82,7 @@ func postCategory(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, createdCategory)
 }
+
 func CategoriesRoutes(r *gin.Engine) {
 	routes := r.Group("/categories")
 	{

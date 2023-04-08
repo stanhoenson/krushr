@@ -27,6 +27,7 @@ func ValidatePutRoute(route *models.Route) error {
 
 	return nil
 }
+
 func ValidatePostRoute(route *models.Route) error {
 	if route.Title == "" {
 		return errors.New("title is required")

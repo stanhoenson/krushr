@@ -24,6 +24,7 @@ func ValidatePostUser(user *models.User) error {
 
 	return nil
 }
+
 func ValidatePutUser(user *models.User) error {
 	if user.Email == "" {
 		return errors.New("email is required")

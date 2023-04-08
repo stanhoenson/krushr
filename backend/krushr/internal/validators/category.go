@@ -27,6 +27,7 @@ func ValidatePostCategory(category *models.Category) error {
 
 	return nil
 }
+
 func ValidatePutCategory(category *models.Category) error {
 	if category.Category == "" {
 		return errors.New("category is required")

@@ -23,6 +23,7 @@ func ValidatePostEntry(entry *models.Entry) error {
 
 	return nil
 }
+
 func ValidatePutEntry(entry *models.Entry) error {
 	if entry.Content == "" {
 		return errors.New("content is required")

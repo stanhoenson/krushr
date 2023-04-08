@@ -7,7 +7,6 @@ import (
 
 func GetRoutes() (*[]models.Route, error) {
 	return repositories.GetRoutes()
-
 }
 
 func GetRouteByID(ID uint) (*models.Route, error) {
