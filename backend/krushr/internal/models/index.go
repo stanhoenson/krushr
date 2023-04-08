@@ -4,7 +4,7 @@ package models
 type User struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
 	Email    string `gorm:"not null" json:"email"`
-	Password string `gorm:"not null" json:"-"`
+	Password string `gorm:"not null" json:"password"`
 	RoleID   uint   `gorm:"not null" json:"role_id"`
 	Role     Role   `json:"role"`
 }

@@ -7,6 +7,28 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
+func ValidateSignUp(user *models.User) error {
+	if user.Email == "" {
+		return errors.New("email is required")
+	}
+
+	if !isValidEmail(user.Email) {
+		return errors.New("invalid email format")
+	}
+
+	if user.Password == "" {
+		return errors.New("password is required")
+	}
+
+	if !isValidPassword(user.Password) {
+		return errors.New("invalid password format")
+	}
+
+	// add more validation rules here
+
+	return nil
+}
+
 func ValidatePostUser(user *models.User) error {
 	if user.Email == "" {
 		return errors.New("email is required")
@@ -50,4 +72,8 @@ func isValidEmail(email string) bool {
 	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	match, err := regexp.MatchString(pattern, email)
 	return err == nil && match
+}
+
+func isValidPassword(password string) bool {
+	return true
 }

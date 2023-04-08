@@ -10,4 +10,5 @@ func InitializeHandlers(r *gin.Engine) {
 	PointsOfInterestRoutes(r)
 	UsersRoutes(r)
 	CategoriesRoutes(r)
+	AuthenticationRoutes(r)
 }
