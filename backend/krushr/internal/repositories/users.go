@@ -5,14 +5,15 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
-func GetUsers() []models.User {
-	var users []models.User
+func GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
 
-	result := database.Db.Find(&users)
+	result := database.Db.Where("email = ?", email).First(&user)
 
 	if result.Error != nil {
-		println(result.Error)
+
+		return nil, result.Error
 	}
 
-	return users
+	return &user, nil
 }

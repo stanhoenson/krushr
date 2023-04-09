@@ -1,0 +1,58 @@
+package services
+
+import (
+	"os"
+	"strconv"
+	"time"
+
+	"github.com/stanhoenson/krushr/internal/models"
+	"github.com/stanhoenson/krushr/internal/repositories"
+	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
+)
+
+func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, error) {
+	roleIdString := os.Getenv("DEFAULT_ROLE_ID")
+
+	u64, err := strconv.ParseUint(roleIdString, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	roleID := uint(u64)
+	role, err := repositories.GetEntity[models.Role](roleID)
+	if err != nil {
+		return nil, err
+	}
+
+	var user models.User
+	user.Email = signUpBody.Email
+	user.Role = *role
+
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(signUpBody.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
+	user.Password = string(passwordBytes)
+
+	return repositories.CreateEntity(&user)
+}
+func AuthenticateWithSignInBody(signInBody *models.SignInBody) (string, error) {
+	return "", nil
+}
+
+type CustomClaims struct {
+	jwt.StandardClaims
+	UserID string `json:"user_id"`
+}
+
+func CreateJwtWithUser(user *models.User) (string, error) {
+
+	claims := CustomClaims{
+		UserID:         user.ID,
+		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Day * 7).Unix(),},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token
+
+}
