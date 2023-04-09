@@ -11,7 +11,6 @@ import (
 )
 
 func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, error) {
-
 	role, err := repositories.GetEntity[models.Role](env.DefaultRoleID)
 	if err != nil {
 		return nil, err
@@ -30,8 +29,8 @@ func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, erro
 
 	return repositories.CreateEntity(&user)
 }
-func Authenticate(signInBody *models.SignInBody) (string, error) {
 
+func Authenticate(signInBody *models.SignInBody) (string, error) {
 	user, err := repositories.GetUserByEmail(signInBody.Email)
 	if err != nil {
 		return "", err
@@ -43,7 +42,9 @@ func Authenticate(signInBody *models.SignInBody) (string, error) {
 		return "", err
 	}
 
-	token, err := CreateJwtWithUser(user, 24*7)
+	dayInHours := time.Duration(24)
+	weekInDays := time.Duration(7)
+	token, err := GenerateJwtWithUser(user, dayInHours*weekInDays)
 
 	return token, nil
 }
@@ -53,13 +54,11 @@ type CustomClaims struct {
 	UserID uint `json:"user_id"`
 }
 
-func CreateJwtWithUser(user *models.User, hoursValid time.Duration) (string, error) {
-
+func GenerateJwtWithUser(user *models.User, hoursValid time.Duration) (string, error) {
 	claims := CustomClaims{
 		UserID:         user.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * hoursValid).Unix()},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(env.JwtSecret))
-
 }

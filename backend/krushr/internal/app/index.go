@@ -9,7 +9,7 @@ import (
 )
 
 func Initialize() {
-	env.Initialize()
+	env.InitializeEnvironment()
 
 	r := gin.Default()
 	validators.InitializeValidators()

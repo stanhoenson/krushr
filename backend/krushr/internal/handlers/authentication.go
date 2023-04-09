@@ -24,8 +24,8 @@ func signUp(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, createdUser)
 }
-func signIn(c *gin.Context) {
 
+func signIn(c *gin.Context) {
 	var signInBody models.SignInBody
 
 	if err := c.BindJSON(&signInBody); err != nil {

@@ -8,16 +8,19 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var DatabaseName string
-var JwtSecret string
-var Address string
-var DefaultRoleID uint
+var (
+	DatabaseName  string
+	JwtSecret     string
+	Address       string
+	DefaultRoleID uint
+)
 
-func Initialize() {
+func InitializeEnvironment() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
 	JwtSecret = os.Getenv("JWT_SECRET")
 	if JwtSecret == "" {
 		panic("failed to get JWT_SECRET environment variable")
@@ -39,5 +42,4 @@ func Initialize() {
 		panic("failed to get DEFAULT_ROLE_ID environment variable")
 	}
 	DefaultRoleID = uint(u64)
-
 }
