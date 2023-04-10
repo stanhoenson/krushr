@@ -17,3 +17,17 @@ func GetUserByEmail(email string) (*models.User, error) {
 
 	return &user, nil
 }
+
+func GetUserByIDWithRole(ID uint) (*models.User, error) {
+
+	var user models.User
+
+	result := database.Db.Preload("Role").First(&user, ID)
+
+	if result.Error != nil {
+
+		return nil, result.Error
+	}
+
+	return &user, nil
+}

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"time"
 
 	"github.com/stanhoenson/krushr/internal/env"
@@ -61,4 +62,29 @@ func GenerateJwtWithUser(user *models.User, hoursValid time.Duration) (string, e
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(env.JwtSecret))
+}
+
+func GetUserFromJwt(jwtString string) (*models.User, error) {
+	token, err := jwt.ParseWithClaims(jwtString, &CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(env.JwtSecret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !token.Valid {
+		return nil, errors.New("Invalid token")
+	}
+	claims, ok := token.Claims.(*CustomClaims)
+	if !ok {
+		return nil, errors.New("Invalid claims")
+	}
+
+	user, err := repositories.GetUserByIDWithRole(claims.UserID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+
 }

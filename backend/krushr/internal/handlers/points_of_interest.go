@@ -6,6 +6,7 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +34,12 @@ func putPointOfInterest(c *gin.Context) {
 }
 
 func deletePointOfInterestByID(c *gin.Context) {
+	err := utils.IsAdmin(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)

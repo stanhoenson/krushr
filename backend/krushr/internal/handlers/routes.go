@@ -74,7 +74,7 @@ func GetRouteByID(c *gin.Context) {
 
 	route, err := services.GetEntity[models.Route](ID)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving route"})
 		return
 	}
 
