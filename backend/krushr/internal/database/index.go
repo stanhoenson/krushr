@@ -8,7 +8,7 @@ import (
 
 var Db *gorm.DB
 
-func InitializeDatabase(database string) {
+func InitializeDatabase(database string) *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(database))
 
 	// TODO look at ways to do this nicely
@@ -19,4 +19,5 @@ func InitializeDatabase(database string) {
 	}
 
 	Db = db
+	return Db
 }

@@ -1,33 +1,85 @@
 package handlers_test
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
+	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/handlers"
+	"github.com/stanhoenson/krushr/internal/models"
+	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
-// func TestGetRouteByID(t *testing.T) {
-// 	r := gin.Default()
-// 	r.GET("/routes/:id", handlers.GetRouteByID)
+// TODO prob some issues when .env variables are used somewhere?
+func TestRoutesRoutes(t *testing.T) {
 
-// 	w := httptest.NewRecorder()
-// 	req, _ := http.NewRequest("GET", "/routes/:1", nil)
-// 	r.ServeHTTP(w, req)
-
-// 	assert.Equal(t, 200, w.Code)
-// 	assert.Equal(t, "hello", w.Body.String())
-// }
-
-func TestGetRouteByIDWithInvalidID(t *testing.T) {
+	//common setup
 	r := gin.Default()
-	r.GET("/routes/:id", handlers.GetRouteByID)
+	handlers.RoutesRoutes(r)
+	db := database.InitializeDatabase("test.db")
+
+	//sequentially
+	t.Run("routes", func(t *testing.T) {
+		testDeleteRouteByIDWithInvalidID(t, r)
+		testGetRouteByIDWithInvalidID(t, r)
+		testGetRouteByID(t, r, db)
+	})
+
+	//parallel
+	t.Run("routes", func(t *testing.T) {
+		t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
+
+			testDeleteRouteByIDWithInvalidID(t, r)
+		})
+		t.Run("testGetRouteByIDWithInvalidID", func(t *testing.T) {
+			testDeleteRouteByIDWithInvalidID(t, r)
+		})
+		t.Run("testGetRouteByID", func(t *testing.T) {
+
+			testGetRouteByID(t, r, db)
+		})
+	})
+
+	//teardown
+	os.Remove("test.db")
+
+}
+
+func testGetRouteByID(t *testing.T, r *gin.Engine, db *gorm.DB) {
+
+	//misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
+	route := models.Route{
+		Title: "test",
+	}
+	createdRoute, _ := repositories.CreateEntity(&route)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/routes/:3", nil)
+	req, _ := http.NewRequest("GET", "/routes/"+string(createdRoute.ID), nil)
+	r.ServeHTTP(w, req)
+	var retrievedRoute models.Route
+	err := json.Unmarshal(w.Body.Bytes(), &retrievedRoute)
+	if err != nil {
+
+		t.Error(err)
+	}
+
+	fmt.Println(retrievedRoute, route, createdRoute)
+	assert.Equal(t, 200, w.Code)
+	//pakte maar even alleen de title hier
+	assert.EqualValues(t, createdRoute.Title, &retrievedRoute.Title)
+}
+
+func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes/3", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 400, w.Code)
@@ -53,12 +105,10 @@ func TestGetRouteByIDWithInvalidID(t *testing.T) {
 // 	assert.Equal(t, "hello", w.Body.String())
 // }
 
-func TestDeleteRouteByIDWithInvalidID(t *testing.T) {
-	r := gin.Default()
-	r.DELETE("/routes/:id", handlers.DeleteRouteByID)
+func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/routes/:1", nil)
+	req, _ := http.NewRequest("DELETE", "/routes/1", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 400, w.Code)
