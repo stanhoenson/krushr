@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func putRoute(c *gin.Context) {
+func PutRoute(c *gin.Context) {
 	var updatedRoute models.Route
 
 	if err := c.BindJSON(&updatedRoute); err != nil {
@@ -32,7 +32,7 @@ func putRoute(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, updatedRoute)
 }
 
-func deleteRouteByID(c *gin.Context) {
+func DeleteRouteByID(c *gin.Context) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -61,7 +61,7 @@ func getRoutes(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, routes)
 }
 
-func getRouteByID(c *gin.Context) {
+func GetRouteByID(c *gin.Context) {
 	id := c.Param("id")
 
 	// Convert string to uint
@@ -118,8 +118,8 @@ func RoutesRoutes(r *gin.Engine) {
 	{
 		routes.GET("", getRoutes)
 		routes.POST("", postRoute)
-		routes.PUT("", putRoute)
-		routes.GET("/:id", getRouteByID)
-		routes.DELETE("/:id", deleteRouteByID)
+		routes.PUT("", PutRoute)
+		routes.GET("/:id", GetRouteByID)
+		routes.DELETE("/:id", DeleteRouteByID)
 	}
 }

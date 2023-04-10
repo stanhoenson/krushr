@@ -14,7 +14,7 @@ func Initialize() {
 	r := gin.Default()
 	validators.InitializeValidators()
 	handlers.InitializeHandlers(r)
-	database.InitializeDatabase()
+	database.InitializeDatabase(env.DatabaseName)
 
 	r.Run(env.Address)
 }
