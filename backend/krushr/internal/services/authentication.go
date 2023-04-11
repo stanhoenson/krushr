@@ -80,11 +80,9 @@ func GetUserFromJwt(jwtString string) (*models.User, error) {
 	}
 
 	user, err := repositories.GetUserByIDWithRole(claims.UserID)
-
 	if err != nil {
 		return nil, err
 	}
 
 	return user, nil
-
 }

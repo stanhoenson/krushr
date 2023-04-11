@@ -12,17 +12,15 @@ func Authorization() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.Set("authenticatedUser", nil)
-
 		} else {
 			user, err := services.GetUserFromJwt(authHeader)
 			if err != nil {
-				//TODO maybe StatusBadRequest
+				// TODO maybe StatusBadRequest
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized" + err.Error()})
 				return
 			}
 			c.Set("authenticatedUser", user)
 		}
 		c.Next()
-
 	}
 }
