@@ -45,7 +45,7 @@ func Authenticate(signInBody *models.SignInBody) (string, error) {
 
 	dayInHours := time.Duration(24)
 	weekInDays := time.Duration(7)
-	token, err := GenerateJwtWithUser(user, dayInHours*weekInDays)
+	token, err := GenerateJWTWithUser(user, dayInHours*weekInDays)
 
 	return token, nil
 }
@@ -55,18 +55,18 @@ type CustomClaims struct {
 	UserID uint `json:"user_id"`
 }
 
-func GenerateJwtWithUser(user *models.User, hoursValid time.Duration) (string, error) {
+func GenerateJWTWithUser(user *models.User, hoursValid time.Duration) (string, error) {
 	claims := CustomClaims{
 		UserID:         user.ID,
 		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * hoursValid).Unix()},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(env.JwtSecret))
+	return token.SignedString([]byte(env.JWTSecret))
 }
 
-func GetUserFromJwt(jwtString string) (*models.User, error) {
+func GetUserFromJWT(jwtString string) (*models.User, error) {
 	token, err := jwt.ParseWithClaims(jwtString, &CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte(env.JwtSecret), nil
+		return []byte(env.JWTSecret), nil
 	})
 	if err != nil {
 		return nil, err
