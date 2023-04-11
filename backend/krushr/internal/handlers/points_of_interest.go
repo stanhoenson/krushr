@@ -34,12 +34,13 @@ func putPointOfInterest(c *gin.Context) {
 }
 
 func deletePointOfInterestByID(c *gin.Context) {
-	err := utils.IsAdmin(c)
-	if err != nil {
+	hasRoles := utils.HasRole(c, []string{"Brother", "Admin"})
+	if !hasRoles {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
+	isAdmin := utils.IsAdmin(c)
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
