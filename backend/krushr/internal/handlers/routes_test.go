@@ -26,8 +26,8 @@ func TestRoutesRoutes(t *testing.T) {
 
 	// sequentially
 	t.Run("routes", func(t *testing.T) {
-		testDeleteRouteByIDWithInvalidID(t, r)
-		testGetRouteByIDWithInvalidID(t, r)
+		testDeleteRouteByIDWithNonexistentRoute(t, r)
+		testGetRouteByIDWithNonExistentRoute(t, r)
 		testGetRouteByID(t, r, db)
 	})
 
@@ -48,20 +48,18 @@ func TestRoutesRoutes(t *testing.T) {
 	os.Remove("test.db")
 }
 
+// misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
 func testGetRouteByID(t *testing.T, r *gin.Engine, db *gorm.DB) {
-	// misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
 	route := models.Route{
 		Title: "test",
 	}
 	createdRoute, _ := repositories.CreateEntity(&route)
-	// fmt.Println(*createdRoute)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
 	r.ServeHTTP(w, req)
 	var retrievedRoute models.Route
 	err := json.Unmarshal(w.Body.Bytes(), &retrievedRoute)
-	// fmt.Println(retrievedRoute)
 	if err != nil {
 		t.Error(err)
 	}
@@ -70,7 +68,16 @@ func testGetRouteByID(t *testing.T, r *gin.Engine, db *gorm.DB) {
 	assert.EqualValues(t, createdRoute.Title, retrievedRoute.Title)
 }
 
-// TODO invalid id is een invalid uint niet een niet bestaande route dat moet dus misschien een 404 zijn
+func testGetRouteByIDWithNonExistentRoute(t *testing.T, r *gin.Engine) {
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes/3", nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
+}
+
+// An ID is of type uint
 func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/-3", nil)
@@ -99,10 +106,19 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 // 	assert.Equal(t, "hello", w.Body.String())
 // }
 
-// TODO invalid id is een invalid uint niet een niet bestaande route dat moet dus misschien een 404 zijn
+func testDeleteRouteByIDWithNonexistentRoute(t *testing.T, r *gin.Engine) {
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/3", nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
+}
+
+// An ID is of type uint
 func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/routes/-1", nil)
+	req, _ := http.NewRequest("DELETE", "/routes/-3", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 400, w.Code)
