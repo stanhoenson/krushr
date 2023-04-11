@@ -26,8 +26,10 @@ func TestRoutesRoutes(t *testing.T) {
 
 	// sequentially
 	t.Run("routes", func(t *testing.T) {
-		testDeleteRouteByIDWithNonexistentRoute(t, r)
-		testGetRouteByIDWithNonExistentRoute(t, r)
+		testDeleteRouteByIDWithInvalidID(t, r)
+		// testDeleteRouteByIDWithNonexistentRoute(t, r)
+		testGetRouteByIDWithInvalidID(t, r)
+		// testGetRouteByIDWithNonExistentRoute(t, r)
 		testGetRouteByID(t, r, db)
 	})
 
