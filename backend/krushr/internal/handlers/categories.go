@@ -52,7 +52,7 @@ func deleteCategoryByID(c *gin.Context) {
 }
 
 func getCategories(c *gin.Context) {
-	categories, err := services.GetEntites[models.Category]()
+	categories, err := services.GetEntities[models.Category]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving categories"})
 		return

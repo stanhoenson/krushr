@@ -52,7 +52,7 @@ func deleteUserByID(c *gin.Context) {
 }
 
 func getUsers(c *gin.Context) {
-	users, err := services.GetEntites[models.User]()
+	users, err := services.GetEntities[models.User]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving users"})
 		return

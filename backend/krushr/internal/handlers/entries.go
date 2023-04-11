@@ -51,7 +51,7 @@ func deleteEntryByID(c *gin.Context) {
 }
 
 func getEntries(c *gin.Context) {
-	entries, err := services.GetEntites[models.Entry]()
+	entries, err := services.GetEntities[models.Entry]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving entries"})
 		return

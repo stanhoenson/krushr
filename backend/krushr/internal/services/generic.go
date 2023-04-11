@@ -27,7 +27,7 @@ func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 }
 
 // Plural
-func GetEntites[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
+func GetEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
 	return repositories.GetEntities[T]()
 }
 
