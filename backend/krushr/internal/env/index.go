@@ -9,8 +9,8 @@ import (
 )
 
 var (
+	JWTSecret     string
 	DatabaseName  string
-	JwtSecret     string
 	Address       string
 	DefaultRoleID uint
 )
@@ -21,25 +21,30 @@ func InitializeEnvironment() {
 		log.Fatal("Error loading .env file")
 	}
 
-	JwtSecret = os.Getenv("JWT_SECRET")
-	if JwtSecret == "" {
-		panic("failed to get JWT_SECRET environment variable")
+	JWTSecret = os.Getenv("JWT_SECRET")
+	if JWTSecret == "" {
+		panicMessage(JWTSecret)
 	}
 
 	DatabaseName = os.Getenv("DATABASE_NAME")
 	if DatabaseName == "" {
-		panic("failed to get DATABASE_NAME environment variable")
+		panicMessage(DatabaseName)
 	}
 
 	Address = os.Getenv("ADDRESS")
 	if Address == "" {
-		panic("failed to get ADDRESS environment variable")
+		panicMessage(Address)
 	}
-	roleIdString := os.Getenv("DEFAULT_ROLE_ID")
 
-	u64, err := strconv.ParseUint(roleIdString, 10, 64)
+	roleIDString := os.Getenv("DEFAULT_ROLE_ID")
+	u64, err := strconv.ParseUint(roleIDString, 10, 64)
 	if err != nil {
-		panic("failed to get DEFAULT_ROLE_ID environment variable")
+		panicMessage(roleIDString)
 	}
 	DefaultRoleID = uint(u64)
+}
+
+func panicMessage(variable string) {
+	message := "failed to get " + variable + " environment variable"
+	panic(message)
 }
