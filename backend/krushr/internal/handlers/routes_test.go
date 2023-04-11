@@ -2,7 +2,6 @@ package handlers_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -20,65 +19,59 @@ import (
 
 // TODO prob some issues when .env variables are used somewhere?
 func TestRoutesRoutes(t *testing.T) {
-
-	//common setup
+	// common setup
 	r := gin.Default()
 	handlers.RoutesRoutes(r)
 	db := database.InitializeDatabase("test.db")
 
-	//sequentially
+	// sequentially
 	t.Run("routes", func(t *testing.T) {
 		testDeleteRouteByIDWithInvalidID(t, r)
 		testGetRouteByIDWithInvalidID(t, r)
 		testGetRouteByID(t, r, db)
 	})
 
-	//parallel
+	// parallel
 	// t.Run("routes", func(t *testing.T) {
 	// 	t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
-
 	// 		testDeleteRouteByIDWithInvalidID(t, r)
 	// 	})
 	// 	t.Run("testGetRouteByIDWithInvalidID", func(t *testing.T) {
 	// 		testDeleteRouteByIDWithInvalidID(t, r)
 	// 	})
 	// 	t.Run("testGetRouteByID", func(t *testing.T) {
-
 	// 		testGetRouteByID(t, r, db)
 	// 	})
 	// })
 
-	//teardown
+	// teardown
 	os.Remove("test.db")
-
 }
 
 func testGetRouteByID(t *testing.T, r *gin.Engine, db *gorm.DB) {
-
-	//misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
+	// misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
 	route := models.Route{
 		Title: "test",
 	}
 	createdRoute, _ := repositories.CreateEntity(&route)
+	// fmt.Println(*createdRoute)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
 	r.ServeHTTP(w, req)
 	var retrievedRoute models.Route
 	err := json.Unmarshal(w.Body.Bytes(), &retrievedRoute)
+	// fmt.Println(retrievedRoute)
 	if err != nil {
-
 		t.Error(err)
 	}
 
 	assert.Equal(t, 200, w.Code)
-	//TODO waarom gaat het hier nou fout!!!!
-	assert.EqualValues(t, createdRoute.Title, &retrievedRoute.Title)
+	assert.EqualValues(t, createdRoute.Title, retrievedRoute.Title)
 }
 
 // TODO invalid id is een invalid uint niet een niet bestaande route dat moet dus misschien een 404 zijn
 func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/-3", nil)
 	r.ServeHTTP(w, req)
@@ -108,7 +101,6 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 
 // TODO invalid id is een invalid uint niet een niet bestaande route dat moet dus misschien een 404 zijn
 func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("DELETE", "/routes/-1", nil)
 	r.ServeHTTP(w, req)
