@@ -59,7 +59,7 @@ func deletePointOfInterestByID(c *gin.Context) {
 }
 
 func getPointsOfInterest(c *gin.Context) {
-	pointsOfInterest, err := services.GetPointsOfInterest()
+	pointsOfInterest, err := services.GetEntities[models.PointOfInterest]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving points of interest"})
 		return

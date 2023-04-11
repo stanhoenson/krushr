@@ -52,7 +52,7 @@ func DeleteRouteByID(c *gin.Context) {
 }
 
 func getRoutes(c *gin.Context) {
-	routes, err := services.GetRoutes()
+	routes, err := services.GetEntities[models.Route]()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
 		return
