@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"go/constant"
 	"net/http"
 	"strconv"
 
