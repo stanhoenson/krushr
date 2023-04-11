@@ -1,11 +1,14 @@
 package handlers
 
 import (
+	"go/constant"
 	"net/http"
 	"strconv"
 
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +36,11 @@ func PutRoute(c *gin.Context) {
 }
 
 func DeleteRouteByID(c *gin.Context) {
+	hasRoles := utils.HasRole(c, []string{constants.BrotherRoleName, constants.AdminRoleName})
+	if !hasRoles {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -42,7 +50,13 @@ func DeleteRouteByID(c *gin.Context) {
 	}
 	ID := uint(u64)
 
-	deletedRoute, err := services.DeleteEntityByID[models.Route](ID)
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
+
+	deletedRoute, err := services.DeleteRouteByIDAndAuthenticatedUser(ID, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting route"})
 		return

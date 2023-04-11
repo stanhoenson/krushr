@@ -6,9 +6,9 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 )
 
-func DeletePointOfInterestByID(authenticatedUser *models.User, ID uint) {
+func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
 	if authenticatedUser.Role.Role == constants.AdminRoleName {
-		repositories.DeleteEntityByID[models.PointOfInterest](ID)
-	} else {
+		return repositories.DeleteEntityByID[models.Route](ID)
 	}
+	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID)
 }
