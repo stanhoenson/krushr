@@ -1,4 +1,6 @@
 package constants
 
-const AdminRoleName = "Admin"
-const BrotherRoleName = "Brother"
+const (
+	AdminRoleName   = "Admin"
+	BrotherRoleName = "Brother"
+)

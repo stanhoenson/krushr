@@ -15,5 +15,4 @@ func DeleteRouteByIDAndUserID(ID uint, userID uint) (*models.Route, error) {
 	}
 
 	return &route, nil
-
 }

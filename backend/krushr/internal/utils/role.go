@@ -34,5 +34,4 @@ func GetUserFromContext(c *gin.Context) (*models.User, error) {
 		return nil, errors.New("No user in context")
 	}
 	return user, nil
-
 }
