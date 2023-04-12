@@ -12,3 +12,11 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 	}
 	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID)
 }
+
+func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.User) (*models.Route, error) {
+	route := models.Route{
+		Title:    postRouteBody.Title,
+		StatusID: postRouteBody.StatusID,
+	}
+	return repositories.CreateEntity(&route)
+}

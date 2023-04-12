@@ -30,7 +30,7 @@ func ValidatePutRoute(route *models.Route) error {
 	if err != nil {
 		return errors.New("failed retrieving users")
 	}
-	if route.StatusID < uint(len(*users)) {
+	if route.UserID < uint(len(*users)) {
 		return errors.New("user_id should have entry in statuses table")
 	}
 
@@ -41,7 +41,7 @@ func ValidatePutRoute(route *models.Route) error {
 	return nil
 }
 
-func ValidatePostRoute(route *models.Route) error {
+func ValidatePostRouteBody(route *models.PostRouteBody) error {
 	if route.Title == "" {
 		return errors.New("title is required")
 	}
@@ -49,16 +49,6 @@ func ValidatePostRoute(route *models.Route) error {
 	if route.StatusID == 0 {
 		return errors.New("status_id is required")
 	}
-
-	if route.UserID == 0 {
-		return errors.New("user_id is required")
-	}
-
-	if len(route.PointsOfInterest) == 0 {
-		return errors.New("at least one point of interest is required")
-	}
-
-	// add more validation rules here
 
 	return nil
 }

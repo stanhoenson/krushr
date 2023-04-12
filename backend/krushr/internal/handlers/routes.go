@@ -95,35 +95,31 @@ func GetRouteByID(c *gin.Context) {
 }
 
 func postRoute(c *gin.Context) {
-	var newRoute models.Route
+	var postRouteBody models.PostRouteBody
 
-	if err := c.BindJSON(&newRoute); err != nil {
+	if err := c.BindJSON(&postRouteBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := validators.ValidatePostRoute(&newRoute); err != nil {
+	if err := validators.ValidatePostRouteBody(&postRouteBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	createdRoute, err := services.CreateEntity(&newRoute)
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
+
+	createdRoute, err := services.CreateRoute(&postRouteBody, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, createdRoute)
-}
-
-func postRoutes(c *gin.Context) {
-	var newRoute models.Route
-
-	if err := c.BindJSON(&newRoute); err != nil {
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, newRoute)
 }
 
 func RoutesRoutes(r *gin.Engine) {
