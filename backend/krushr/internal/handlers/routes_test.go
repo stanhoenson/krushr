@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -10,48 +11,54 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/handlers"
+	"github.com/stanhoenson/krushr/internal/middleware"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
+	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 )
 
 // TODO prob some issues when .env variables are used somewhere?
 func TestRoutesRoutes(t *testing.T) {
 	// common setup
 	r := gin.Default()
+	r.Use(middleware.Authorization())
 	handlers.RoutesRoutes(r)
-	db := database.InitializeDatabase("test.db")
+	database.InitializeDatabase("test.db")
 
 	// sequentially
-	t.Run("routes", func(t *testing.T) {
-		testDeleteRouteByIDWithInvalidID(t, r)
-		// testDeleteRouteByIDWithNonexistentRoute(t, r)
-		testGetRouteByIDWithInvalidID(t, r)
-		// testGetRouteByIDWithNonExistentRoute(t, r)
-		testGetRouteByID(t, r, db)
-	})
+	// t.Run("routes", func(t *testing.T) {
+	// 	testDeleteRouteByID(t, r)
+	// 	testDeleteRouteByIDWithInvalidID(t, r)
+	// 	// testDeleteRouteByIDWithNonexistentRoute(t, r)
+	// 	testGetRouteByIDWithInvalidID(t, r)
+	// 	// testGetRouteByIDWithNonExistentRoute(t, r)
+	// 	testGetRouteByID(t, r)
+	// })
 
 	// parallel
-	// t.Run("routes", func(t *testing.T) {
-	// 	t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
-	// 		testDeleteRouteByIDWithInvalidID(t, r)
-	// 	})
-	// 	t.Run("testGetRouteByIDWithInvalidID", func(t *testing.T) {
-	// 		testDeleteRouteByIDWithInvalidID(t, r)
-	// 	})
-	// 	t.Run("testGetRouteByID", func(t *testing.T) {
-	// 		testGetRouteByID(t, r, db)
-	// 	})
-	// })
+	t.Run("routes", func(t *testing.T) {
+		// t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
+		// 	testDeleteRouteByIDWithInvalidID(t, r)
+		// })
+		// t.Run("testGetRouteByIDWithInvalidID", func(t *testing.T) {
+		// 	testDeleteRouteByIDWithInvalidID(t, r)
+		// })
+		// t.Run("testGetRouteByID", func(t *testing.T) {
+		// 	testGetRouteByID(t, r)
+		// })
+		t.Run("testDeleteRouteByID", func(t *testing.T) {
+			testDeleteRouteByID(t, r)
+		})
+	})
 
 	// teardown
 	os.Remove("test.db")
 }
 
 // misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
-func testGetRouteByID(t *testing.T, r *gin.Engine, db *gorm.DB) {
+func testGetRouteByID(t *testing.T, r *gin.Engine) {
 	route := models.Route{
 		Title: "test",
 	}
@@ -89,24 +96,57 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
 }
 
-// func TestDeleteRouteByID(t *testing.T) {
-// 	r := gin.Default()
-// 	r.DELETE("/routes/:id", handlers.DeleteRouteByID)
+func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
+	// Adding the route to delete
+	route := models.Route{
+		Title: "De Boswandeling",
+	}
+	createdRoute, err := repositories.CreateEntity(&route)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println()
+	fmt.Print("Route: ")
+	fmt.Println(*createdRoute)
 
-// 	route := models.Route{
-// 		Title:    "test",
-// 		StatusID: 1,
-// 		UserID:   1,
-// 	}
-// 	repositories.CreateEntity(&route)
+	// Adding a role for the user
+	role := models.Role{
+		Role: "Admin",
+	}
+	createdRole, err := repositories.CreateEntity(&role)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Print("Role: ")
+	fmt.Println(*createdRole)
 
-// 	w := httptest.NewRecorder()
-// 	req, _ := http.NewRequest("DELETE", "/routes/:1", nil)
-// 	r.ServeHTTP(w, req)
+	// Adding a user for authorization
+	user := models.User{
+		Email:    "s.hoenson@protonmail.com",
+		Password: "stanaap2",
+		RoleID:   1,
+	}
+	createdUser, err := repositories.CreateEntity(&user)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Print("User: ")
+	fmt.Println(*createdUser)
+	jwt, err := services.GenerateJWTWithUser(&user, 24*7)
+	fmt.Println("JWT: " + jwt)
 
-// 	assert.Equal(t, 200, w.Code)
-// 	assert.Equal(t, "hello", w.Body.String())
-// }
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
+	// req.Header = map[string][]string{"Authorization": {jwt}}
+	req.Header.Add("Authorization", jwt)
+	fmt.Println("Authorization: " + req.Header.Get("Authorization"))
+	fmt.Println()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "hello", w.Body.String())
+	// query de database om te checken of de verwijderde route er nog is
+}
 
 func testDeleteRouteByIDWithNonexistentRoute(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()

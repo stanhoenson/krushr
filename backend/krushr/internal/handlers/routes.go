@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -35,7 +36,7 @@ func PutRoute(c *gin.Context) {
 }
 
 func DeleteRouteByID(c *gin.Context) {
-	hasRoles := utils.HasRole(c, []string{constants.BrotherRoleName, constants.AdminRoleName})
+	hasRoles := utils.HasRole(c, constants.Roles)
 	if !hasRoles {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
@@ -50,6 +51,7 @@ func DeleteRouteByID(c *gin.Context) {
 	ID := uint(u64)
 
 	user, err := utils.GetUserFromContext(c)
+	fmt.Println(user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
 		return
