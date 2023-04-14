@@ -6,39 +6,39 @@ import (
 )
 
 // Singular
-func GetEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
 	return repositories.GetEntity[T](ID)
 }
 
-func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	return repositories.CreateEntity(entity)
 }
 
-func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	return repositories.DeleteEntity(entity)
 }
 
-func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
 	return repositories.DeleteEntityByID[T](ID)
 }
 
-func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	return repositories.UpdateEntity(entity)
 }
 
 // Plural
-func GetEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
+func GetEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role]() (*[]T, error) {
 	return repositories.GetEntities[T]()
 }
 
-func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	return repositories.CreateEntities(entities)
 }
 
-func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	return repositories.DeleteEntities(entities)
 }
 
-func UpdateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	return repositories.UpdateEntities(entities)
 }

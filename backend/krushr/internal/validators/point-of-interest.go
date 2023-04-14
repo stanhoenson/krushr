@@ -7,7 +7,7 @@ import (
 )
 
 func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
-	if poi.Title == "" {
+	if poi.Name == "" {
 		return errors.New("title is required")
 	}
 
@@ -29,7 +29,7 @@ func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
 }
 
 func ValidatePostPointOfInterest(poi *models.PointOfInterest) error {
-	if poi.Title == "" {
+	if poi.Name == "" {
 		return errors.New("title is required")
 	}
 

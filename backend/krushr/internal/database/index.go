@@ -11,8 +11,8 @@ var Db *gorm.DB
 func InitializeDatabase(database string) *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(database))
 
-	// TODO look at ways to do this nicely
-	db.AutoMigrate(&models.Category{}, &models.Entry{}, &models.PointOfInterest{}, &models.Role{}, &models.Route{}, &models.Status{}, &models.Type{}, &models.User{})
+	// TODO look at ways to do this nicely, only in development
+	db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{})
 
 	if err != nil {
 		panic("failed to initialize database")

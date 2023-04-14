@@ -6,7 +6,7 @@ import (
 )
 
 // Singular
-func GetEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
 	var entity T
 
 	result := database.Db.First(&entity, ID)
@@ -18,7 +18,7 @@ func GetEntity[T models.Category | models.Entry | models.PointOfInterest | model
 	return &entity, nil
 }
 
-func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	result := database.Db.Create(&entity)
 
 	if result.Error != nil {
@@ -28,7 +28,7 @@ func CreateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 	return entity, nil
 }
 
-func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	result := database.Db.Delete(&entity)
 
 	if result.Error != nil {
@@ -38,7 +38,7 @@ func DeleteEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 	return entity, nil
 }
 
-func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](ID uint) (*T, error) {
+func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
 	var entity T
 
 	result := database.Db.Delete(&entity, ID)
@@ -50,7 +50,7 @@ func DeleteEntityByID[T models.Category | models.Entry | models.PointOfInterest 
 	return &entity, nil
 }
 
-func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entity *T) (*T, error) {
+func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
 	result := database.Db.Updates(&entity)
 
 	if result.Error != nil {
@@ -61,7 +61,7 @@ func UpdateEntity[T models.Category | models.Entry | models.PointOfInterest | mo
 }
 
 // Plural
-func GetEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User]() (*[]T, error) {
+func GetEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role]() (*[]T, error) {
 	var entities []T
 
 	result := database.Db.Find(&entities)
@@ -73,7 +73,7 @@ func GetEntities[T models.Category | models.Entry | models.PointOfInterest | mod
 	return &entities, nil
 }
 
-func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	result := database.Db.Create(&entities)
 
 	if result.Error != nil {
@@ -83,7 +83,7 @@ func CreateEntities[T models.Category | models.Entry | models.PointOfInterest | 
 	return entities, nil
 }
 
-func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	result := database.Db.Delete(&entities)
 
 	if result.Error != nil {
@@ -93,7 +93,7 @@ func DeleteEntities[T models.Category | models.Entry | models.PointOfInterest | 
 	return entities, nil
 }
 
-func UpdateEntities[T models.Category | models.Entry | models.PointOfInterest | models.Role | models.Route | models.Status | models.Type | models.User](entities *[]T) (*[]T, error) {
+func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	result := database.Db.Updates(&entities)
 
 	if result.Error != nil {

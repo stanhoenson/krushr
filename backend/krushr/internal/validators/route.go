@@ -10,11 +10,11 @@ import (
 )
 
 func ValidatePutRoute(route *models.Route) error {
-	if route.Title == "" {
+	if route.Name == "" {
 		return errors.New("title is required")
 	}
 
-	if len(route.Title) > constants.TitleMaxLength {
+	if len(route.Name) > constants.TitleMaxLength {
 		return fmt.Errorf("title shouldn't be longer than %d characters", constants.TitleMaxLength)
 	}
 
@@ -42,7 +42,7 @@ func ValidatePutRoute(route *models.Route) error {
 }
 
 func ValidatePostRouteBody(route *models.PostRouteBody) error {
-	if route.Title == "" {
+	if route.Name == "" {
 		return errors.New("title is required")
 	}
 

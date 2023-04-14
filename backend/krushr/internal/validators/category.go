@@ -7,20 +7,12 @@ import (
 )
 
 func ValidatePostCategory(category *models.Category) error {
-	if category.Category == "" {
+	if category.Name == "" {
 		return errors.New("category is required")
 	}
 
-	if category.Icon == "" {
-		return errors.New("icon is required")
-	}
-
-	if category.Weight < 0 {
+	if category.Position < 0 {
 		return errors.New("weight must be a non-negative integer")
-	}
-
-	if category.TypeID == 0 {
-		return errors.New("type_id is required")
 	}
 
 	// add more validation rules here
@@ -29,20 +21,12 @@ func ValidatePostCategory(category *models.Category) error {
 }
 
 func ValidatePutCategory(category *models.Category) error {
-	if category.Category == "" {
+	if category.Name == "" {
 		return errors.New("category is required")
 	}
 
-	if category.Icon == "" {
-		return errors.New("icon is required")
-	}
-
-	if category.Weight < 0 {
+	if category.Position < 0 {
 		return errors.New("weight must be a non-negative integer")
-	}
-
-	if category.TypeID == 0 {
-		return errors.New("type_id is required")
 	}
 
 	// add more validation rules here
