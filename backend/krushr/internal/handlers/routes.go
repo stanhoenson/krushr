@@ -14,7 +14,7 @@ import (
 )
 
 func PutRoute(c *gin.Context) {
-	var updatedRoute models.Route
+	var updatedRoute models.PutRouteBody
 
 	if err := c.BindJSON(&updatedRoute); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
