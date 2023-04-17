@@ -83,7 +83,7 @@ func postUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createdUser)
 }
 
-func UsersRoutes(r *gin.Engine) {
+func RegisterUserRoutes(r *gin.Engine) {
 	routes := r.Group("/users")
 	{
 		routes.GET("", getUsers)

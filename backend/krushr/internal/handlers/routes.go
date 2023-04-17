@@ -124,7 +124,7 @@ func postRoute(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createdRoute)
 }
 
-func RoutesRoutes(r *gin.Engine) {
+func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
 		routes.GET("", getRoutes)
