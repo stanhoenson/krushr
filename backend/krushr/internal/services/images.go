@@ -8,28 +8,30 @@ import (
 	"github.com/stanhoenson/krushr/internal/filemanager"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
-	"gorm.io/gorm"
 )
 
 func CreateImage(fileHeader *multipart.FileHeader) (image *models.Image, err error) {
-	err = database.Db.Transaction(func(tx *gorm.DB) error {
+	tx := database.Db.Begin()
 
-		filePath, err := filemanager.StoreMulitpartImage(fileHeader)
+	filePath, err := filemanager.StoreMulitpartImage(fileHeader)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	newImage := &models.Image{Path: filePath}
+
+	createdImage, err := repositories.CreateEntity(newImage, tx)
+	if err != nil {
+		tx.Rollback()
+		err := filemanager.DeleteFile(filePath)
 		if err != nil {
-			return err
+			return nil, fmt.Errorf("failed to rollback file creation")
 		}
-		return err
+		return nil, err
+	}
 
-		newImage := &models.Image{Path: filePath}
-
-		image, err = repositories.CreateEntity(newImage)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	return
+	tx.Commit()
+	return createdImage, nil
 
 }

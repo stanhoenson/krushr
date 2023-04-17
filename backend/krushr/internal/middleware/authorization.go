@@ -16,7 +16,7 @@ func Authorization() gin.HandlerFunc {
 			user, err := services.GetUserFromJWT(jwt)
 			if err != nil {
 				// TODO maybe StatusBadRequest
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized" + err.Error()})
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return
 			}
 			c.Set("authenticatedUser", user)

@@ -1,17 +1,16 @@
 package repositories
 
 import (
-	"fmt"
-
-	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
+	"fmt"
+	"gorm.io/gorm"
 )
 
 // Singular
-func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
+func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint, tx *gorm.DB) (*T, error) {
 	var entity T
 
-	result := database.Db.First(&entity, ID)
+	result := tx.First(&entity, ID)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -20,8 +19,8 @@ func GetEntity[T models.Route | models.Image | models.Detail | models.Link | mod
 	return &entity, nil
 }
 
-func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
-	result := database.Db.Create(&entity)
+func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T, tx *gorm.DB) (*T, error) {
+	result := tx.Create(&entity)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -30,8 +29,8 @@ func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | 
 	return entity, nil
 }
 
-func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
-	result := database.Db.Delete(&entity)
+func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T, tx *gorm.DB) (*T, error) {
+	result := tx.Delete(&entity)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -40,10 +39,10 @@ func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | 
 	return entity, nil
 }
 
-func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint) (*T, error) {
+func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint, tx *gorm.DB) (*T, error) {
 	var entity T
 
-	result := database.Db.Delete(&entity, ID)
+	result := tx.Delete(&entity, ID)
 	fmt.Println(result.RowsAffected)
 
 	if result.Error != nil {
@@ -53,8 +52,8 @@ func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Lin
 	return &entity, nil
 }
 
-func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T) (*T, error) {
-	result := database.Db.Updates(&entity)
+func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T, tx *gorm.DB) (*T, error) {
+	result := tx.Updates(&entity)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -64,10 +63,10 @@ func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | 
 }
 
 // Plural
-func GetEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role]() (*[]T, error) {
+func GetEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](tx *gorm.DB) (*[]T, error) {
 	var entities []T
 
-	result := database.Db.Find(&entities)
+	result := tx.Find(&entities)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -75,10 +74,10 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 
 	return &entities, nil
 }
-func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](IDs *[]uint) (*[]T, error) {
+func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](IDs *[]uint, tx *gorm.DB) (*[]T, error) {
 	var entities []T
 
-	result := database.Db.Find(&entities, IDs)
+	result := tx.Find(&entities, IDs)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -87,8 +86,8 @@ func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Lin
 	return &entities, nil
 }
 
-func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
-	result := database.Db.Create(&entities)
+func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T, tx *gorm.DB) (*[]T, error) {
+	result := tx.Create(&entities)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -97,8 +96,8 @@ func CreateEntities[T models.Route | models.Image | models.Detail | models.Link 
 	return entities, nil
 }
 
-func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
-	result := database.Db.Delete(&entities)
+func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T, tx *gorm.DB) (*[]T, error) {
+	result := tx.Delete(&entities)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -107,8 +106,8 @@ func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link 
 	return entities, nil
 }
 
-func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
-	result := database.Db.Updates(&entities)
+func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T, tx *gorm.DB) (*[]T, error) {
+	result := tx.Updates(&entities)
 
 	if result.Error != nil {
 		return nil, result.Error

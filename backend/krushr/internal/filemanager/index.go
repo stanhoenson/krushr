@@ -53,6 +53,17 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 	return env.FileStoragePath + filename, nil
 }
 
+func DeleteFile(filename string) error {
+	filepath := filepath.Join(env.FileStoragePath, filename)
+
+	err := os.Remove(filepath)
+	if err != nil {
+		return fmt.Errorf("failed to remove file: %v", err)
+	}
+
+	return nil
+}
+
 func RetrieveFile(filename string) (*os.File, error) {
 	filepath := filepath.Join(env.FileStoragePath, filename)
 

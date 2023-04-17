@@ -58,6 +58,7 @@ type PointOfInterest struct {
 	Details    []*Detail   `gorm:"many2many:points_of_interest_details" json:"details"`
 	Links      []*Link     `gorm:"many2many:points_of_interest_links" json:"links"`
 	Categories []*Category `gorm:"many2many:points_of_interest_categories" json:"categories"`
+	Routes     []*Route    `gorm:"many2many:routes_points_of_interest" json:"routes"`
 	User       User        `json:"user"`
 	UserID     uint        `gorm:"not null" json:"userId"`
 }
@@ -73,4 +74,10 @@ type User struct {
 type Role struct {
 	ID   uint   `gorm:"primaryKey" json:"id"`
 	Name string `gorm:"not null, unique" json:"name"`
+}
+
+type RoutesPointsOfInterest struct {
+	RouteID           uint `gorm:"primaryKey"`
+	PointOfInterestID uint `gorm:"primaryKey"`
+	Position          uint `gorm:"not null"`
 }

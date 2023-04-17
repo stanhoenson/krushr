@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
@@ -12,7 +13,7 @@ import (
 )
 
 func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, error) {
-	role, err := repositories.GetEntity[models.Role](env.DefaultRoleID)
+	role, err := repositories.GetEntity[models.Role](env.DefaultRoleID, database.Db)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +29,7 @@ func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, erro
 
 	user.Password = string(passwordBytes)
 
-	return repositories.CreateEntity(&user)
+	return repositories.CreateEntity(&user, database.Db)
 }
 
 func Authenticate(signInBody *models.SignInBody) (string, error) {

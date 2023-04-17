@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,23 +9,29 @@ import (
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
+	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 )
 
 func PutRoute(c *gin.Context) {
-	var updatedRoute models.PutRouteBody
+	var putRouteBody models.PutRouteBody
 
-	if err := c.BindJSON(&updatedRoute); err != nil {
+	if err := c.BindJSON(&putRouteBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := validators.ValidatePutRoute(&updatedRoute); err != nil {
+	if err := validators.ValidatePutRoute(&putRouteBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
 
-	_, err := services.UpdateEntity(&updatedRoute)
+	updatedRoute, err := services.UpdateRoute(&putRouteBody, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating route"})
 		return
@@ -36,11 +41,6 @@ func PutRoute(c *gin.Context) {
 }
 
 func DeleteRouteByID(c *gin.Context) {
-	hasRoles := utils.HasRole(c, constants.Roles)
-	if !hasRoles {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: No role"})
-		return
-	}
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -51,7 +51,6 @@ func DeleteRouteByID(c *gin.Context) {
 	ID := uint(u64)
 
 	user, err := utils.GetUserFromContext(c)
-	fmt.Println(user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
 		return
@@ -128,9 +127,9 @@ func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
 		routes.GET("", getRoutes)
-		routes.POST("", postRoute)
-		routes.PUT("", PutRoute)
+		routes.POST("", wrappers.RoleWrapper(constants.Roles, postRoute))
+		routes.PUT("", wrappers.RoleWrapper(constants.Roles, PutRoute))
 		routes.GET("/:id", GetRouteByID)
-		routes.DELETE("/:id", DeleteRouteByID)
+		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, DeleteRouteByID))
 	}
 }

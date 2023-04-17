@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +17,11 @@ func IsAdmin(c *gin.Context) bool {
 		return false
 	}
 	return true
+}
+
+func IsAuthenticated(c *gin.Context) bool {
+	return HasRole(c, constants.Roles)
+
 }
 
 func HasRole(c *gin.Context, roles []string) bool {

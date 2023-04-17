@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
 )
 
-func ValidatePutRoute(route *models.Route) error {
+func ValidatePutRoute(route *models.PutRouteBody) error {
 	if route.Name == "" {
 		return errors.New("title is required")
 	}
@@ -18,7 +19,7 @@ func ValidatePutRoute(route *models.Route) error {
 		return fmt.Errorf("title shouldn't be longer than %d characters", constants.TitleMaxLength)
 	}
 
-	statuses, err := repositories.GetEntities[models.Status]()
+	statuses, err := repositories.GetEntities[models.Status](database.Db)
 	if err != nil {
 		return errors.New("failed retrieving statuses")
 	}
@@ -26,17 +27,10 @@ func ValidatePutRoute(route *models.Route) error {
 		return errors.New("status_id should have entry in statuses table")
 	}
 
-	users, err := repositories.GetEntities[models.User]()
-	if err != nil {
-		return errors.New("failed retrieving users")
-	}
-	if route.UserID < uint(len(*users)) {
-		return errors.New("user_id should have entry in statuses table")
-	}
-
-	if len(route.PointsOfInterest) < 2 {
-		return errors.New("at least two points of interest is required")
-	}
+	//TODO probably caught by insert
+	// if len(route.PointsOfInterest) < 2 {
+	// 	return errors.New("at least two points of interest is required")
+	// }
 
 	return nil
 }

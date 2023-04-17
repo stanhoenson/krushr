@@ -8,5 +8,5 @@ const (
 
 var Roles = []string{
 	AdminRoleName,
-	BrotherRoleName,
+	CreatorRoleName,
 }
