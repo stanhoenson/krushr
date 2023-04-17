@@ -75,6 +75,17 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 
 	return &entities, nil
 }
+func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](IDs *[]uint) (*[]T, error) {
+	var entities []T
+
+	result := database.Db.Find(&entities, IDs)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &entities, nil
+}
 
 func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entities *[]T) (*[]T, error) {
 	result := database.Db.Create(&entities)

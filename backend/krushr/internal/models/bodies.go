@@ -2,8 +2,13 @@ package models
 
 // Route
 type PostRouteBody struct {
-	Name     string `json:"name" binding:"required"`
-	StatusID uint   `json:"status_id" binding:"required"`
+	Name               string `json:"name" binding:"required"`
+	PointOfInterestIDs []uint `json:"pointOfInterestIds"`
+	ImageIDs           []uint `json:"imageIds"`
+	DetailIDs          []uint `json:"detailIds"`
+	LinkIDs            []uint `json:"linkIds"`
+	CategoryIDs        []uint `json:"categoryIds"`
+	StatusID           uint   `json:"statusId" binding:"required"`
 }
 
 type PutRouteBody struct {
@@ -59,13 +64,13 @@ type PutStatusBody struct {
 
 // PointOfInterest
 type PostPointOfInterestBody struct {
-	Name        string      `json:"name"`
-	Longitude   float64     `json:"longitude"`
-	Latitude    float64     `json:"latitude"`
-	ImagesIDs   []*Image    `json:"images"`
-	DetailIDs   []*Detail   `json:"details"`
-	LinkIDs     []*Link     `json:"links"`
-	CategoryIDs []*Category `json:"categories"`
+	Name        string  `json:"name"`
+	Longitude   float64 `json:"longitude"`
+	Latitude    float64 `json:"latitude"`
+	ImageIDs    []uint  `json:"imageIds"`
+	DetailIDs   []uint  `json:"detailIds"`
+	LinkIDs     []uint  `json:"linkIds"`
+	CategoryIDs []uint  `json:"categoryIds"`
 }
 
 type PutPointOfInterestBody struct {
