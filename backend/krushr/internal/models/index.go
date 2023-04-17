@@ -71,5 +71,5 @@ type User struct {
 
 type Role struct {
 	ID   uint   `gorm:"primaryKey" json:"id"`
-	Role string `gorm:"not null" json:"role"`
+	Name string `gorm:"not null, unique" json:"name"`
 }

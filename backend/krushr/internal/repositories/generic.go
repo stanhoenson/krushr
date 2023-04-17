@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
 )
@@ -42,6 +44,7 @@ func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Lin
 	var entity T
 
 	result := database.Db.Delete(&entity, ID)
+	fmt.Println(result.RowsAffected)
 
 	if result.Error != nil {
 		return nil, result.Error

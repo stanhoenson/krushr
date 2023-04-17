@@ -38,7 +38,7 @@ func PutRoute(c *gin.Context) {
 func DeleteRouteByID(c *gin.Context) {
 	hasRoles := utils.HasRole(c, constants.Roles)
 	if !hasRoles {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: No role"})
 		return
 	}
 	id := c.Param("id")

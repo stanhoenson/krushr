@@ -7,6 +7,6 @@ var Roles = []string{
 
 const (
 	AdminRoleName   = "Admin"
-	BrotherRoleName = "Brother"
+	CreatorRoleName = "Creator"
 	TitleMaxLength  = 50
 )

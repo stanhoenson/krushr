@@ -60,7 +60,7 @@ func TestRoutesRoutes(t *testing.T) {
 // misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
 func testGetRouteByID(t *testing.T, r *gin.Engine) {
 	route := models.Route{
-		Title: "test",
+		Name: "test",
 	}
 	createdRoute, _ := repositories.CreateEntity(&route)
 
@@ -74,7 +74,7 @@ func testGetRouteByID(t *testing.T, r *gin.Engine) {
 	}
 
 	assert.Equal(t, 200, w.Code)
-	assert.EqualValues(t, createdRoute.Title, retrievedRoute.Title)
+	assert.EqualValues(t, createdRoute.Name, retrievedRoute.Name)
 }
 
 func testGetRouteByIDWithNonExistentRoute(t *testing.T, r *gin.Engine) {
@@ -99,26 +99,12 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	// Adding the route to delete
 	route := models.Route{
-		Title: "De Boswandeling",
+		Name: "De Boswandeling",
 	}
 	createdRoute, err := repositories.CreateEntity(&route)
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println()
-	fmt.Print("Route: ")
-	fmt.Println(*createdRoute)
-
-	// Adding a role for the user
-	role := models.Role{
-		Role: "Admin",
-	}
-	createdRole, err := repositories.CreateEntity(&role)
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Print("Role: ")
-	fmt.Println(*createdRole)
 
 	// Adding a user for authorization
 	user := models.User{
@@ -130,21 +116,16 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Print("User: ")
-	fmt.Println(*createdUser)
-	jwt, err := services.GenerateJWTWithUser(&user, 24*7)
-	fmt.Println("JWT: " + jwt)
+	jwt, err := services.GenerateJWTWithUser(createdUser, 24*7)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
-	// req.Header = map[string][]string{"Authorization": {jwt}}
 	req.Header.Add("Authorization", jwt)
 	fmt.Println("Authorization: " + req.Header.Get("Authorization"))
-	fmt.Println()
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, "hello", w.Body.String())
+	// assert.Equal(t, createdUser.ID, w.Body.String())
 	// query de database om te checken of de verwijderde route er nog is
 }
 

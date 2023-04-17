@@ -1,6 +1,7 @@
 package database
 
 import (
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -19,5 +20,11 @@ func InitializeDatabase(database string) *gorm.DB {
 	}
 
 	Db = db
+	populateDatabase()
 	return Db
+}
+
+func populateDatabase() {
+	Db.Create(&models.Role{Name: constants.AdminRoleName})
+	Db.Create(&models.Role{Name: constants.CreatorRoleName})
 }

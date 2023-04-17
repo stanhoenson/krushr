@@ -7,7 +7,7 @@ import (
 )
 
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
-	if authenticatedUser.Role.Role == constants.AdminRoleName {
+	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.Route](ID)
 	}
 	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID)
