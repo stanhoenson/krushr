@@ -6,7 +6,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
-func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
+func ValidatePutPointOfInterest(poi *models.PutPointOfInterestBody) error {
 	if poi.Name == "" {
 		return errors.New("title is required")
 	}
@@ -19,7 +19,7 @@ func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
 		return errors.New("invalid latitude value")
 	}
 
-	if len(poi.Categories) == 0 {
+	if len(poi.CategoryIDs) == 0 {
 		return errors.New("at least one category is required")
 	}
 
@@ -28,7 +28,7 @@ func ValidatePutPointOfInterest(poi *models.PointOfInterest) error {
 	return nil
 }
 
-func ValidatePostPointOfInterest(poi *models.PointOfInterest) error {
+func ValidatePostPointOfInterest(poi *models.PostPointOfInterestBody) error {
 	if poi.Name == "" {
 		return errors.New("title is required")
 	}
@@ -41,7 +41,7 @@ func ValidatePostPointOfInterest(poi *models.PointOfInterest) error {
 		return errors.New("invalid latitude value")
 	}
 
-	if len(poi.Categories) == 0 {
+	if len(poi.CategoryIDs) == 0 {
 		return errors.New("at least one category is required")
 	}
 

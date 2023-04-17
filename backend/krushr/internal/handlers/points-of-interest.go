@@ -4,26 +4,34 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
+	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 )
 
 func putPointOfInterest(c *gin.Context) {
-	var updatedPointOfInterest models.PointOfInterest
+	var putPointOfInterestBody models.PutPointOfInterestBody
 
-	if err := c.BindJSON(&updatedPointOfInterest); err != nil {
+	if err := c.BindJSON(&putPointOfInterestBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := validators.ValidatePutPointOfInterest(&updatedPointOfInterest); err != nil {
+	if err := validators.ValidatePutPointOfInterest(&putPointOfInterestBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
 
-	_, err := services.UpdateEntity(&updatedPointOfInterest)
+	updatedPointOfInterest, err := services.UpdatePointOfInterest(&putPointOfInterestBody, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating point of interest"})
 		return
@@ -41,8 +49,13 @@ func deletePointOfInterestByID(c *gin.Context) {
 		return
 	}
 	ID := uint(u64)
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
 
-	deletedPointOfInterest, err := services.DeleteEntityByID[models.PointOfInterest](ID)
+	deletedPointOfInterest, err := services.DeletePointOfInterestByIDAndAuthentictedUser(ID, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting point of interest"})
 		return
@@ -82,27 +95,32 @@ func getPointOfInterestByID(c *gin.Context) {
 }
 
 func postPointOfInterest(c *gin.Context) {
-	var newPointOfInterest models.PointOfInterest
+	var postPointOfInterestBody models.PostPointOfInterestBody
 
-	if err := c.BindJSON(&newPointOfInterest); err != nil {
-
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := validators.ValidatePostPointOfInterest(&newPointOfInterest); err != nil {
+	if err := c.BindJSON(&postPointOfInterestBody); err != nil {
 
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	createdPoi, err := services.CreateEntity(&newPointOfInterest)
+	if err := validators.ValidatePostPointOfInterest(&postPointOfInterestBody); err != nil {
+
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	user, err := utils.GetUserFromContext(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
+		return
+	}
+
+	createdPointOfInterest, err := services.CreatePointOfInterest(&postPointOfInterestBody, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, createdPoi)
+	c.IndentedJSON(http.StatusOK, createdPointOfInterest)
 }
 
 func RegisterPointOfInterestRoutes(r *gin.Engine) {
@@ -110,8 +128,8 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 	{
 		routes.GET("", getPointsOfInterest)
 		routes.GET("/:id", getPointOfInterestByID)
-		routes.DELETE("/:id", deletePointOfInterestByID)
-		routes.PUT("", putPointOfInterest)
-		routes.POST("", postPointOfInterest)
+		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, deletePointOfInterestByID))
+		routes.PUT("", wrappers.RoleWrapper(constants.Roles, putPointOfInterest))
+		routes.POST("", wrappers.RoleWrapper(constants.Roles, postPointOfInterest))
 	}
 }
