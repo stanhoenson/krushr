@@ -42,7 +42,7 @@ func signIn(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, jwt)
 }
 
-func AuthenticationRoutes(r *gin.Engine) {
+func RegisterAuthenticationRoutes(r *gin.Engine) {
 	routes := r.Group("/authentication")
 	{
 		routes.POST("/sign-in", signIn)

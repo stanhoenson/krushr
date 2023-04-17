@@ -83,7 +83,7 @@ func postCategory(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createdCategory)
 }
 
-func CategoriesRoutes(r *gin.Engine) {
+func RegisterCategoryRoutes(r *gin.Engine) {
 	routes := r.Group("/categories")
 	{
 		routes.GET("", getCategories)

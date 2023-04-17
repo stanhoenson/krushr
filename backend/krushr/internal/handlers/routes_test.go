@@ -24,7 +24,7 @@ func TestRoutesRoutes(t *testing.T) {
 	// common setup
 	r := gin.Default()
 	r.Use(middleware.Authorization())
-	handlers.RoutesRoutes(r)
+	handlers.RegisterRouteRoutes(r)
 	database.InitializeDatabase("test.db")
 
 	// sequentially

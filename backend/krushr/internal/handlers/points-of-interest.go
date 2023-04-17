@@ -105,7 +105,7 @@ func postPointOfInterest(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createdPoi)
 }
 
-func PointsOfInterestRoutes(r *gin.Engine) {
+func RegisterPointOfInterestRoutes(r *gin.Engine) {
 	routes := r.Group("/points-of-interest")
 	{
 		routes.GET("", getPointsOfInterest)
