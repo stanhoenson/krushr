@@ -9,7 +9,7 @@ type Route struct {
 	Categories       []*Category        `gorm:"many2many:routes_categories" json:"categories"`
 	Status           Status             `json:"status"`
 	StatusID         uint               `gorm:"not null" json:"statusId"`
-	PointsOfInterest []*PointOfInterest `gorm:"many2many:routes_points_of_interest" json:"routesPointsOfInterest"`
+	PointsOfInterest []*PointOfInterest `gorm:"many2many:routes_points_of_interest" json:"pointsOfInterest"`
 	Distance         float64            `gorm:"not null" json:"distance"`
 	User             User               `json:"user"`
 	UserID           uint               `gorm:"not null" json:"userId"`
@@ -80,4 +80,8 @@ type RoutesPointsOfInterest struct {
 	RouteID           uint `gorm:"primaryKey"`
 	PointOfInterestID uint `gorm:"primaryKey"`
 	Position          uint `gorm:"not null"`
+}
+
+func (RoutesPointsOfInterest) TableName() string {
+	return "routes_points_of_interest"
 }

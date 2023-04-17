@@ -16,7 +16,7 @@ func InitializeDatabase(database string) *gorm.DB {
 		panic("failed to initialize database")
 	}
 	// TODO look at ways to do this nicely, only in development
-	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{})
+	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
 
 	if err != nil {
 		panic("failed to auto migrate models")
