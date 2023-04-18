@@ -27,7 +27,7 @@ func ValidatePutRoute(route *models.PutRouteBody) error {
 		return errors.New("status_id should have entry in statuses table")
 	}
 
-	//TODO probably caught by insert
+	// TODO probably caught by insert
 	// if len(route.PointsOfInterest) < 2 {
 	// 	return errors.New("at least two points of interest is required")
 	// }

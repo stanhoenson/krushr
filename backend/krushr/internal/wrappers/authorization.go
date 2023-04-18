@@ -17,6 +17,5 @@ func RoleWrapper(roles []string, handler gin.HandlerFunc) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
-
 	}
 }

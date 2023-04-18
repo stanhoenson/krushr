@@ -3,7 +3,6 @@ package utils
 import "github.com/stanhoenson/krushr/internal/models"
 
 func PointsOfInterestToDistance(pointsOfInterest *[]models.PointOfInterest) float64 {
-
 	dereferencedPointsOfInterest := *pointsOfInterest
 	distance := 0.0
 	arrayLength := len(dereferencedPointsOfInterest)

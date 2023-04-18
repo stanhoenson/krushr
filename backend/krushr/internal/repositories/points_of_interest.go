@@ -26,5 +26,4 @@ func GetPointOfInterestByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models
 	}
 
 	return &pointOfInterest, nil
-
 }

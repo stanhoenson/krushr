@@ -8,7 +8,6 @@ import (
 )
 
 func postImage(c *gin.Context) {
-
 	// single file
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
@@ -17,7 +16,6 @@ func postImage(c *gin.Context) {
 	}
 
 	createdFile, err := services.CreateImage(fileHeader)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating image"})
 		return

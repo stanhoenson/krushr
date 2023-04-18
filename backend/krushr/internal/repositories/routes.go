@@ -26,5 +26,4 @@ func GetRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, er
 	}
 
 	return &route, nil
-
 }

@@ -31,6 +31,7 @@ func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | 
 func GetEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role]() (*[]T, error) {
 	return repositories.GetEntities[T](database.Db)
 }
+
 func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](IDs *[]uint) (*[]T, error) {
 	return repositories.GetEntitiesByIDs[T](IDs, database.Db)
 }

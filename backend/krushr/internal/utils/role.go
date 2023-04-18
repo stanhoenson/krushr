@@ -21,7 +21,6 @@ func IsAdmin(c *gin.Context) bool {
 
 func IsAuthenticated(c *gin.Context) bool {
 	return HasRole(c, constants.Roles)
-
 }
 
 func HasRole(c *gin.Context, roles []string) bool {

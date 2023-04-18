@@ -17,7 +17,6 @@ func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *mo
 }
 
 func UpdatePointOfInterest(putPointOfInterestBody *models.PutPointOfInterestBody, authenticatedUser *models.User) (*models.PointOfInterest, error) {
-
 	images, err := GetEntitiesByIDs[models.Image](&putPointOfInterestBody.ImageIDs)
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving images")
@@ -43,7 +42,6 @@ func UpdatePointOfInterest(putPointOfInterestBody *models.PutPointOfInterestBody
 	pointOfInterest.Longitude = putPointOfInterestBody.Longitude
 
 	updatedPointOfInterest, err := repositories.UpdateEntity(pointOfInterest, tx)
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -67,11 +65,9 @@ func UpdatePointOfInterest(putPointOfInterestBody *models.PutPointOfInterestBody
 	tx.Commit()
 
 	return updatedPointOfInterest, nil
-
 }
 
 func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User) (*models.PointOfInterest, error) {
-
 	images, err := GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs)
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving images")
@@ -94,7 +90,6 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	}
 
 	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -118,5 +113,4 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	tx.Commit()
 
 	return createdPointOfInterest, nil
-
 }

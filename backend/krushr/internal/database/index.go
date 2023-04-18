@@ -11,7 +11,6 @@ var Db *gorm.DB
 
 func InitializeDatabase(database string) *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(database))
-
 	if err != nil {
 		panic("failed to initialize database")
 	}
@@ -21,7 +20,7 @@ func InitializeDatabase(database string) *gorm.DB {
 	if err != nil {
 		panic("failed to auto migrate models")
 	}
-	//declare some custom things
+	// declare some custom things
 	err = db.SetupJoinTable(&models.Route{}, "PointsOfInterest", &models.RoutesPointsOfInterest{})
 	if err != nil {
 		panic("failed to setup join table")

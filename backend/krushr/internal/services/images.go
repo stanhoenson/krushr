@@ -33,5 +33,4 @@ func CreateImage(fileHeader *multipart.FileHeader) (image *models.Image, err err
 
 	tx.Commit()
 	return createdImage, nil
-
 }

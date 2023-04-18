@@ -1,8 +1,10 @@
 package repositories
 
 import (
-	"github.com/stanhoenson/krushr/internal/models"
 	"fmt"
+
+	"github.com/stanhoenson/krushr/internal/models"
+
 	"gorm.io/gorm"
 )
 
@@ -74,6 +76,7 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 
 	return &entities, nil
 }
+
 func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](IDs *[]uint, tx *gorm.DB) (*[]T, error) {
 	var entities []T
 

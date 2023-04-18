@@ -18,9 +18,7 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 }
 
 func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.User) (*models.Route, error) {
-
 	pointsOfInterest, err := GetEntitiesByIDs[models.PointOfInterest](&putRouteBody.PointOfInterestIDs)
-
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving points of interest")
 	}
@@ -46,11 +44,9 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 
 	route.Name = putRouteBody.Name
 	route.StatusID = putRouteBody.StatusID
-	route.Distance =
-		utils.PointsOfInterestToDistance(pointsOfInterest)
+	route.Distance = utils.PointsOfInterestToDistance(pointsOfInterest)
 
 	updateRoute, err := repositories.UpdateEntity(route, tx)
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -79,12 +75,10 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 	tx.Commit()
 
 	return updateRoute, nil
-
 }
+
 func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.User) (*models.Route, error) {
-
 	pointsOfInterest, err := GetEntitiesByIDs[models.PointOfInterest](&postRouteBody.PointOfInterestIDs)
-
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving points of interest")
 	}
@@ -137,5 +131,4 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 	tx.Commit()
 
 	return createdRoute, nil
-
 }
