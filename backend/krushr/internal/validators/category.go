@@ -6,12 +6,12 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
-func ValidatePostCategory(category *models.Category) error {
-	if category.Name == "" {
+func ValidatePostCategoryBody(postCategoryBody *models.PostCategoryBody) error {
+	if postCategoryBody.Name == "" {
 		return errors.New("category is required")
 	}
 
-	if category.Position < 0 {
+	if postCategoryBody.Position < 0 {
 		return errors.New("weight must be a non-negative integer")
 	}
 
@@ -20,12 +20,12 @@ func ValidatePostCategory(category *models.Category) error {
 	return nil
 }
 
-func ValidatePutCategory(category *models.Category) error {
-	if category.Name == "" {
+func ValidatePutCategoryBody(putCategoryBody *models.PutCategoryBody) error {
+	if putCategoryBody.Name == "" {
 		return errors.New("category is required")
 	}
 
-	if category.Position < 0 {
+	if putCategoryBody.Position < 0 {
 		return errors.New("weight must be a non-negative integer")
 	}
 

@@ -4,32 +4,34 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/validators"
+	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 )
 
 func putCategory(c *gin.Context) {
-	var updatedCategory models.Category
+	var putCategoryBody models.PutCategoryBody
 
-	if err := c.BindJSON(&updatedCategory); err != nil {
+	if err := c.BindJSON(&putCategoryBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := validators.ValidatePutCategory(&updatedCategory); err != nil {
+	if err := validators.ValidatePutCategoryBody(&putCategoryBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	_, err := services.UpdateEntity(&updatedCategory)
+	_, err := services.UpdateCategory(&putCategoryBody)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating category"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, updatedCategory)
+	c.IndentedJSON(http.StatusOK, putCategoryBody)
 }
 
 func deleteCategoryByID(c *gin.Context) {
@@ -62,19 +64,19 @@ func getCategories(c *gin.Context) {
 }
 
 func postCategory(c *gin.Context) {
-	var newCategory models.Category
+	var postCategoryBody models.PostCategoryBody
 
-	if err := c.BindJSON(&newCategory); err != nil {
+	if err := c.BindJSON(&postCategoryBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := validators.ValidatePostCategory(&newCategory); err != nil {
+	if err := validators.ValidatePostCategoryBody(&postCategoryBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	createdCategory, err := services.CreateEntity(&newCategory)
+	createdCategory, err := services.CreateCategory(&postCategoryBody)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating category"})
 		return
@@ -87,8 +89,8 @@ func RegisterCategoryRoutes(r *gin.Engine) {
 	routes := r.Group("/categories")
 	{
 		routes.GET("", getCategories)
-		routes.DELETE("/:id", deleteCategoryByID)
-		routes.POST("", postCategory)
-		routes.PUT("", putCategory)
+		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, deleteCategoryByID))
+		routes.POST("", wrappers.RoleWrapper(constants.Roles, postCategory))
+		routes.PUT("", wrappers.RoleWrapper(constants.Roles, putCategory))
 	}
 }
