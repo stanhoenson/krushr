@@ -52,6 +52,21 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 		return nil, err
 	}
 	err = tx.Model(updateRoute).Association("PointsOfInterest").Replace(pointsOfInterest)
+
+	for index, pointOfInterest := range *pointsOfInterest {
+		var routePointOfInterest models.RoutesPointsOfInterest
+		result := tx.Where("route_id = ?", route.ID).Where("point_of_interest_id = ?", pointOfInterest.ID).First(&routePointOfInterest)
+		if result.Error != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		routePointOfInterest.Position = uint(index)
+		result = tx.Updates(&routePointOfInterest)
+		if result.Error != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
 	if err != nil {
 		tx.Rollback()
 		return nil, fmt.Errorf("Error replacing association")
@@ -108,6 +123,20 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 		return nil, err
 	}
 	err = tx.Model(createdRoute).Association("PointsOfInterest").Replace(pointsOfInterest)
+	for index, pointOfInterest := range *pointsOfInterest {
+		var routePointOfInterest models.RoutesPointsOfInterest
+		result := tx.Where("route_id = ?", route.ID).Where("point_of_interest_id = ?", pointOfInterest.ID).First(&routePointOfInterest)
+		if result.Error != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		routePointOfInterest.Position = uint(index)
+		result = tx.Updates(&routePointOfInterest)
+		if result.Error != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
 	if err != nil {
 		tx.Rollback()
 		return nil, fmt.Errorf("Error replacing association")
