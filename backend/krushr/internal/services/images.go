@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"mime/multipart"
+	"os"
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/filemanager"
@@ -10,7 +11,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 )
 
-func CreateImage(fileHeader *multipart.FileHeader) (image *models.Image, err error) {
+func CreateImage(fileHeader *multipart.FileHeader) (*models.Image, error) {
 	tx := database.Db.Begin()
 
 	filePath, err := filemanager.StoreMulitpartImage(fileHeader)
@@ -33,4 +34,45 @@ func CreateImage(fileHeader *multipart.FileHeader) (image *models.Image, err err
 
 	tx.Commit()
 	return createdImage, nil
+}
+
+func DeleteImage(ID uint) (uint, error) {
+
+	tx := database.Db.Begin()
+	image, err := repositories.GetEntity[models.Image](ID, tx)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	err = filemanager.DeleteFile(image.Path)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	_, err = repositories.DeleteEntity(image, tx)
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	tx.Commit()
+	return image.ID, nil
+}
+
+func GetImageFile(ID uint) (*os.File, error) {
+
+	image, err := repositories.GetEntity[models.Image](ID, database.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := filemanager.RetrieveFile(image.Path)
+
+	if err != nil {
+		return nil, err
+	}
+	return file, nil
+
 }

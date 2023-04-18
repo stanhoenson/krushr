@@ -53,8 +53,7 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 	return env.FileStoragePath + filename, nil
 }
 
-func DeleteFile(filename string) error {
-	filepath := filepath.Join(env.FileStoragePath, filename)
+func DeleteFile(filepath string) error {
 
 	err := os.Remove(filepath)
 	if err != nil {
@@ -86,13 +85,16 @@ func GenerateFilename(originalFilename string) string {
 func IsImage(file multipart.File) (bool, error) {
 	// Read the first 512 bytes of the file
 	buffer := make([]byte, 512)
-	_, err := file.Read(buffer)
+	_, err := io.ReadAtLeast(file, buffer, 512)
 	if err != nil {
 		return false, err
 	}
 
 	// Detect the file type based on its content
 	filetype := http.DetectContentType(buffer)
+
+	//reset thing
+	file.Seek(0, io.SeekStart)
 	switch filetype {
 	case "image/jpeg", "image/jpg", "image/png", "image/gif":
 		return true, nil
