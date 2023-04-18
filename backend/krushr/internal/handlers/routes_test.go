@@ -17,7 +17,10 @@ import (
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
+
+var Db *gorm.DB
 
 // TODO prob some issues when .env variables are used somewhere?
 func TestRoutesRoutes(t *testing.T) {
@@ -25,7 +28,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
-	database.InitializeDatabase("test.db")
+	Db = database.InitializeDatabase("test.db")
 
 	// sequentially
 	// t.Run("routes", func(t *testing.T) {
@@ -39,6 +42,9 @@ func TestRoutesRoutes(t *testing.T) {
 
 	// parallel
 	t.Run("routes", func(t *testing.T) {
+		t.Run("testDeleteRouteByID", func(t *testing.T) {
+			testDeleteRouteByID(t, r)
+		})
 		// t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
 		// 	testDeleteRouteByIDWithInvalidID(t, r)
 		// })
@@ -48,13 +54,43 @@ func TestRoutesRoutes(t *testing.T) {
 		// t.Run("testGetRouteByID", func(t *testing.T) {
 		// 	testGetRouteByID(t, r)
 		// })
-		t.Run("testDeleteRouteByID", func(t *testing.T) {
-			testDeleteRouteByID(t, r)
-		})
 	})
 
 	// teardown
 	os.Remove("test.db")
+}
+
+func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
+	// Adding the route to delete
+	route := models.Route{
+		Name: "De Boswandeling",
+	}
+	createdRoute, err := repositories.CreateEntity(&route, Db)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Adding a user for authorization
+	user := models.User{
+		Email:    "s.hoenson@protonmail.com",
+		Password: "stanaap2",
+		RoleID:   1,
+	}
+	createdUser, err := repositories.CreateEntity(&user, Db)
+	if err != nil {
+		t.Fatal(err)
+	}
+	jwt, err := services.GenerateJWTWithUser(createdUser, 24*7)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
+	req.Header.Add("Authorization", jwt)
+	fmt.Println("Authorization: " + req.Header.Get("Authorization"))
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 200, w.Code)
+	// assert.Equal(t, createdUser.ID, w.Body.String())
+	// query de database om te checken of de verwijderde route er nog is
 }
 
 // misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
@@ -62,7 +98,7 @@ func testGetRouteByID(t *testing.T, r *gin.Engine) {
 	route := models.Route{
 		Name: "test",
 	}
-	createdRoute, _ := repositories.CreateEntity(&route)
+	createdRoute, _ := repositories.CreateEntity(&route, Db)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
@@ -94,39 +130,6 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
-}
-
-func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
-	// Adding the route to delete
-	route := models.Route{
-		Name: "De Boswandeling",
-	}
-	createdRoute, err := repositories.CreateEntity(&route)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Adding a user for authorization
-	user := models.User{
-		Email:    "s.hoenson@protonmail.com",
-		Password: "stanaap2",
-		RoleID:   1,
-	}
-	createdUser, err := repositories.CreateEntity(&user)
-	if err != nil {
-		t.Fatal(err)
-	}
-	jwt, err := services.GenerateJWTWithUser(createdUser, 24*7)
-
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
-	req.Header.Add("Authorization", jwt)
-	fmt.Println("Authorization: " + req.Header.Get("Authorization"))
-	r.ServeHTTP(w, req)
-
-	assert.Equal(t, 200, w.Code)
-	// assert.Equal(t, createdUser.ID, w.Body.String())
-	// query de database om te checken of de verwijderde route er nog is
 }
 
 func testDeleteRouteByIDWithNonexistentRoute(t *testing.T, r *gin.Engine) {
