@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -59,18 +60,18 @@ func TestRoutesRoutes(t *testing.T) {
 	os.Remove("test.db")
 }
 
-func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
-	// Adding the route to delete
+func createDummyRoute() *models.Route {
 	route := models.Route{
 		Name: "De Boswandeling",
 	}
 	createdRoute, err := repositories.CreateEntity(&route, Db)
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
-	createdRouteJSON, _ := json.Marshal(createdRoute)
+	return createdRoute
+}
 
-	// Adding a user for authorization
+func createDummyUser() *models.User {
 	user := models.User{
 		Email:    "s.hoenson@protonmail.com",
 		Password: "stanaap2",
@@ -78,9 +79,17 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	}
 	createdUser, err := repositories.CreateEntity(&user, Db)
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
-	jwt, err := services.GenerateJWTWithUser(createdUser, 24*7)
+	return createdUser
+}
+
+func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
+	createdRoute := createDummyRoute()
+	createdRouteJSON, _ := json.Marshal(createdRoute)
+
+	createdUser := createDummyUser()
+	jwt, _ := services.GenerateJWTWithUser(createdUser, 24*7)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
@@ -89,7 +98,16 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, string(createdRouteJSON), w.Body.String())
-	// query de database om te checken of de verwijderde route er nog is
+}
+
+// An ID should be of type uint
+func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/-3", nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
 }
 
 // misschien is het wel netter als dit allemaal in 1 functie staat maar zou ook ARRANGE kunnen zijn(prob het beste wel om alles hier te doen want anders kan je niet garanderen dat een andere functie in de weg zit), ook hier een goed voorbeeld waar een postRouteBody goed zou werken
@@ -134,16 +152,6 @@ func testGetRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 func testDeleteRouteByIDWithNonexistentRoute(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("DELETE", "/routes/3", nil)
-	r.ServeHTTP(w, req)
-
-	assert.Equal(t, 400, w.Code)
-	assert.Equal(t, "{\"error\":\"Invalid ID parameter\"}", w.Body.String())
-}
-
-// An ID is of type uint
-func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/routes/-3", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 400, w.Code)
