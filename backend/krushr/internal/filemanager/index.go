@@ -31,15 +31,17 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 
 	// Generate a unique filename for the uploaded file
 	filename := GenerateFilename(fileHeader.Filename)
+	folderpath := filepath.Join(env.DataFolder, env.FileStorageFolder)
+	filepath := filepath.Join(folderpath, filename)
 
 	// Create the directory if it doesn't exist
-	err = os.MkdirAll(env.FileStoragePath, os.ModePerm)
+	err = os.MkdirAll(folderpath, os.ModePerm)
 	if err != nil {
 		return "", fmt.Errorf("failed to create directory: %v", err)
 	}
 
 	// Create the file on disk
-	dst, err := os.Create(filepath.Join(env.FileStoragePath, filename))
+	dst, err := os.Create(filepath)
 	if err != nil {
 		return "", fmt.Errorf("failed to create file: %v", err)
 	}
@@ -50,7 +52,7 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 		return "", fmt.Errorf("failed to copy file: %v", err)
 	}
 
-	return env.FileStoragePath + filename, nil
+	return filepath, nil
 }
 
 func DeleteFile(filepath string) error {
@@ -64,7 +66,7 @@ func DeleteFile(filepath string) error {
 }
 
 func RetrieveFile(filename string) (*os.File, error) {
-	filepath := filepath.Join(env.FileStoragePath, filename)
+	filepath := filepath.Join(env.DataFolder, env.FileStorageFolder, filename)
 
 	file, err := os.Open(filepath)
 	if err != nil {

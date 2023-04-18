@@ -9,11 +9,12 @@ import (
 )
 
 var (
-	JWTSecret       string
-	DatabaseName    string
-	Address         string
-	DefaultRoleID   uint
-	FileStoragePath string
+	JWTSecret         string
+	DatabaseName      string
+	Address           string
+	DefaultRoleID     uint
+	FileStorageFolder string
+	DataFolder        string
 )
 
 func InitializeEnvironment() {
@@ -36,9 +37,14 @@ func InitializeEnvironment() {
 	if Address == "" {
 		panicMessage(Address)
 	}
-	FileStoragePath = os.Getenv("FILE_STORAGE_PATH")
-	if FileStoragePath == "" {
-		panicMessage(FileStoragePath)
+	FileStorageFolder = os.Getenv("FILE_STORAGE_FOLDER")
+	if FileStorageFolder == "" {
+		panicMessage(FileStorageFolder)
+	}
+
+	DataFolder = os.Getenv("DATA_FOLDER")
+	if DataFolder == "" {
+		panicMessage(DataFolder)
 	}
 
 	roleIDString := os.Getenv("DEFAULT_ROLE_ID")

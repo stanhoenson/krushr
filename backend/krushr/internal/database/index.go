@@ -2,8 +2,10 @@ package database
 
 import (
 	"log"
+	"path/filepath"
 
 	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -11,8 +13,8 @@ import (
 
 var Db *gorm.DB
 
-func InitializeDatabase(database string) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(database))
+func InitializeDatabase(databaseName string) *gorm.DB {
+	db, err := gorm.Open(sqlite.Open(filepath.Join(env.DataFolder, databaseName)))
 	if err != nil {
 		log.Fatal("failed to initialize database")
 	}
