@@ -1,6 +1,8 @@
 package database
 
 import (
+	"log"
+
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/driver/sqlite"
@@ -12,22 +14,22 @@ var Db *gorm.DB
 func InitializeDatabase(database string) *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(database))
 	if err != nil {
-		panic("failed to initialize database")
+		log.Fatal("failed to initialize database")
 	}
 	// TODO look at ways to do this nicely, only in development
 	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
 
 	if err != nil {
-		panic("failed to auto migrate models")
+		log.Fatal("failed to auto migrate models")
 	}
 	// declare some custom things
 	err = db.SetupJoinTable(&models.Route{}, "PointsOfInterest", &models.RoutesPointsOfInterest{})
 	if err != nil {
-		panic("failed to setup join table")
+		log.Fatal("failed to setup join table")
 	}
 	err = db.SetupJoinTable(&models.PointOfInterest{}, "Routes", &models.RoutesPointsOfInterest{})
 	if err != nil {
-		panic("failed to setup join table")
+		log.Fatal("failed to setup join table")
 	}
 
 	Db = db
