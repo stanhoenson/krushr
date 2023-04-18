@@ -17,10 +17,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 )
-
-var Db *gorm.DB
 
 // TODO prob some issues when .env variables are used somewhere?
 func TestRoutesRoutes(t *testing.T) {
@@ -28,7 +25,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
-	Db = database.InitializeDatabase("test.db")
+	database.InitializeDatabase("test.db")
 
 	// sequentially
 	// t.Run("routes", func(t *testing.T) {
@@ -67,7 +64,7 @@ func createDummyRoute() *models.Route {
 	route := models.Route{
 		Name: "De Boswandeling",
 	}
-	createdRoute, err := repositories.CreateEntity(&route, Db)
+	createdRoute, err := repositories.CreateEntity(&route, database.Db)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +77,7 @@ func createDummyUser() *models.User {
 		Password: "stanaap2",
 		RoleID:   1,
 	}
-	createdUser, err := repositories.CreateEntity(&user, Db)
+	createdUser, err := repositories.CreateEntity(&user, database.Db)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -129,7 +126,7 @@ func testGetRouteByID(t *testing.T, r *gin.Engine) {
 	route := models.Route{
 		Name: "test",
 	}
-	createdRoute, _ := repositories.CreateEntity(&route, Db)
+	createdRoute, _ := repositories.CreateEntity(&route, database.Db)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
