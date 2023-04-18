@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -56,13 +57,21 @@ func DeleteRouteByID(c *gin.Context) {
 		return
 	}
 
+	route, err := services.GetEntity[models.Route](ID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving route"})
+		return
+	}
+
 	deletedRoute, err := services.DeleteRouteByIDAndAuthenticatedUser(ID, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting route"})
 		return
 	}
+	fmt.Print("Deleted route: ")
+	fmt.Println(*deletedRoute)
 
-	c.IndentedJSON(http.StatusOK, deletedRoute)
+	c.JSON(http.StatusOK, route)
 }
 
 func getRoutes(c *gin.Context) {

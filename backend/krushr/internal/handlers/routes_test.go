@@ -2,7 +2,6 @@ package handlers_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -69,6 +68,7 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	createdRouteJSON, _ := json.Marshal(createdRoute)
 
 	// Adding a user for authorization
 	user := models.User{
@@ -85,11 +85,10 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
 	req.Header.Add("Authorization", jwt)
-	fmt.Println("Authorization: " + req.Header.Get("Authorization"))
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	// assert.Equal(t, createdUser.ID, w.Body.String())
+	assert.Equal(t, string(createdRouteJSON), w.Body.String())
 	// query de database om te checken of de verwijderde route er nog is
 }
 
