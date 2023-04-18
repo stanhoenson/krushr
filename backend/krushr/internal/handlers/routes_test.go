@@ -45,6 +45,9 @@ func TestRoutesRoutes(t *testing.T) {
 		t.Run("testDeleteRouteByID", func(t *testing.T) {
 			testDeleteRouteByID(t, r)
 		})
+		// t.Run("testDeleteRouteUnauthorized", func(t *testing.T) {
+		// 	testDeleteRouteUnauthorized(t, r)
+		// })
 		// t.Run("testDeleteRouteByIDWithInvalidID", func(t *testing.T) {
 		// 	testDeleteRouteByIDWithInvalidID(t, r)
 		// })
@@ -100,10 +103,21 @@ func testDeleteRouteByID(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, string(createdRouteJSON), w.Body.String())
 }
 
-// An ID should be of type uint
+func testDeleteRouteUnauthorized(t *testing.T, r *gin.Engine) {
+	createdRoute := createDummyRoute()
+	createdRouteJSON, _ := json.Marshal(createdRoute)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/"+strconv.Itoa(int(createdRoute.ID)), nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, string(createdRouteJSON), w.Body.String())
+}
+
 func testDeleteRouteByIDWithInvalidID(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/routes/-3", nil)
+	req, _ := http.NewRequest("DELETE", "/routes/3", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 400, w.Code)
