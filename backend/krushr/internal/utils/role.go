@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
@@ -25,9 +24,7 @@ func IsAuthenticated(c *gin.Context) bool {
 
 func HasRole(c *gin.Context, roles []string) bool {
 	value, exists := c.Get("authenticatedUser")
-	fmt.Println(value)
 	user, ok := value.(*models.User)
-	fmt.Println(user.Role)
 	// TODO maybe get admin role and compare or something with ids
 	if !ok || !exists || !StringArrayIncludesSubstring(roles, user.Role.Name) {
 		return false
