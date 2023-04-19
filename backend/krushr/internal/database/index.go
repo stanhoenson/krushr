@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/stanhoenson/krushr/internal/constants"
@@ -14,6 +15,13 @@ import (
 var Db *gorm.DB
 
 func InitializeDatabase(databaseName string) *gorm.DB {
+
+	// Create the directory if it doesn't exist
+	err := os.MkdirAll(env.DataFolder, os.ModePerm)
+	if err != nil {
+		log.Fatal("failed to create directory")
+	}
+
 	db, err := gorm.Open(sqlite.Open(filepath.Join(env.DataFolder, databaseName)))
 	if err != nil {
 		log.Fatal("failed to initialize database")

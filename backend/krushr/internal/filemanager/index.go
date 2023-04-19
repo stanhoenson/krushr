@@ -47,6 +47,7 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 	}
 	defer dst.Close()
 
+	//TODO if something goes wrong we need to delete the file
 	// Copy the uploaded file to the file on disk
 	if _, err := io.Copy(dst, file); err != nil {
 		return "", fmt.Errorf("failed to copy file: %v", err)
