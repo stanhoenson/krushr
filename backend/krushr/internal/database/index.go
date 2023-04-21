@@ -50,4 +50,9 @@ func InitializeDatabase(databaseName string) *gorm.DB {
 func populateDatabase() {
 	Db.Create(&models.Role{Name: constants.AdminRoleName})
 	Db.Create(&models.Role{Name: constants.CreatorRoleName})
+
+	//statuses
+	for _, statusName := range constants.Statuses {
+		Db.Create(&models.Status{Name: statusName})
+	}
 }

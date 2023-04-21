@@ -5,7 +5,7 @@ import (
 )
 
 func Haversine(lat1, lon1, lat2, lon2 float64) float64 {
-	const earthRadius = 6371 // kilometers
+	const earthRadius float64 = 6371 // kilometers
 	lat1Radians := lat1 * math.Pi / 180.0
 	lat2Radians := lat2 * math.Pi / 180.0
 	latDiffRadians := (lat2 - lat1) * math.Pi / 180.0

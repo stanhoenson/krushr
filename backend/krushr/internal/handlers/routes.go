@@ -1,17 +1,18 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func PutRoute(c *gin.Context) {
@@ -57,21 +58,13 @@ func DeleteRouteByID(c *gin.Context) {
 		return
 	}
 
-	route, err := services.GetEntity[models.Route](ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving route"})
-		return
-	}
-
 	deletedRoute, err := services.DeleteRouteByIDAndAuthenticatedUser(ID, user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting route"})
 		return
 	}
-	fmt.Print("Deleted route: ")
-	fmt.Println(*deletedRoute)
 
-	c.JSON(http.StatusOK, route)
+	c.JSON(http.StatusOK, deletedRoute)
 }
 
 func getRoutes(c *gin.Context) {
@@ -123,9 +116,12 @@ func postRoute(c *gin.Context) {
 		return
 	}
 
-	createdRoute, err := services.CreateRoute(&postRouteBody, user)
+	createdRoute, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
+		return services.CreateRoute(&postRouteBody, user, tx)
+
+	})
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route" + err.Error()})
 		return
 	}
 

@@ -2,6 +2,15 @@ package models
 
 // Route
 type PostRouteBody struct {
+	Name             string                    `json:"name" binding:"required"`
+	PointsOfInterest []PostPointOfInterestBody `json:"pointsOfInterest" binding:"required,min=2"`
+	ImageIDs         []uint                    `json:"imageIds"`
+	Details          []PostDetailBody          `json:"details"`
+	Links            []PostLinkBody            `json:"links"`
+	Categories       []PostCategoryBody        `json:"categories"`
+	StatusID         uint                      `json:"statusId" binding:"required"`
+}
+type PostRouteBodyOld struct {
 	Name               string `json:"name" binding:"required"`
 	PointOfInterestIDs []uint `json:"pointOfInterestIds"`
 	ImageIDs           []uint `json:"imageIds"`
@@ -64,13 +73,13 @@ type PutStatusBody struct {
 
 // PointOfInterest
 type PostPointOfInterestBody struct {
-	Name        string  `json:"name"`
-	Longitude   float64 `json:"longitude"`
-	Latitude    float64 `json:"latitude"`
-	ImageIDs    []uint  `json:"imageIds"`
-	DetailIDs   []uint  `json:"detailIds"`
-	LinkIDs     []uint  `json:"linkIds"`
-	CategoryIDs []uint  `json:"categoryIds"`
+	Name       string             `json:"name"`
+	Longitude  float64            `json:"longitude"`
+	Latitude   float64            `json:"latitude"`
+	ImageIDs   []uint             `json:"imageIds"`
+	Details    []PostDetailBody   `json:"details"`
+	Links      []PostLinkBody     `json:"links"`
+	Categories []PostCategoryBody `json:"categories"`
 }
 
 type PutPointOfInterestBody struct {

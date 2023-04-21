@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"fmt"
-
 	"github.com/stanhoenson/krushr/internal/models"
 
 	"gorm.io/gorm"
@@ -41,11 +39,20 @@ func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | 
 	return entity, nil
 }
 
+func FirstOrCreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](entity *T, cond *T, tx *gorm.DB) (*T, error) {
+	result := tx.FirstOrCreate(&entity, cond)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return entity, nil
+}
+
 func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role](ID uint, tx *gorm.DB) (*T, error) {
 	var entity T
 
 	result := tx.Delete(&entity, ID)
-	fmt.Println(result.RowsAffected)
 
 	if result.Error != nil {
 		return nil, result.Error

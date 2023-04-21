@@ -4,7 +4,23 @@ import (
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
+	"gorm.io/gorm"
 )
+
+func FirstOrCreateCategory(postDetailBody *models.PostCategoryBody, tx *gorm.DB) (*models.Category, error) {
+
+	category := models.Category{
+		Name: postDetailBody.Name,
+	}
+
+	createdCategory, err := repositories.FirstOrCreateEntity(&category, &category, tx)
+	if err != nil {
+		return nil, err
+	}
+
+	return createdCategory, nil
+
+}
 
 func CreateCategory(postCategoryBody *models.PostCategoryBody) (*models.Category, error) {
 

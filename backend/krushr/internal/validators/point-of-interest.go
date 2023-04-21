@@ -19,7 +19,7 @@ func ValidatePutPointOfInterest(poi *models.PutPointOfInterestBody) error {
 		return errors.New("invalid latitude value")
 	}
 
-	if len(poi.CategoryIDs) == 0 {
+	if len(poi.Categories) == 0 {
 		return errors.New("at least one category is required")
 	}
 
@@ -41,7 +41,7 @@ func ValidatePostPointOfInterest(poi *models.PostPointOfInterestBody) error {
 		return errors.New("invalid latitude value")
 	}
 
-	if len(poi.CategoryIDs) == 0 {
+	if len(poi.Categories) == 0 {
 		return errors.New("at least one category is required")
 	}
 
