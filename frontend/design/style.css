@@ -1,6 +1,3 @@
-/* @link https://utopia.fyi/type/calculator?c=320,18,1.125,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-/* @link https://utopia.fyi/space/calculator?c=320,18,1.125,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-
 :root {
 	--step--2: clamp(0.80rem, calc(0.92rem + -0.15vw), 0.89rem);
 	--step--1: clamp(1.00rem, calc(1.00rem + 0.00vw), 1.00rem);
@@ -28,23 +25,34 @@
 }
 
 html {
-	font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+	font-family: sans-serif;
+	color: hsl(210, 5%, 23%); 
+	background-color: hsl(210, 5%, 100%);
 }
 
 body {
 	font-size: var(--step-0);
+	line-height: 1.3;
 }
 
 header {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	padding: var(--space-m);
-	border-bottom: 1px solid hsl(0, 0%, 88%);
-	background-color: hsl(0, 0%, 97%);
+	margin-bottom: var(--space-2xl);
+	padding: var(--space-s);
+	background-color: hsl(210, 5%, 93%);
+	border-bottom: 1px solid hsl(210, 5%, 86%);
 }
 
 header nav {
+	max-width: 80rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: var(--space-xs);
+	margin: auto;
+}
+
+header nav .left,
+header nav .right {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-3xs);
@@ -52,7 +60,7 @@ header nav {
 
 header nav a {
 	transition: background-color 200ms;
-	color: hsl(0, 0%, 20%);
+	color: hsl(210, 5%, 23%); 
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
 	border-radius: var(--space-2xs);
@@ -60,5 +68,110 @@ header nav a {
 
 header nav a:hover,
 header nav a.active {
-	background-color: hsl(0, 0%, 91%);
+	background-color: hsl(210, 5%, 86%);
+}
+
+header nav a.primary {
+	color: hsl(210, 5%, 100%);
+	background-color: hsl(210, 90%, 50%);
+}
+
+a.primary:hover {
+	background-color: hsl(210, 90%, 40%);
+}
+
+main {
+	max-width: 80rem;
+	margin: auto;
+	margin-bottom: var(--space-2xl);
+	padding: 0 var(--space-s);
+}
+
+main section a.primary {
+	display: block;
+	max-width: 100%;
+	transition: background-color 200ms;
+	color: hsl(210, 5%, 100%);
+	text-align: center;
+	text-decoration: none;
+	margin-bottom: var(--space-m);
+	padding: var(--space-s);
+	background-color: hsl(210, 90%, 50%);
+	border-radius: var(--space-2xs);
+}
+
+.routes {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-m);
+}
+
+.route {
+	padding: var(--space-s);
+	background-color: hsl(210, 5%, 93%);
+	border: 1px solid hsl(210, 5%, 86%);
+	border-radius: var(--space-2xs);
+}
+
+.route img {
+	object-fit: cover;
+	width: 100%;
+	height: 22rem;
+	margin-bottom: var(--space-3xs);
+}
+
+.route h1 {
+	font-size: var(--step-1);
+}
+
+.route .details {
+	color: hsl(210, 5%, 44%);
+	margin-bottom: var(--space-2xs);
+}
+
+.route .details span {
+	color: hsl(210, 5%, 79%);
+}
+
+.route .details span.dot {
+	color: hsl(210, 5%, 65%);
+}
+
+.route .description {
+	margin-bottom: var(--space-m);
+}
+
+.route a {
+	display: block;
+	max-width: 100%;
+	transition: background-color 200ms;
+	color: hsl(210, 5%, 23%);
+	text-align: center;
+	text-decoration: none;
+	margin-top: var(--space-m);
+	padding: var(--space-xs);
+	background-color: hsl(210, 5%, 86%);
+	border-radius: var(--space-2xs);
+}
+
+.route a:hover {
+	background-color: hsl(210, 5%, 79%);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--space-3xs);
+}
+
+@media (max-width: 60rem) {
+	.routes {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 40rem) {
+	.route img {
+		height: 16rem;
+	}
 }
