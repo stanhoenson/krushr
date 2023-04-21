@@ -33,7 +33,9 @@ func PutRoute(c *gin.Context) {
 		return
 	}
 
-	updatedRoute, err := services.UpdateRoute(&putRouteBody, user)
+	updatedRoute, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
+		return services.UpdateRoute(&putRouteBody, user, tx)
+	})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating route"})
 		return

@@ -18,39 +18,33 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID, database.Db)
 }
 
-func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.User) (*models.Route, error) {
-	// pointsOfInterest, err := GetEntitiesByIDs[models.PointOfInterest](&postRouteBody.PointOfInterestIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving points of interest")
-	// }
-	// images, err := GetEntitiesByIDs[models.Image](&postRouteBody.ImageIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving images")
-	// }
-	// details, err := GetEntitiesByIDs[models.Detail](&postRouteBody.DetailIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving details")
-	// }
-	// links, err := GetEntitiesByIDs[models.Link](&postRouteBody.LinkIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving links")
-	// }
-	tx := database.Db.Begin()
-
+func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
 	//create points of interest
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
 	for _, postPointOfInterestBody := range putRouteBody.PointsOfInterest {
 
 		createdPointOfInterest, err := CreateOrUpdatePointOfInterest(&postPointOfInterestBody, authenticatedUser, tx)
 		if err != nil {
-			tx.Rollback()
 			return nil, err
 		}
 		createdOrUpdatedPointsOfInterest = append(createdOrUpdatedPointsOfInterest, createdPointOfInterest)
 	}
+
+	//find or create categories
+	foundOrCreatedCategories := []*models.Category{}
+	for _, postCategoryBody := range putRouteBody.Categories {
+
+		foundOrCreatedCategory, err := FirstOrCreateCategory(&postCategoryBody, tx)
+		if err != nil {
+			return nil, err
+		}
+		foundOrCreatedCategories = append(foundOrCreatedCategories, foundOrCreatedCategory)
+	}
+
+	//TODO to error or not to error on empty result
 	images, err := GetEntitiesByIDs[models.Image](&putRouteBody.ImageIDs)
+
 	if err != nil {
-		tx.Rollback()
 		return nil, fmt.Errorf("Error retrieving images")
 	}
 
@@ -60,7 +54,6 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 
 		foundOrCreatedLink, err := FirstOrCreateLink(&postLinkBody, tx)
 		if err != nil {
-			tx.Rollback()
 			return nil, err
 		}
 		foundOrCreatedLinks = append(foundOrCreatedLinks, foundOrCreatedLink)
@@ -72,7 +65,6 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 
 		foundOrCreatedDetail, err := FirstOrCreateDetail(&postDetailBody, tx)
 		if err != nil {
-			tx.Rollback()
 			return nil, err
 		}
 		foundOrCreatedDetails = append(foundOrCreatedDetails, foundOrCreatedDetail)
@@ -83,6 +75,11 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 		imagesPointers = append(imagesPointers, &image)
 	}
 
+	status, err := repositories.GetEntity[models.Status](putRouteBody.StatusID, tx)
+	if err != nil {
+		return nil, err
+	}
+
 	route, err := repositories.GetRouteByIDAndUserID(putRouteBody.ID, authenticatedUser.ID, tx)
 	if err != nil {
 		tx.Rollback()
@@ -90,79 +87,36 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 	}
 
 	route.Name = putRouteBody.Name
-	route.StatusID = putRouteBody.StatusID
+	route.Status = *status
 	route.Distance = utils.PointsOfInterestToDistance(createdOrUpdatedPointsOfInterest)
-	route.UserID = authenticatedUser.ID
+	route.User = *authenticatedUser
 	route.PointsOfInterest = createdOrUpdatedPointsOfInterest
 	route.Links = foundOrCreatedLinks
 	route.Details = foundOrCreatedDetails
 	route.Images = imagesPointers
 
 	updatedRoute, err := repositories.UpdateEntity(route, tx)
-
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	// err = tx.Model(createdRoute).Association("PointsOfInterest").Replace(pointsOfInterest)
-	for index, pointOfInterest := range route.PointsOfInterest {
-		var routePointOfInterest models.RoutesPointsOfInterest
-		//TODO should this be abstracted away to a repo function?
-		result := tx.Where("route_id = ?", route.ID).Where("point_of_interest_id = ?", pointOfInterest.ID).First(&routePointOfInterest)
-		if result.Error != nil {
-			tx.Rollback()
-			return nil, err
-		}
-		routePointOfInterest.Position = uint(index)
-		result = tx.Updates(&routePointOfInterest)
-		if result.Error != nil {
-			tx.Rollback()
-			return nil, err
-		}
-	}
-	if err != nil {
-		tx.Rollback()
-		return nil, fmt.Errorf("Error replacing association")
-	}
-	// err = tx.Model(createdRoute).Association("Images").Replace(images)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx.Model(createdRoute).Association("Details").Replace(details)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx.Model(createdRoute).Association("Links").Replace(links)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
 
-	tx.Commit()
+	for index, pointOfInterest := range route.PointsOfInterest {
+
+		routePointOfInterest := models.RoutesPointsOfInterest{
+			RouteID:           route.ID,
+			PointOfInterestID: pointOfInterest.ID,
+			Position:          uint(index),
+		}
+		_, err := repositories.UpdateEntity(&routePointOfInterest, tx)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	return updatedRoute, nil
 }
 
 func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
-
-	// pointsOfInterest, err := GetEntitiesByIDs[models.PointOfInterest](&postRouteBody.PointOfInterestIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving points of interest")
-	// }
-	// images, err := GetEntitiesByIDs[models.Image](&postRouteBody.ImageIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving images")
-	// }
-	// details, err := GetEntitiesByIDs[models.Detail](&postRouteBody.DetailIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving details")
-	// }
-	// links, err := GetEntitiesByIDs[models.Link](&postRouteBody.LinkIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving links")
-	// }
 
 	//create points of interest
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
@@ -238,38 +192,18 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 	if err != nil {
 		return nil, err
 	}
-	// err = tx.Model(createdRoute).Association("PointsOfInterest").Replace(pointsOfInterest)
 	for index, pointOfInterest := range route.PointsOfInterest {
-		var routePointOfInterest models.RoutesPointsOfInterest
-		//TODO should this be abstracted away to a repo function?
-		result := tx.Where("route_id = ?", route.ID).Where("point_of_interest_id = ?", pointOfInterest.ID).First(&routePointOfInterest)
-		if result.Error != nil {
-			return nil, err
+
+		routePointOfInterest := models.RoutesPointsOfInterest{
+			RouteID:           route.ID,
+			PointOfInterestID: pointOfInterest.ID,
+			Position:          uint(index),
 		}
-		routePointOfInterest.Position = uint(index)
-		result = tx.Updates(&routePointOfInterest)
-		if result.Error != nil {
+		_, err := repositories.UpdateEntity(&routePointOfInterest, tx)
+		if err != nil {
 			return nil, err
 		}
 	}
-	if err != nil {
-		return nil, fmt.Errorf("Error replacing association")
-	}
-	// err = tx.Model(createdRoute).Association("Images").Replace(images)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx.Model(createdRoute).Association("Details").Replace(details)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx.Model(createdRoute).Association("Links").Replace(links)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
 
 	return createdRoute, nil
 
