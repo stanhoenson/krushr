@@ -1,0 +1,97 @@
+{
+  "name": "My Routeee",
+  "pointsOfInterest": [
+    {
+      "name": "POI A",
+      "longitude": 123.456,
+      "latitude": 78.9,
+      "imageIds": [1, 2, 3],
+      "details": [
+        {
+          "text": "Detail 1"
+        },
+        {
+          "text": "Detail 2"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://example.com"
+        },
+        {
+          "url": "http://google.com"
+        }
+      ],
+      "categories": [
+        {
+          "name": "Category 1",
+          "position": 1
+        },
+        {
+          "name": "Category 2",
+          "position": 2
+        }
+      ]
+    },
+    {
+      "name": "POI B",
+      "longitude": 456.789,
+      "latitude": 12.34,
+      "imageIds": [4, 5, 6],
+      "details": [
+        {
+          "text": "Detail 3"
+        },
+        {
+          "text": "Detail 4"
+        }
+      ],
+      "links": [
+        {
+          "url": "http://example.com"
+        },
+        {
+          "url": "http://google.com"
+        }
+      ],
+      "categories": [
+        {
+          "name": "Category 3",
+          "position": 1
+        },
+        {
+          "name": "Category 4",
+          "position": 2
+        }
+      ]
+    }
+  ],
+  "imageIds": [7, 8, 9],
+  "details": [
+    {
+      "text": "Route detail 1"
+    },
+    {
+      "text": "Route detail 2"
+    }
+  ],
+  "links": [
+    {
+      "url": "http://example.com"
+    },
+    {
+      "url": "http://google.com"
+    }
+  ],
+  "categories": [
+    {
+      "name": "Route category 1",
+      "position": 1
+    },
+    {
+      "name": "Route category 2",
+      "position": 2
+    }
+  ],
+  "statusId": 1
+}
