@@ -13,7 +13,7 @@ import (
 )
 
 func CreateUserFromSignUpBody(signUpBody *models.SignUpBody) (*models.User, error) {
-	role, err := repositories.GetEntity[models.Role](env.DefaultRoleID, database.Db)
+	role, err := repositories.GetEntityByID[models.Role](env.DefaultRoleID, database.Db)
 	if err != nil {
 		return nil, err
 	}

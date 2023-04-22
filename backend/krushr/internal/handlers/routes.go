@@ -16,6 +16,15 @@ import (
 )
 
 func PutRoute(c *gin.Context) {
+	id := c.Param("id")
+
+	u64, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
+		return
+	}
+	ID := uint(u64)
+
 	var putRouteBody models.PutRouteBody
 
 	if err := c.BindJSON(&putRouteBody); err != nil {
@@ -34,7 +43,7 @@ func PutRoute(c *gin.Context) {
 	}
 
 	updatedRoute, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
-		return services.UpdateRoute(&putRouteBody, user, tx)
+		return services.UpdateRoute(ID, &putRouteBody, user, tx)
 	})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating route"})
@@ -134,8 +143,8 @@ func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
 		routes.GET("", getRoutes)
-		routes.POST("", wrappers.RoleWrapper(constants.Roles, postRoute))
-		routes.PUT("", wrappers.RoleWrapper(constants.Roles, PutRoute))
+		// routes.POST("", wrappers.RoleWrapper(constants.Roles, postRoute))
+		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, PutRoute))
 		routes.GET("/:id", GetRouteByID)
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, DeleteRouteByID))
 	}

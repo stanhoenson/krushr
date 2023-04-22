@@ -5,15 +5,26 @@ import (
 	"strconv"
 
 	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func putPointOfInterest(c *gin.Context) {
+	id := c.Param("id")
+
+	u64, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
+		return
+	}
+	ID := uint(u64)
+
 	var putPointOfInterestBody models.PutPointOfInterestBody
 
 	if err := c.BindJSON(&putPointOfInterestBody); err != nil {
@@ -31,7 +42,10 @@ func putPointOfInterest(c *gin.Context) {
 		return
 	}
 
-	updatedPointOfInterest, err := services.UpdatePointOfInterest(&putPointOfInterestBody, user)
+	updatedPointOfInterest, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.PointOfInterest, error) {
+		return services.UpdatePointOfInterest(ID, &putPointOfInterestBody, user, tx)
+
+	})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating point of interest"})
 		return
@@ -129,7 +143,7 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 		routes.GET("", getPointsOfInterest)
 		routes.GET("/:id", getPointOfInterestByID)
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, deletePointOfInterestByID))
-		routes.PUT("", wrappers.RoleWrapper(constants.Roles, putPointOfInterest))
+		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, putPointOfInterest))
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, postPointOfInterest))
 	}
 }

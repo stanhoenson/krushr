@@ -7,7 +7,7 @@ import (
 )
 
 // Singular
-func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (*T, error) {
+func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (*T, error) {
 	var entity T
 
 	result := tx.First(&entity, ID)
@@ -17,6 +17,16 @@ func GetEntity[T models.Route | models.Image | models.Detail | models.Link | mod
 	}
 
 	return &entity, nil
+}
+func GetEntityByConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, tx *gorm.DB) (*T, error) {
+
+	result := tx.First(&entity, &entity)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return entity, nil
 }
 
 func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, tx *gorm.DB) (*T, error) {

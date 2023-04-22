@@ -21,7 +21,6 @@ type PostRouteBodyOld struct {
 }
 
 type PutRouteBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostRouteBody
 }
 
@@ -30,7 +29,6 @@ type PostImageBody struct {
 	Path string `json:"path" binding:"required"`
 }
 type PutImageBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostImageBody
 }
 
@@ -39,7 +37,6 @@ type PostDetailBody struct {
 	Text string `json:"text" binding:"required"`
 }
 type PutDetailBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostDetailBody
 }
 
@@ -48,7 +45,6 @@ type PostLinkBody struct {
 	URL string `json:"url" binding:"required"`
 }
 type PutLinkBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostLinkBody
 }
 
@@ -58,7 +54,6 @@ type PostCategoryBody struct {
 	Position uint   `json:"position" binding:"required"`
 }
 type PutCategoryBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostCategoryBody
 }
 
@@ -67,22 +62,41 @@ type PostStatusBody struct {
 	Name string `json:"name" binding:"required"`
 }
 type PutStatusBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostStatusBody
 }
 
 // PointOfInterest
 type PostPointOfInterestBody struct {
-	Name       string             `json:"name"`
-	Longitude  float64            `json:"longitude"`
-	Latitude   float64            `json:"latitude"`
+	GetPointOfInterestBody
 	ImageIDs   []uint             `json:"imageIds"`
 	Details    []PostDetailBody   `json:"details"`
 	Links      []PostLinkBody     `json:"links"`
 	Categories []PostCategoryBody `json:"categories"`
 }
 
+type GetPointOfInterestBody struct {
+	Name      string  `json:"name"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+}
+
+
+func (g *GetPointOfInterestBody) ToPointOfInterest() PointOfInterest {
+	return PointOfInterest{
+		Name:      g.Name,
+		Longitude: g.Longitude,
+		Latitude:  g.Latitude,
+	}
+}
+
+func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestBody {
+	return GetPointOfInterestBody{
+		Name:      p.Name,
+		Longitude: p.Longitude,
+		Latitude:  p.Latitude,
+	}
+}
+
 type PutPointOfInterestBody struct {
-	ID uint `json:"id" binding:"required"`
 	PostPointOfInterestBody
 }

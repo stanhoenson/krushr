@@ -13,6 +13,14 @@ import (
 )
 
 func putCategory(c *gin.Context) {
+	id := c.Param("id")
+
+	u64, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
+		return
+	}
+	ID := uint(u64)
 	var putCategoryBody models.PutCategoryBody
 
 	if err := c.BindJSON(&putCategoryBody); err != nil {
@@ -25,7 +33,7 @@ func putCategory(c *gin.Context) {
 		return
 	}
 
-	_, err := services.UpdateCategory(&putCategoryBody)
+	_, err = services.UpdateCategory(ID, &putCategoryBody)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating category"})
 		return

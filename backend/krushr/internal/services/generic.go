@@ -8,7 +8,7 @@ import (
 
 // Singular
 func GetEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint) (*T, error) {
-	return repositories.GetEntity[T](ID, database.Db)
+	return repositories.GetEntityByID[T](ID, database.Db)
 }
 
 func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T) (*T, error) {

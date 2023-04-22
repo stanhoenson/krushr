@@ -38,9 +38,9 @@ func CreateCategory(postCategoryBody *models.PostCategoryBody) (*models.Category
 
 }
 
-func UpdateCategory(putCategoryBody *models.PutCategoryBody) (*models.Category, error) {
+func UpdateCategory(ID uint, putCategoryBody *models.PutCategoryBody) (*models.Category, error) {
 
-	category, err := repositories.GetEntity[models.Category](putCategoryBody.ID, database.Db)
+	category, err := repositories.GetEntityByID[models.Category](ID, database.Db)
 
 	if err != nil {
 		return nil, err

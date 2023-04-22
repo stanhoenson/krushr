@@ -18,12 +18,12 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID, database.Db)
 }
 
-func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
+func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
 	//create points of interest
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
 	for _, postPointOfInterestBody := range putRouteBody.PointsOfInterest {
 
-		createdPointOfInterest, err := CreateOrUpdatePointOfInterest(&postPointOfInterestBody, authenticatedUser, tx)
+		createdPointOfInterest, err := FindOrCreateOrUpdatePointOfInterest(&postPointOfInterestBody, authenticatedUser, tx)
 		if err != nil {
 			return nil, err
 		}
@@ -75,12 +75,12 @@ func UpdateRoute(putRouteBody *models.PutRouteBody, authenticatedUser *models.Us
 		imagesPointers = append(imagesPointers, &image)
 	}
 
-	status, err := repositories.GetEntity[models.Status](putRouteBody.StatusID, tx)
+	status, err := repositories.GetEntityByID[models.Status](putRouteBody.StatusID, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	route, err := repositories.GetRouteByIDAndUserID(putRouteBody.ID, authenticatedUser.ID, tx)
+	route, err := repositories.GetRouteByIDAndUserID(ID, authenticatedUser.ID, tx)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -122,7 +122,7 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
 	for _, postPointOfInterestBody := range postRouteBody.PointsOfInterest {
 
-		createdPointOfInterest, err := CreateOrUpdatePointOfInterest(&postPointOfInterestBody, authenticatedUser, tx)
+		createdPointOfInterest, err := FindOrCreateOrUpdatePointOfInterest(&postPointOfInterestBody, authenticatedUser, tx)
 		if err != nil {
 			return nil, err
 		}
@@ -173,7 +173,7 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 		imagesPointers = append(imagesPointers, &image)
 	}
 
-	status, err := repositories.GetEntity[models.Status](postRouteBody.StatusID, tx)
+	status, err := repositories.GetEntityByID[models.Status](postRouteBody.StatusID, tx)
 	if err != nil {
 		return nil, err
 	}
