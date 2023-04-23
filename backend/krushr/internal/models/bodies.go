@@ -96,9 +96,7 @@ func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestB
 	}
 }
 
-type PutPointOfInterestBody struct {
-	PostPointOfInterestBody
-}
+type PutPointOfInterestBody = PostPointOfInterestBody
 
 type PostUserBody struct {
 	Email    string `json:"email"`
@@ -106,10 +104,6 @@ type PostUserBody struct {
 	RoleID   uint   `json:"roleId"`
 }
 
-
-
 type PutUserBody struct {
 	PostUserBody
 }
-
-

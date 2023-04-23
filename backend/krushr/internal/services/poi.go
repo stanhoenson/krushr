@@ -26,7 +26,7 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 		return nil, err
 	}
 
-	pointOfInterestRelatedEntries, err := CreateOrUpdateRelatedEntities(&putPointOfInterestBody.PostPointOfInterestBody, tx)
+	pointOfInterestRelatedEntries, err := CreateOrUpdatePointOfInterestRelatedEntities(putPointOfInterestBody, tx)
 
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ type PointOfInterestRelatedEntries struct {
 	categories []*models.Category
 }
 
-func CreateOrUpdateRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*PointOfInterestRelatedEntries, error) {
+func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*PointOfInterestRelatedEntries, error) {
 
 	images, err := repositories.GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs, tx)
 	if err != nil {
@@ -109,6 +109,34 @@ func CreateOrUpdateRelatedEntities(postPointOfInterestBody *models.PostPointOfIn
 
 }
 
+func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
+
+	pointOfInterestRelatedEntries, err := CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody, tx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	pointOfInterest := models.PointOfInterest{
+		Name:       postPointOfInterestBody.Name,
+		Longitude:  postPointOfInterestBody.Longitude,
+		Latitude:   postPointOfInterestBody.Latitude,
+		Categories: pointOfInterestRelatedEntries.categories,
+		UserID:     authenticatedUser.ID,
+		Details:    pointOfInterestRelatedEntries.details,
+		Links:      pointOfInterestRelatedEntries.links,
+		Images:     pointOfInterestRelatedEntries.images,
+	}
+
+	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return createdPointOfInterest, err
+}
+
 func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
 
 	//find
@@ -125,24 +153,7 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 	if err == gorm.ErrRecordNotFound {
 		//create
 
-		pointOfInterestRelatedEntries, err := CreateOrUpdateRelatedEntities(postPointOfInterestBody, tx)
-
-		if err != nil {
-			return nil, err
-		}
-
-		pointOfInterest := models.PointOfInterest{
-			Name:       postPointOfInterestBody.Name,
-			Longitude:  postPointOfInterestBody.Longitude,
-			Latitude:   postPointOfInterestBody.Latitude,
-			Categories: pointOfInterestRelatedEntries.categories,
-			UserID:     authenticatedUser.ID,
-			Details:    pointOfInterestRelatedEntries.details,
-			Links:      pointOfInterestRelatedEntries.links,
-			Images:     pointOfInterestRelatedEntries.images,
-		}
-
-		createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
+		createdPointOfInterest, err := CreatePointOfInterest(postPointOfInterestBody, authenticatedUser, tx)
 
 		if err != nil {
 			return nil, err
@@ -152,97 +163,14 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 	} else if retrievedPointOfInterest.UserID == authenticatedUser.ID {
 		//update
 
-		pointOfInterestRelatedEntries, err := CreateOrUpdateRelatedEntities(postPointOfInterestBody, tx)
-
+		updatedPointOfInterest, err := UpdatePointOfInterest(retrievedPointOfInterest.ID, postPointOfInterestBody, authenticatedUser, tx)
 		if err != nil {
 			return nil, err
 		}
 
-		retrievedPointOfInterest.Name = postPointOfInterestBody.Name
-		retrievedPointOfInterest.Longitude = postPointOfInterestBody.Longitude
-		retrievedPointOfInterest.Latitude = postPointOfInterestBody.Latitude
-		retrievedPointOfInterest.Categories = pointOfInterestRelatedEntries.categories
-		retrievedPointOfInterest.Details = pointOfInterestRelatedEntries.details
-		retrievedPointOfInterest.Links = pointOfInterestRelatedEntries.links
-		retrievedPointOfInterest.Images = pointOfInterestRelatedEntries.images
-
-		updatePointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
-		if err != nil {
-			return nil, err
-		}
-
-		return updatePointOfInterest, err
+		return updatedPointOfInterest, err
 	} else {
 		return retrievedPointOfInterest, nil
 	}
 
-	// createdPointOfInterest, err := repositories.FirstOrCreateEntity(&pointOfInterest, &pointOfInterest, tx)
-	// if err != nil {
-	// 	tx2.Rollback()
-	// 	return nil, err
-	// }
-	// err = tx2.Model(createdPointOfInterest).Association("Images").Replace(images)
-	// if err != nil {
-	// 	tx2.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx2.Model(createdPointOfInterest).Association("Details").Replace(details)
-	// if err != nil {
-	// 	tx2.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx2.Model(createdPointOfInterest).Association("Links").Replace(links)
-	// if err != nil {
-	// 	tx2.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-
-}
-
-func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User) (*models.PointOfInterest, error) {
-	images, err := GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs)
-	if err != nil {
-		return nil, fmt.Errorf("Error retrieving images")
-	}
-	// details, err := GetEntitiesByIDs[models.Detail](&postPointOfInterestBody.DetailIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving details")
-	// }
-	// links, err := GetEntitiesByIDs[models.Link](&postPointOfInterestBody.LinkIDs)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("Error retrieving links")
-	// }
-	tx := database.Db.Begin()
-
-	pointOfInterest := models.PointOfInterest{
-		Name:      postPointOfInterestBody.Name,
-		Latitude:  postPointOfInterestBody.Latitude,
-		Longitude: postPointOfInterestBody.Longitude,
-		UserID:    authenticatedUser.ID,
-	}
-
-	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	err = tx.Model(createdPointOfInterest).Association("Images").Replace(images)
-	if err != nil {
-		tx.Rollback()
-		return nil, fmt.Errorf("Error replacing association")
-	}
-	// err = tx.Model(createdPointOfInterest).Association("Details").Replace(details)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-	// err = tx.Model(createdPointOfInterest).Association("Links").Replace(links)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	return nil, fmt.Errorf("Error replacing association")
-	// }
-
-	tx.Commit()
-
-	return createdPointOfInterest, nil
 }

@@ -68,7 +68,9 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 				if err != nil {
 					return nil, err
 				}
-				return services.CreatePointOfInterest(requestBody, user)
+				return wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.PointOfInterest, error) {
+					return services.CreatePointOfInterest(requestBody, user, tx)
+				})
 			})
 		}))
 	}
