@@ -59,7 +59,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 			})
 		}))
 		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
-
 			Put(ctx, func(requestBody *models.PutRouteBody) error {
 				return validators.ValidatePutRoute(requestBody)
 			}, func(c *gin.Context, ID uint, requestBody *models.PutRouteBody) (*models.Route, error) {

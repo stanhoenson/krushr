@@ -12,10 +12,11 @@ import (
 func Initialize() {
 	env.InitializeEnvironment()
 
+	// Returns an engine with a Logger and Recovery middleware already attached
 	r := gin.Default()
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
-	handlers.InitializeHandlers(r)
+	handlers.RegisterHandlers(r)
 	database.InitializeDatabase(env.DatabaseName)
 
 	r.Run(env.Address)

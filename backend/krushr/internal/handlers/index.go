@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitializeHandlers(r *gin.Engine) {
+func RegisterHandlers(r *gin.Engine) {
 	RegisterLinkRoutes(r)
 	RegisterDetailRoutes(r)
 	RegisterRouteRoutes(r)
