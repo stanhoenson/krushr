@@ -1,5 +1,5 @@
 // Route
-interface PostRouteBody {
+export interface PostRouteBody {
   name: string;
   pointsOfInterest: PostPointOfInterestBody[];
   imageIds?: number[];
@@ -9,7 +9,7 @@ interface PostRouteBody {
   statusId: number;
 }
 
-interface PostRouteBodyOld {
+export interface PostRouteBodyOld {
   name: string;
   pointOfInterestIds?: number[];
   imageIds?: number[];
@@ -19,67 +19,71 @@ interface PostRouteBodyOld {
   statusId: number;
 }
 
-interface PutRouteBody extends PostRouteBody {
-  id: number;
-}
+export interface PutRouteBody extends PostRouteBody {}
 
 // Image
-interface PostImageBody {
+export interface PostImageBody {
   path: string;
 }
 
-interface PutImageBody extends PostImageBody {
-  id: number;
-}
+export interface PutImageBody extends PostImageBody {}
 
 // Detail
-interface PostDetailBody {
+export interface PostDetailBody {
   text: string;
 }
 
-interface PutDetailBody extends PostDetailBody {
-  id: number;
-}
+export interface PutDetailBody extends PostDetailBody {}
 
 // Link
-interface PostLinkBody {
+export interface PostLinkBody {
   url: string;
 }
 
-interface PutLinkBody extends PostLinkBody {
-  id: number;
-}
+export interface PutLinkBody extends PostLinkBody {}
 
 // Category
-interface PostCategoryBody {
+export interface PostCategoryBody {
   name: string;
   position: number;
 }
 
-interface PutCategoryBody extends PostCategoryBody {
-  id: number;
-}
+export interface PutCategoryBody extends PostCategoryBody {}
 
 // Status
-interface PostStatusBody {
+export interface PostStatusBody {
   name: string;
 }
 
-interface PutStatusBody extends PostStatusBody {
-  id: number;
-}
+export interface PutStatusBody extends PostStatusBody {}
 
 // PointOfInterest
-interface PostPointOfInterestBody {
-  name: string;
-  longitude: number;
-  latitude: number;
+export interface PostPointOfInterestBody extends GetPointOfInterestBody {
   imageIds?: number[];
   details?: PostDetailBody[];
   links?: PostLinkBody[];
   categories?: PostCategoryBody[];
 }
 
-interface PutPointOfInterestBody extends PostPointOfInterestBody {
-  id: number;
+export interface GetPointOfInterestBody {
+  name: string;
+  longitude: number;
+  latitude: number;
 }
+
+export type PutPointOfInterestBody = PostPointOfInterestBody;
+
+export interface PostUserBody {
+  email: string;
+  password: string;
+  roleId: number;
+}
+
+export interface PutUserBody extends PostUserBody {}
+
+export interface SignUpBody {
+  email: string;
+  password: string;
+}
+
+export interface SignInBody extends SignUpBody {}
