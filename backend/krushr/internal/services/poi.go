@@ -118,11 +118,11 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 
 	retrievedPointOfInterest, err := repositories.GetEntityByConditions(&pointOfInterest, tx)
 
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 
-	if retrievedPointOfInterest.ID != 0 {
+	if err == gorm.ErrRecordNotFound {
 		//create
 
 		pointOfInterestRelatedEntries, err := CreateOrUpdateRelatedEntities(postPointOfInterestBody, tx)

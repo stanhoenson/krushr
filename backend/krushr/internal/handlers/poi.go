@@ -63,12 +63,12 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(c *gin.Context) {
 			Post(c, func(requestBody *models.PostPointOfInterestBody) error {
 				return validators.ValidatePostPointOfInterest(requestBody)
-			}, func(c *gin.Context, rbt *models.PostPointOfInterestBody) (*models.PointOfInterest, error) {
+			}, func(c *gin.Context, requestBody *models.PostPointOfInterestBody) (*models.PointOfInterest, error) {
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
 					return nil, err
 				}
-				return services.CreatePointOfInterest(rbt, user)
+				return services.CreatePointOfInterest(requestBody, user)
 			})
 		}))
 	}

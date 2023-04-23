@@ -51,9 +51,9 @@ type Status struct {
 
 type PointOfInterest struct {
 	ID         uint        `gorm:"primaryKey" json:"id"`
-	Name       string      `gorm:"not null" json:"name"`
-	Longitude  float64     `gorm:"not null" json:"longitude"`
-	Latitude   float64     `gorm:"not null" json:"latitude"`
+	Name       string      `gorm:"not null;uniqueIndex:poiIndex" json:"name"`
+	Longitude  float64     `gorm:"not null;uniqueIndex:poiIndex" json:"longitude"`
+	Latitude   float64     `gorm:"not null;uniqueIndex:poiIndex" json:"latitude"`
 	Images     []*Image    `gorm:"many2many:points_of_interest_images;constraint:OnDelete:CASCADE" json:"images"`
 	Details    []*Detail   `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"details"`
 	Links      []*Link     `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"links"`
