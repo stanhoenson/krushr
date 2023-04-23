@@ -5,6 +5,8 @@ import (
 )
 
 func InitializeHandlers(r *gin.Engine) {
+	RegisterLinkRoutes(r)
+	RegisterDetailRoutes(r)
 	RegisterRouteRoutes(r)
 	RegisterPointOfInterestRoutes(r)
 	RegisterUserRoutes(r)

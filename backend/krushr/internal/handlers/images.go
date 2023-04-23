@@ -34,27 +34,6 @@ func getImageDataByID(c *gin.Context) {
 
 }
 
-func getImageByID(c *gin.Context) {
-
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	image, err := services.GetEntity[models.Image](ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving image"})
-		return
-
-	}
-	c.IndentedJSON(http.StatusOK, image)
-
-}
-
 func postImage(c *gin.Context) {
 	// single file
 	fileHeader, err := c.FormFile("file")
@@ -73,33 +52,13 @@ func postImage(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createdFile)
 }
 
-func deleteImage(c *gin.Context) {
-
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	deletedCategory, err := services.DeleteImage(ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting image"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, deletedCategory)
-
-}
-
 func RegisterImageRoutes(r *gin.Engine) {
 	r.GET("/imagedata/:id", getImageDataByID)
+
 	routes := r.Group("/images")
 	{
-		routes.GET("/:id", getImageByID)
-		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, deletePointOfInterestByID))
+		routes.GET("/:id", GetByID[models.Image])
+		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, DeleteByID[models.Image]))
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, postImage))
 	}
 }

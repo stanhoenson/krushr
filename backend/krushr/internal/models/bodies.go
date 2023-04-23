@@ -80,7 +80,6 @@ type GetPointOfInterestBody struct {
 	Latitude  float64 `json:"latitude"`
 }
 
-
 func (g *GetPointOfInterestBody) ToPointOfInterest() PointOfInterest {
 	return PointOfInterest{
 		Name:      g.Name,
@@ -100,3 +99,17 @@ func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestB
 type PutPointOfInterestBody struct {
 	PostPointOfInterestBody
 }
+
+type PostUserBody struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	RoleID   uint   `json:"roleId"`
+}
+
+
+
+type PutUserBody struct {
+	PostUserBody
+}
+
+

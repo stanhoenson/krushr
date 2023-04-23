@@ -15,45 +15,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func putPointOfInterest(c *gin.Context) {
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	var putPointOfInterestBody models.PutPointOfInterestBody
-
-	if err := c.BindJSON(&putPointOfInterestBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := validators.ValidatePutPointOfInterest(&putPointOfInterestBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	user, err := utils.GetUserFromContext(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
-		return
-	}
-
-	updatedPointOfInterest, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.PointOfInterest, error) {
-		return services.UpdatePointOfInterest(ID, &putPointOfInterestBody, user, tx)
-
-	})
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating point of interest"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, updatedPointOfInterest)
-}
-
 func deletePointOfInterestByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -78,72 +39,37 @@ func deletePointOfInterestByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, deletedPointOfInterest)
 }
 
-func getPointsOfInterest(c *gin.Context) {
-	pointsOfInterest, err := services.GetEntities[models.PointOfInterest]()
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving points of interest"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, pointsOfInterest)
-}
-
-func getPointOfInterestByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Convert string to uint
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	pointsOfInterest, err := services.GetEntity[models.PointOfInterest](ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving point of interest"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, pointsOfInterest)
-}
-
-func postPointOfInterest(c *gin.Context) {
-	var postPointOfInterestBody models.PostPointOfInterestBody
-
-	if err := c.BindJSON(&postPointOfInterestBody); err != nil {
-
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := validators.ValidatePostPointOfInterest(&postPointOfInterestBody); err != nil {
-
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	user, err := utils.GetUserFromContext(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
-		return
-	}
-
-	createdPointOfInterest, err := services.CreatePointOfInterest(&postPointOfInterestBody, user)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating point of interest"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, createdPointOfInterest)
-}
-
 func RegisterPointOfInterestRoutes(r *gin.Engine) {
 	routes := r.Group("/points-of-interest")
 	{
-		routes.GET("", getPointsOfInterest)
-		routes.GET("/:id", getPointOfInterestByID)
+		routes.GET("", GetAll[models.PointOfInterest])
+		routes.GET("/:id", GetByID[models.PointOfInterest])
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, deletePointOfInterestByID))
-		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, putPointOfInterest))
-		routes.POST("", wrappers.RoleWrapper(constants.Roles, postPointOfInterest))
+		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
+			Put(ctx, func(requestBody *models.PutPointOfInterestBody) error {
+				return validators.ValidatePutPointOfInterest(requestBody)
+			}, func(c *gin.Context, ID uint, requestBody *models.PutPointOfInterestBody) (*models.PointOfInterest, error) {
+
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return nil, err
+				}
+
+				return wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.PointOfInterest, error) {
+					return services.UpdatePointOfInterest(ID, requestBody, user, tx)
+				})
+			})
+		}))
+		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(c *gin.Context) {
+			Post(c, func(requestBody *models.PostPointOfInterestBody) error {
+				return validators.ValidatePostPointOfInterest(requestBody)
+			}, func(c *gin.Context, rbt *models.PostPointOfInterestBody) (*models.PointOfInterest, error) {
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return nil, err
+				}
+				return services.CreatePointOfInterest(rbt, user)
+			})
+		}))
 	}
 }

@@ -15,44 +15,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func PutRoute(c *gin.Context) {
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	var putRouteBody models.PutRouteBody
-
-	if err := c.BindJSON(&putRouteBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := validators.ValidatePutRoute(&putRouteBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	user, err := utils.GetUserFromContext(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
-		return
-	}
-
-	updatedRoute, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
-		return services.UpdateRoute(ID, &putRouteBody, user, tx)
-	})
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating route"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, updatedRoute)
-}
-
 func DeleteRouteByID(c *gin.Context) {
 	id := c.Param("id")
 
@@ -78,74 +40,38 @@ func DeleteRouteByID(c *gin.Context) {
 	c.JSON(http.StatusOK, deletedRoute)
 }
 
-func getRoutes(c *gin.Context) {
-	routes, err := services.GetEntities[models.Route]()
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving routes"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, routes)
-}
-
-func GetRouteByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Convert string to uint
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	route, err := services.GetEntity[models.Route](ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving route"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, route)
-}
-
-func postRoute(c *gin.Context) {
-	var postRouteBody models.PostRouteBody
-
-	if err := c.BindJSON(&postRouteBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := validators.ValidatePostRouteBody(&postRouteBody); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	user, err := utils.GetUserFromContext(c)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "No user in context"})
-		return
-	}
-
-	createdRoute, err := wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
-		return services.CreateRoute(&postRouteBody, user, tx)
-
-	})
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating route" + err.Error()})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, createdRoute)
-}
-
 func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
-		routes.GET("", getRoutes)
-		// routes.POST("", wrappers.RoleWrapper(constants.Roles, postRoute))
-		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, PutRoute))
-		routes.GET("/:id", GetRouteByID)
+		routes.GET("", GetAll[models.Route])
+		routes.GET("/:id", GetByID[models.Route])
+		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
+			Post(ctx, func(requestBody *models.PostRouteBody) error {
+				return validators.ValidatePostRouteBody(requestBody)
+			}, func(c *gin.Context, requestBody *models.PostRouteBody) (*models.Route, error) {
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return nil, err
+				}
+				return wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
+					return services.CreateRoute(requestBody, user, tx)
+				})
+			})
+		}))
+		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
+
+			Put(ctx, func(requestBody *models.PutRouteBody) error {
+				return validators.ValidatePutRoute(requestBody)
+			}, func(c *gin.Context, ID uint, requestBody *models.PutRouteBody) (*models.Route, error) {
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return nil, err
+				}
+				return wrappers.WithTransaction(database.Db, func(tx *gorm.DB) (*models.Route, error) {
+					return services.UpdateRoute(ID, requestBody, user, tx)
+				})
+			})
+		}))
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, DeleteRouteByID))
 	}
 }
