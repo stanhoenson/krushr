@@ -5,9 +5,7 @@ import (
 	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
-	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
-	"github.com/stanhoenson/krushr/internal/repositories"
 )
 
 func ValidatePutRoute(route *models.PutRouteBody) error {
@@ -17,14 +15,6 @@ func ValidatePutRoute(route *models.PutRouteBody) error {
 
 	if len(route.Name) > constants.TitleMaxLength {
 		return fmt.Errorf("title shouldn't be longer than %d characters", constants.TitleMaxLength)
-	}
-
-	statuses, err := repositories.GetEntities[models.Status](database.Db)
-	if err != nil {
-		return errors.New("failed retrieving statuses")
-	}
-	if route.StatusID < uint(len(*statuses)) {
-		return errors.New("status_id should have entry in statuses table")
 	}
 
 	// TODO probably caught by insert

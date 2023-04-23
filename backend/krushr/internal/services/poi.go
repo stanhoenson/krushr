@@ -48,14 +48,14 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 	return updatePointOfInterest, err
 }
 
-type PointOfInterestRelatedEntries struct {
+type pointOfInterestRelatedEntries struct {
 	images     []*models.Image
 	links      []*models.Link
 	details    []*models.Detail
 	categories []*models.Category
 }
 
-func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*PointOfInterestRelatedEntries, error) {
+func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*pointOfInterestRelatedEntries, error) {
 
 	images, err := repositories.GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs, tx)
 	if err != nil {
@@ -100,7 +100,7 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 		imagesPointers = append(imagesPointers, &image)
 	}
 
-	return &PointOfInterestRelatedEntries{
+	return &pointOfInterestRelatedEntries{
 		images:     imagesPointers,
 		categories: foundOrCreatedCategories,
 		details:    foundOrCreatedDetails,

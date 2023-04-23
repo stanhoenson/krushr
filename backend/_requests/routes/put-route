@@ -1,0 +1,2 @@
+#!/bin/sh
+curl --header @headers.txt -X PUT --json @post-route-body.json http://localhost:8080/routes/1

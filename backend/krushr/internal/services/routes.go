@@ -66,7 +66,7 @@ func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *
 	return updatedRoute, nil
 }
 
-type RouteRelatedEntities struct {
+type routeRelatedEntities struct {
 	pointsOfInterest []*models.PointOfInterest
 	images           []*models.Image
 	links            []*models.Link
@@ -74,7 +74,7 @@ type RouteRelatedEntities struct {
 	categories       []*models.Category
 }
 
-func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*RouteRelatedEntities, error) {
+func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*routeRelatedEntities, error) {
 
 	//create points of interest
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
@@ -131,7 +131,7 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 		imagesPointers = append(imagesPointers, &image)
 	}
 
-	return &RouteRelatedEntities{
+	return &routeRelatedEntities{
 		images:           imagesPointers,
 		details:          foundOrCreatedDetails,
 		categories:       foundOrCreatedCategories,
