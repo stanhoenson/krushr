@@ -17,7 +17,7 @@ func Initialize() {
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
 	handlers.RegisterHandlers(r)
-	database.InitializeDatabase(env.DatabaseName)
+	database.InitializeDatabase(env.DatabaseName, env.DataFolder)
 
 	r.Run(env.Address)
 }

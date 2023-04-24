@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	"github.com/stanhoenson/krushr/internal/constants"
-	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -14,15 +13,15 @@ import (
 
 var Db *gorm.DB
 
-func InitializeDatabase(databaseName string) *gorm.DB {
+func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 
 	// Create the directory if it doesn't exist
-	err := os.MkdirAll(env.DataFolder, os.ModePerm)
+	err := os.MkdirAll(folderName, os.ModePerm)
 	if err != nil {
 		log.Fatal("failed to create directory")
 	}
 
-	db, err := gorm.Open(sqlite.Open(filepath.Join(env.DataFolder, databaseName)))
+	db, err := gorm.Open(sqlite.Open(filepath.Join(folderName, databaseName)))
 	if err != nil {
 		log.Fatal("failed to initialize database")
 	}

@@ -6,11 +6,28 @@ import (
 	"gorm.io/gorm"
 )
 
-// Singular
-func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (*T, error) {
-	var entity T
+type GetOptions struct {
+	PreloadAssociations string
+}
 
-	result := tx.First(&entity, ID)
+type GetOption func(*GetOptions)
+
+// Singular
+func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB, setters ...GetOption) (*T, error) {
+	options := &GetOptions{
+		PreloadAssociations: "",
+	}
+	for _, setter := range setters {
+		setter(options)
+	}
+
+	var entity T
+	var result *gorm.DB
+	if options.PreloadAssociations != "" {
+		result = tx.Preload(options.PreloadAssociations).First(&entity, ID)
+	} else {
+		result = tx.First(&entity, ID)
+	}
 
 	if result.Error != nil {
 		return nil, result.Error

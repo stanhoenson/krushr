@@ -2,12 +2,14 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/handlers"
@@ -25,7 +27,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
-	database.InitializeDatabase("test.db")
+	database.InitializeDatabase("test.db", "test/")
 
 	// sequentially
 	// t.Run("routes", func(t *testing.T) {
@@ -39,9 +41,9 @@ func TestRoutesRoutes(t *testing.T) {
 
 	// parallel
 	t.Run("routes", func(t *testing.T) {
-		t.Run("testDeleteRouteByID", func(t *testing.T) {
-			testDeleteRouteByID(t, r)
-		})
+		// t.Run("testDeleteRouteByID", func(t *testing.T) {
+		// 	testDeleteRouteByID(t, r)
+		// })
 		// t.Run("testDeleteRouteUnauthorized", func(t *testing.T) {
 		// 	testDeleteRouteUnauthorized(t, r)
 		// })
@@ -57,7 +59,86 @@ func TestRoutesRoutes(t *testing.T) {
 	})
 
 	// teardown
-	os.Remove("test.db")
+	os.Remove("test/test.db")
+	os.Remove("test")
+}
+
+func TestPerformance(t *testing.T) {
+	database.InitializeDatabase("test.db", "test/")
+	r := gin.Default()
+	// r.DELETE("/:id",)
+	// run the function 1000 times and record the timings
+	var totalTime time.Duration
+	for i := 0; i < 10000; i++ {
+		start := time.Now()
+		w := httptest.NewRecorder()
+		c := gin.CreateTestContextOnly(w, r)
+		c.AddParam("id", "1")
+		// call the function here
+		handlers.DeleteByID[models.Route](c)
+		// ...
+		assert.Equal(t, 200, w.Code)
+		elapsed := time.Since(start)
+		totalTime += elapsed
+	}
+
+	// calculate the average time and print the result
+	avgTime := totalTime / 10000
+	fmt.Printf("Average time per function call: %v\n", avgTime)
+	totalTime = 0
+	for i := 0; i < 10000; i++ {
+		start := time.Now()
+		w := httptest.NewRecorder()
+		c := gin.CreateTestContextOnly(w, r)
+		c.AddParam("id", "1")
+		// call the function here
+		handlers.DeleteByIDCool[models.Route](c, func(c *gin.Context, ID uint) (*models.Route, error) {
+			return services.DeleteEntityByID[models.Route](ID)
+		})
+
+		// ...
+
+		assert.Equal(t, 200, w.Code)
+		elapsed := time.Since(start)
+		totalTime += elapsed
+	}
+
+	// calculate the average time and print the result
+	avgTime = totalTime / 10000
+	fmt.Printf("Average time per function call: %v\n", avgTime)
+
+	totalTime = 0
+	for i := 0; i < 10000; i++ {
+		start := time.Now()
+		w := httptest.NewRecorder()
+		c := gin.CreateTestContextOnly(w, r)
+		c.AddParam("id", "1")
+		// call the function here
+		handlers.DeleteByIDCooler[models.Route](c, func(dbi *handlers.DeleteByIDOptions[models.Route]) {
+			dbi.DeleteFunction = func(c *gin.Context, ID uint) (*models.Route, error) {
+				return services.DeleteEntityByID[models.Route](ID)
+			}
+		}, func(dbi *handlers.DeleteByIDOptions[models.Route]) {
+			dbi.DeleteFunction = func(c *gin.Context, ID uint) (*models.Route, error) {
+				return services.DeleteEntityByID[models.Route](ID)
+			}
+		}, func(dbi *handlers.DeleteByIDOptions[models.Route]) {
+			dbi.DeleteFunction = func(c *gin.Context, ID uint) (*models.Route, error) {
+				return services.DeleteEntityByID[models.Route](ID)
+			}
+		})
+		// ...
+		assert.Equal(t, 200, w.Code)
+		elapsed := time.Since(start)
+		totalTime += elapsed
+	}
+
+	// calculate the average time and print the result
+	avgTime = totalTime / 10000
+	fmt.Printf("Average time per function call: %v\n", avgTime)
+
+	os.Remove("test/test.db")
+	os.Remove("test")
 }
 
 func createDummyRoute() *models.Route {

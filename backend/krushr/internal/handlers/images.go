@@ -22,7 +22,7 @@ func getImageDataByID(c *gin.Context) {
 	}
 	ID := uint(u64)
 
-	image, err := services.GetEntity[models.Image](ID)
+	image, err := services.GetEntityByID[models.Image](ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving image"})
 		return
@@ -57,7 +57,9 @@ func RegisterImageRoutes(r *gin.Engine) {
 
 	routes := r.Group("/images")
 	{
-		routes.GET("/:id", GetByID[models.Image])
+		routes.GET("/:id", func(ctx *gin.Context) {
+			GetByID[models.Image](ctx)
+		})
 		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, DeleteByID[models.Image]))
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, postImage))
 	}

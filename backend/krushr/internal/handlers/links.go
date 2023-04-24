@@ -10,7 +10,9 @@ import (
 func RegisterLinkRoutes(r *gin.Engine) {
 	routes := r.Group("/links")
 	{
-		routes.GET("", GetAll[models.Link])
+		routes.GET("", func(ctx *gin.Context) {
+			GetAll[models.Link](ctx)
+		})
 		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, DeleteByID[models.Link]))
 	}
 }

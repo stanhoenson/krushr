@@ -11,6 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
+func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
+
+	return repositories.GetRouteByIDWithAssociations(ID, database.Db)
+
+}
+
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.Route](ID, database.Db)
