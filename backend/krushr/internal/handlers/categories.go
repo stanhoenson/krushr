@@ -17,8 +17,8 @@ var categoryPostOptions = PostOptions[models.Category, models.PostCategoryBody]{
 		return services.CreateCategory(requestBody)
 	},
 }
-var categoryPutOptions = PutOptions[models.Category, models.PutCategoryBody]{
 
+var categoryPutOptions = PutOptions[models.Category, models.PutCategoryBody]{
 	ValidationFunction: func(requestBody *models.PutCategoryBody) error {
 		return validators.ValidatePutCategoryBody(requestBody)
 	},
@@ -38,7 +38,6 @@ func RegisterCategoryRoutes(r *gin.Engine) {
 			Post(ctx, func(po *PostOptions[models.Category, models.PostCategoryBody]) {
 				po = &categoryPostOptions
 			})
-
 		}))
 		routes.PUT("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(po *PutOptions[models.Category, models.PutCategoryBody]) {

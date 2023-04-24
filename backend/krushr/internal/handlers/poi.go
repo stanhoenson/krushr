@@ -41,11 +41,9 @@ func deletePointOfInterestByID(c *gin.Context) {
 
 var poiPostOptions = PostOptions[models.PointOfInterest, models.PostPointOfInterestBody]{
 	ValidationFunction: func(requestBody *models.PostPointOfInterestBody) error {
-
 		return validators.ValidatePostPointOfInterest(requestBody)
 	},
 	CreateFunction: func(c *gin.Context, requestBody *models.PostPointOfInterestBody) (*models.PointOfInterest, error) {
-
 		user, err := utils.GetUserFromContext(c)
 		if err != nil {
 			return nil, err
@@ -55,6 +53,7 @@ var poiPostOptions = PostOptions[models.PointOfInterest, models.PostPointOfInter
 		})
 	},
 }
+
 var poiPutOptions = PutOptions[models.PointOfInterest, models.PutPointOfInterestBody]{
 	ValidationFunction: func(requestBody *models.PutPointOfInterestBody) error {
 		return validators.ValidatePutPointOfInterest(requestBody)

@@ -37,7 +37,6 @@ func WithTransaction[T any](db *gorm.DB, fn func(tx *gorm.DB) (T, error)) (T, er
 
 	initialT, err = fn(tx)
 	defer func() {
-
 		if r := recover(); r != nil {
 			tx.Rollback()
 			panic(r)
@@ -53,5 +52,4 @@ func WithTransaction[T any](db *gorm.DB, fn func(tx *gorm.DB) (T, error)) (T, er
 		}
 	}()
 	return initialT, err
-
 }

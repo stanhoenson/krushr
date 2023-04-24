@@ -35,6 +35,7 @@ func DeleteByID[T models.Route | models.Image | models.Detail | models.Link | mo
 
 	c.IndentedJSON(http.StatusOK, deletedEntity)
 }
+
 func DeleteByIDCool[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*T, error)) {
 	id := c.Param("id")
 
@@ -53,6 +54,7 @@ func DeleteByIDCool[T models.Route | models.Image | models.Detail | models.Link 
 
 	c.IndentedJSON(http.StatusOK, deletedEntity)
 }
+
 func DeleteByIDCooler[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, setters ...DeleteByIDOption[T]) {
 	deleteByIDOptions := &DeleteByIDOptions[T]{
 		DeleteFunction: func(c *gin.Context, ID uint) (*T, error) {
@@ -89,7 +91,6 @@ type GetAllOptions[T any] struct {
 type GetAllOption[T any] func(*GetAllOptions[T])
 
 func GetAll[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, setters ...GetAllOption[T]) {
-
 	getAllOptions := &GetAllOptions[T]{
 		GetFunction: func(c *gin.Context) (*[]T, error) {
 			return services.GetEntities[T]()
@@ -176,7 +177,7 @@ func Post[EntityType models.Route | models.Image | models.Detail | models.Link |
 
 	createdEntity, err := postOptions.CreateFunction(c, &requestBody)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating " + utils.GetTypeString(createdEntity)+err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating " + utils.GetTypeString(createdEntity) + err.Error()})
 		return
 	}
 
@@ -196,7 +197,6 @@ func Put[EntityType models.Route | models.Image | models.Detail | models.Link | 
 			return nil
 		},
 		UpdateFunction: func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error) {
-
 			return nil, fmt.Errorf("Not implemented")
 		},
 	}

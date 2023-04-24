@@ -35,8 +35,8 @@ func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link |
 
 	return &entity, nil
 }
-func GetEntityByConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, tx *gorm.DB) (*T, error) {
 
+func GetEntityByConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, tx *gorm.DB) (*T, error) {
 	result := tx.First(&entity, &entity)
 
 	if result.Error != nil {

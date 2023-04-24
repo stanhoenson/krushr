@@ -30,7 +30,6 @@ func GetRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, er
 }
 
 func GetRouteByIDWithAssociations(ID uint, tx *gorm.DB) (*models.Route, error) {
-
 	var route models.Route
 	result := tx.Preload(clause.Associations).First(&route, ID)
 
@@ -39,5 +38,4 @@ func GetRouteByIDWithAssociations(ID uint, tx *gorm.DB) (*models.Route, error) {
 	}
 
 	return &route, nil
-
 }

@@ -14,11 +14,10 @@ var userPostOptions = PostOptions[models.User, models.PostUserBody]{
 		return nil
 	},
 	CreateFunction: func(c *gin.Context, requestBody *models.PostUserBody) (*models.User, error) {
-
 		return services.CreateUser(requestBody, database.Db)
-
 	},
 }
+
 var userPutOptions = PutOptions[models.User, models.PutUserBody]{
 	ValidationFunction: func(requestBody *models.PutUserBody) error {
 		return nil

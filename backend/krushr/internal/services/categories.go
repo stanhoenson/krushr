@@ -8,7 +8,6 @@ import (
 )
 
 func FirstOrCreateCategory(postDetailBody *models.PostCategoryBody, tx *gorm.DB) (*models.Category, error) {
-
 	category := models.Category{
 		Name: postDetailBody.Name,
 	}
@@ -19,11 +18,9 @@ func FirstOrCreateCategory(postDetailBody *models.PostCategoryBody, tx *gorm.DB)
 	}
 
 	return createdCategory, nil
-
 }
 
 func CreateCategory(postCategoryBody *models.PostCategoryBody) (*models.Category, error) {
-
 	category := models.Category{
 		Name:     postCategoryBody.Name,
 		Position: postCategoryBody.Position,
@@ -35,13 +32,10 @@ func CreateCategory(postCategoryBody *models.PostCategoryBody) (*models.Category
 	}
 
 	return createdCategory, nil
-
 }
 
 func UpdateCategory(ID uint, putCategoryBody *models.PutCategoryBody) (*models.Category, error) {
-
 	category, err := repositories.GetEntityByID[models.Category](ID, database.Db)
-
 	if err != nil {
 		return nil, err
 	}
@@ -55,5 +49,4 @@ func UpdateCategory(ID uint, putCategoryBody *models.PutCategoryBody) (*models.C
 	}
 
 	return updatedCategory, nil
-
 }

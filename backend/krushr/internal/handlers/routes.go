@@ -87,8 +87,8 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		}))
 		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(po *PutOptions[models.Route, models.PutRouteBody]) {
-                po.UpdateFunction = routePutOptions.UpdateFunction
-                po.ValidationFunction = routePutOptions.ValidationFunction
+				po.UpdateFunction = routePutOptions.UpdateFunction
+				po.ValidationFunction = routePutOptions.ValidationFunction
 			})
 		}))
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, DeleteRouteByID))

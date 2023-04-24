@@ -12,9 +12,7 @@ import (
 )
 
 func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
-
 	return repositories.GetRouteByIDWithAssociations(ID, database.Db)
-
 }
 
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
@@ -25,7 +23,6 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 }
 
 func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
-
 	routeRelatedEntities, err := CreateOrUpdateRouteRelatedEntities(&putRouteBody.PostRouteBody, authenticatedUser, tx)
 	if err != nil {
 		return nil, err
@@ -81,8 +78,7 @@ type routeRelatedEntities struct {
 }
 
 func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*routeRelatedEntities, error) {
-
-	//create points of interest
+	// create points of interest
 	createdOrUpdatedPointsOfInterest := []*models.PointOfInterest{}
 	for _, postPointOfInterestBody := range postRouteBody.PointsOfInterest {
 
@@ -93,7 +89,7 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 		createdOrUpdatedPointsOfInterest = append(createdOrUpdatedPointsOfInterest, createdPointOfInterest)
 	}
 
-	//find or create categories
+	// find or create categories
 	foundOrCreatedCategories := []*models.Category{}
 	for _, postCategoryBody := range postRouteBody.Categories {
 
@@ -105,12 +101,11 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 	}
 
 	images, err := GetEntitiesByIDs[models.Image](&postRouteBody.ImageIDs)
-
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving images")
 	}
 
-	//create links
+	// create links
 	foundOrCreatedLinks := []*models.Link{}
 	for _, postLinkBody := range postRouteBody.Links {
 
@@ -121,7 +116,7 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 		foundOrCreatedLinks = append(foundOrCreatedLinks, foundOrCreatedLink)
 	}
 
-	//create details
+	// create details
 	foundOrCreatedDetails := []*models.Detail{}
 	for _, postDetailBody := range postRouteBody.Details {
 
@@ -144,11 +139,9 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 		links:            foundOrCreatedLinks,
 		pointsOfInterest: createdOrUpdatedPointsOfInterest,
 	}, nil
-
 }
 
 func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
-
 	routeRelatedEntities, err := CreateOrUpdateRouteRelatedEntities(postRouteBody, authenticatedUser, tx)
 	if err != nil {
 		return nil, err
@@ -187,5 +180,4 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 	}
 
 	return createdRoute, nil
-
 }
