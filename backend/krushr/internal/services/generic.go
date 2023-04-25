@@ -7,8 +7,11 @@ import (
 )
 
 // Singular
-func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, setters ...repositories.GetOption) (*T, error) {
-	return repositories.GetEntityByID[T](ID, database.Db, setters...)
+func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint) (*T, error) {
+	return repositories.GetEntityByID[T](ID, database.Db)
+}
+func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations string) (*T, error) {
+	return repositories.GetEntityByIDWithAssociations[T](ID, associations, database.Db)
 }
 
 func CreateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T) (*T, error) {

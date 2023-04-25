@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,31 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DeleteByIDOptions[T any] struct {
-	DeleteFunction func(c *gin.Context, ID uint) (*T, error)
+func DeleteByIDDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	DeleteByID(c, func(c *gin.Context, ID uint) (*T, error) {
+		return services.DeleteEntityByID[T](ID)
+	})
 }
-
-type DeleteByIDOption[T any] func(*DeleteByIDOptions[T])
-
-func DeleteByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	deletedEntity, err := services.DeleteEntityByID[T](ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting " + utils.GetTypeString(deletedEntity)})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, deletedEntity)
-}
-func DeleteByIDCool[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*T, error)) {
+func DeleteByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*T, error)) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -53,54 +33,14 @@ func DeleteByIDCool[T models.Route | models.Image | models.Detail | models.Link 
 
 	c.IndentedJSON(http.StatusOK, deletedEntity)
 }
-func DeleteByIDCooler[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, setters ...DeleteByIDOption[T]) {
-	deleteByIDOptions := &DeleteByIDOptions[T]{
-		DeleteFunction: func(c *gin.Context, ID uint) (*T, error) {
-			return services.DeleteEntityByID[T](ID)
-		},
-	}
 
-	for _, setter := range setters {
-		setter(deleteByIDOptions)
-	}
-
-	id := c.Param("id")
-
-	u64, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid ID parameter"})
-		return
-	}
-	ID := uint(u64)
-
-	deletedEntity, err := deleteByIDOptions.DeleteFunction(c, ID)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting " + utils.GetTypeString(deletedEntity)})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, deletedEntity)
+func GetAllDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	GetAll[T](c, func(c *gin.Context) (*[]T, error) {
+		return services.GetEntities[T]()
+	})
 }
-
-type GetAllOptions[T any] struct {
-	GetFunction func(c *gin.Context) (*[]T, error)
-}
-
-type GetAllOption[T any] func(*GetAllOptions[T])
-
-func GetAll[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, setters ...GetAllOption[T]) {
-
-	getAllOptions := &GetAllOptions[T]{
-		GetFunction: func(c *gin.Context) (*[]T, error) {
-			return services.GetEntities[T]()
-		},
-	}
-
-	for _, setter := range setters {
-		setter(getAllOptions)
-	}
-
-	entities, err := getAllOptions.GetFunction(c)
+func GetAll[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getFunction func(c *gin.Context) (*[]T, error)) {
+	entities, err := getFunction(c)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entities)})
 		return
@@ -108,23 +48,13 @@ func GetAll[T models.Route | models.Image | models.Detail | models.Link | models
 
 	c.IndentedJSON(http.StatusOK, entities)
 }
-
-type GetByIDOptions[T any] struct {
-	GetFunction func(c *gin.Context, ID uint) (*T, error)
+func GetByIDDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	GetByID(c, func(c *gin.Context, ID uint) (*T, error) {
+		return services.GetEntityByID[T](ID)
+	})
 }
 
-type GetByIDOption[T any] func(*GetByIDOptions[T])
-
-func GetByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, setters ...GetByIDOption[T]) {
-	getByIDOptions := &GetByIDOptions[T]{
-		GetFunction: func(c *gin.Context, ID uint) (*T, error) {
-			return services.GetEntityByID[T](ID)
-		},
-	}
-
-	for _, setter := range setters {
-		setter(getByIDOptions)
-	}
+func GetByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getByIDFunction func(c *gin.Context, ID uint) (*T, error)) {
 
 	id := c.Param("id")
 
@@ -135,7 +65,7 @@ func GetByID[T models.Route | models.Image | models.Detail | models.Link | model
 	}
 	ID := uint(u64)
 
-	entity, err := getByIDOptions.GetFunction(c, ID)
+	entity, err := getByIDFunction(c, ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entity)})
 		return
@@ -144,23 +74,7 @@ func GetByID[T models.Route | models.Image | models.Detail | models.Link | model
 	c.IndentedJSON(http.StatusOK, entity)
 }
 
-type PostOptions[EntityType any, RequestBodyType any] struct {
-	ValidationFunction func(requestBody *RequestBodyType) error
-	CreateFunction     func(c *gin.Context, requestBody *RequestBodyType) (*EntityType, error)
-}
-
-type PostOption[EntityType any, RequestBodyType any] func(*PostOptions[EntityType, RequestBodyType])
-
-func Post[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest, RequestBodyType any](c *gin.Context, setters ...PostOption[EntityType, RequestBodyType]) {
-	postOptions := &PostOptions[EntityType, RequestBodyType]{
-		ValidationFunction: func(requestBody *RequestBodyType) error { return nil },
-		CreateFunction: func(c *gin.Context, requestBody *RequestBodyType) (*EntityType, error) {
-			return nil, fmt.Errorf("Not implemented")
-		},
-	}
-	for _, setter := range setters {
-		setter(postOptions)
-	}
+func Post[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, createFunction func(c *gin.Context, requestBody *RequestBodyType) (*EntityType, error)) {
 
 	var requestBody RequestBodyType
 
@@ -169,40 +83,21 @@ func Post[EntityType models.Route | models.Image | models.Detail | models.Link |
 		return
 	}
 
-	if err := postOptions.ValidationFunction(&requestBody); err != nil {
+	if err := validationFunction(c, &requestBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	createdEntity, err := postOptions.CreateFunction(c, &requestBody)
+	createdEntity, err := createFunction(c, &requestBody)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating " + utils.GetTypeString(createdEntity)+err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error creating " + utils.GetTypeString(createdEntity) + err.Error()})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, createdEntity)
 }
 
-type PutOptions[EntityType any, RequestBodyType any] struct {
-	ValidationFunction func(requestBody *RequestBodyType) error
-	UpdateFunction     func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error)
-}
-
-type PutOption[EntityType any, RequestBodyType any] func(*PutOptions[EntityType, RequestBodyType])
-
-func Put[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest, RequestBodyType any](c *gin.Context, setters ...PutOption[EntityType, RequestBodyType]) {
-	putOptions := &PutOptions[EntityType, RequestBodyType]{
-		ValidationFunction: func(requestBody *RequestBodyType) error {
-			return nil
-		},
-		UpdateFunction: func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error) {
-
-			return nil, fmt.Errorf("Not implemented")
-		},
-	}
-	for _, setter := range setters {
-		setter(putOptions)
-	}
+func Put[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, updateFunction func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error)) {
 
 	id := c.Param("id")
 
@@ -212,6 +107,7 @@ func Put[EntityType models.Route | models.Image | models.Detail | models.Link | 
 		return
 	}
 	ID := uint(u64)
+
 	var requestBody RequestBodyType
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -219,12 +115,12 @@ func Put[EntityType models.Route | models.Image | models.Detail | models.Link | 
 		return
 	}
 
-	if err := putOptions.ValidationFunction(&requestBody); err != nil {
+	if err := validationFunction(c, &requestBody); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	updatedEntity, err := putOptions.UpdateFunction(c, ID, &requestBody)
+	updatedEntity, err := updateFunction(c, ID, &requestBody)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error updating " + utils.GetTypeString(updatedEntity)})
 		return

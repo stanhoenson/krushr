@@ -10,11 +10,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
+func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *models.User) (*models.PointOfInterest, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
-		return repositories.DeleteEntityByID[models.Route](ID, database.Db)
+		return repositories.DeleteEntityByID[models.PointOfInterest](ID, database.Db)
 	}
-	return repositories.DeleteRouteByIDAndUserID(ID, authenticatedUser.ID, database.Db)
+	return repositories.DeletePointOfInterestByIDAndAuthentictedUser(ID, authenticatedUser.ID, database.Db)
 }
 
 func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
