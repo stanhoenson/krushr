@@ -7,7 +7,6 @@ import (
 )
 
 func FirstOrCreateLink(postLinkBody *models.PostLinkBody, tx *gorm.DB) (*models.Link, error) {
-
 	link := models.Link{
 		URL: postLinkBody.URL,
 	}
@@ -18,5 +17,4 @@ func FirstOrCreateLink(postLinkBody *models.PostLinkBody, tx *gorm.DB) (*models.
 	}
 
 	return createdLink, nil
-
 }

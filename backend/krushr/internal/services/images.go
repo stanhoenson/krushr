@@ -37,7 +37,6 @@ func CreateImage(fileHeader *multipart.FileHeader) (*models.Image, error) {
 }
 
 func DeleteImage(ID uint) (uint, error) {
-
 	tx := database.Db.Begin()
 	image, err := repositories.GetEntityByID[models.Image](ID, tx)
 	if err != nil {
@@ -62,17 +61,14 @@ func DeleteImage(ID uint) (uint, error) {
 }
 
 func GetImageFile(ID uint) (*os.File, error) {
-
 	image, err := repositories.GetEntityByID[models.Image](ID, database.Db)
 	if err != nil {
 		return nil, err
 	}
 
 	file, err := filemanager.RetrieveFile(image.Path)
-
 	if err != nil {
 		return nil, err
 	}
 	return file, nil
-
 }

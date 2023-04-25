@@ -18,16 +18,14 @@ func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *mo
 }
 
 func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
-	//find
+	// find
 
 	retrievedPointOfInterest, err := repositories.GetPointOfInterestByIDAndUserID(ID, authenticatedUser.ID, tx)
-
 	if err != nil {
 		return nil, err
 	}
 
 	pointOfInterestRelatedEntries, err := CreateOrUpdatePointOfInterestRelatedEntities(putPointOfInterestBody, tx)
-
 	if err != nil {
 		return nil, err
 	}
@@ -56,13 +54,12 @@ type pointOfInterestRelatedEntries struct {
 }
 
 func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*pointOfInterestRelatedEntries, error) {
-
 	images, err := repositories.GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs, tx)
 	if err != nil {
 		return nil, fmt.Errorf("Error retrieving images" + err.Error())
 	}
 
-	//find or create links
+	// find or create links
 	foundOrCreatedLinks := []*models.Link{}
 	for _, postLinkBody := range postPointOfInterestBody.Links {
 
@@ -73,7 +70,7 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 		foundOrCreatedLinks = append(foundOrCreatedLinks, foundOrCreatedLink)
 	}
 
-	//find or create details
+	// find or create details
 	foundOrCreatedDetails := []*models.Detail{}
 	for _, postDetailBody := range postPointOfInterestBody.Details {
 
@@ -84,7 +81,7 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 		foundOrCreatedDetails = append(foundOrCreatedDetails, foundOrCreatedDetail)
 	}
 
-	//find or create categories
+	// find or create categories
 	foundOrCreatedCategories := []*models.Category{}
 	for _, postCategoryBody := range postPointOfInterestBody.Categories {
 
@@ -106,13 +103,10 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 		details:    foundOrCreatedDetails,
 		links:      foundOrCreatedLinks,
 	}, nil
-
 }
 
 func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
-
 	pointOfInterestRelatedEntries, err := CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody, tx)
-
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +123,6 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	}
 
 	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
-
 	if err != nil {
 		return nil, err
 	}
@@ -138,8 +131,7 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 }
 
 func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {
-
-	//find
+	// find
 	getPointOfInterestBody := postPointOfInterestBody.ToGetPointOfInterestBody()
 
 	pointOfInterest := getPointOfInterestBody.ToPointOfInterest()
@@ -151,17 +143,16 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 	}
 
 	if err == gorm.ErrRecordNotFound {
-		//create
+		// create
 
 		createdPointOfInterest, err := CreatePointOfInterest(postPointOfInterestBody, authenticatedUser, tx)
-
 		if err != nil {
 			return nil, err
 		}
 
 		return createdPointOfInterest, err
 	} else if retrievedPointOfInterest.UserID == authenticatedUser.ID {
-		//update
+		// update
 
 		updatedPointOfInterest, err := UpdatePointOfInterest(retrievedPointOfInterest.ID, postPointOfInterestBody, authenticatedUser, tx)
 		if err != nil {
@@ -172,5 +163,4 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 	} else {
 		return retrievedPointOfInterest, nil
 	}
-
 }

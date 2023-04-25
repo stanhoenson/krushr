@@ -12,7 +12,6 @@ import (
 )
 
 func getImageDataByID(c *gin.Context) {
-
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -31,7 +30,6 @@ func getImageDataByID(c *gin.Context) {
 
 	c.File(image.Path)
 	c.Status(200)
-
 }
 
 func postImage(c *gin.Context) {

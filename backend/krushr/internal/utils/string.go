@@ -45,7 +45,6 @@ func Pluralize(s string) string {
 	}
 }
 
-
 func GetTypeString(entity interface{}) string {
 	entityType := reflect.TypeOf(entity).Elem()
 

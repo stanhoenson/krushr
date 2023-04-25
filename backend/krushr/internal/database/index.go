@@ -14,7 +14,6 @@ import (
 var Db *gorm.DB
 
 func InitializeDatabase(databaseName, folderName string) *gorm.DB {
-
 	// Create the directory if it doesn't exist
 	err := os.MkdirAll(folderName, os.ModePerm)
 	if err != nil {
@@ -50,7 +49,7 @@ func populateDatabase() {
 	Db.Create(&models.Role{Name: constants.AdminRoleName})
 	Db.Create(&models.Role{Name: constants.CreatorRoleName})
 
-	//statuses
+	// statuses
 	for _, statusName := range constants.Statuses {
 		Db.Create(&models.Status{Name: statusName})
 	}

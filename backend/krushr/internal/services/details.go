@@ -7,7 +7,6 @@ import (
 )
 
 func FirstOrCreateDetail(postDetailBody *models.PostDetailBody, tx *gorm.DB) (*models.Detail, error) {
-
 	detail := models.Detail{
 		Text: postDetailBody.Text,
 	}
@@ -18,5 +17,4 @@ func FirstOrCreateDetail(postDetailBody *models.PostDetailBody, tx *gorm.DB) (*m
 	}
 
 	return createdDetail, nil
-
 }

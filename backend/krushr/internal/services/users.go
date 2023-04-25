@@ -8,9 +8,7 @@ import (
 )
 
 func CreateUser(postUserBody *models.PostUserBody, tx *gorm.DB) (*models.User, error) {
-
 	role, err := repositories.GetEntityByID[models.Role](postUserBody.RoleID, tx)
-
 	if err != nil {
 		return nil, err
 	}
@@ -32,17 +30,15 @@ func CreateUser(postUserBody *models.PostUserBody, tx *gorm.DB) (*models.User, e
 	}
 
 	return createdUser, nil
-
 }
-func UpdateUser(ID uint, putUserBody *models.PutUserBody, tx *gorm.DB) (*models.User, error) {
 
+func UpdateUser(ID uint, putUserBody *models.PutUserBody, tx *gorm.DB) (*models.User, error) {
 	user, err := repositories.GetEntityByID[models.User](ID, tx)
 	if err != nil {
 		return nil, err
 	}
 
 	role, err := repositories.GetEntityByID[models.Role](putUserBody.RoleID, tx)
-
 	if err != nil {
 		return nil, err
 	}
@@ -62,5 +58,4 @@ func UpdateUser(ID uint, putUserBody *models.PutUserBody, tx *gorm.DB) (*models.
 	}
 
 	return updatedUser, nil
-
 }

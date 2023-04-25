@@ -1,9 +1,6 @@
 package handlers
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"

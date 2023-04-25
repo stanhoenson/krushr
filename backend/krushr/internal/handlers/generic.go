@@ -10,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteByIDDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
-	DeleteByID(c, func(c *gin.Context, ID uint) (*T, error) {
-		return services.DeleteEntityByID[T](ID)
+func DeleteByIDDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	DeleteByID(c, func(c *gin.Context, ID uint) (*EntityType, error) {
+		return services.DeleteEntityByID[EntityType](ID)
 	})
 }
-func DeleteByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*T, error)) {
+func DeleteByID[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*EntityType, error)) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -34,12 +34,12 @@ func DeleteByID[T models.Route | models.Image | models.Detail | models.Link | mo
 	c.IndentedJSON(http.StatusOK, deletedEntity)
 }
 
-func GetAllDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
-	GetAll[T](c, func(c *gin.Context) (*[]T, error) {
-		return services.GetEntities[T]()
+func GetAllDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	GetAll(c, func(c *gin.Context) (*[]EntityType, error) {
+		return services.GetEntities[EntityType]()
 	})
 }
-func GetAll[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getFunction func(c *gin.Context) (*[]T, error)) {
+func GetAll[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getFunction func(c *gin.Context) (*[]EntityType, error)) {
 	entities, err := getFunction(c)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entities)})
@@ -48,13 +48,13 @@ func GetAll[T models.Route | models.Image | models.Detail | models.Link | models
 
 	c.IndentedJSON(http.StatusOK, entities)
 }
-func GetByIDDefault[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
-	GetByID(c, func(c *gin.Context, ID uint) (*T, error) {
-		return services.GetEntityByID[T](ID)
+func GetByIDDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
+	GetByID(c, func(c *gin.Context, ID uint) (*EntityType, error) {
+		return services.GetEntityByID[EntityType](ID)
 	})
 }
 
-func GetByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getByIDFunction func(c *gin.Context, ID uint) (*T, error)) {
+func GetByID[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context, getByIDFunction func(c *gin.Context, ID uint) (*EntityType, error)) {
 
 	id := c.Param("id")
 

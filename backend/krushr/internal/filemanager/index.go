@@ -47,7 +47,7 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 	}
 	defer dst.Close()
 
-	//TODO if something goes wrong we need to delete the file
+	// TODO if something goes wrong we need to delete the file
 	// Copy the uploaded file to the file on disk
 	if _, err := io.Copy(dst, file); err != nil {
 		return "", fmt.Errorf("failed to copy file: %v", err)
@@ -57,7 +57,6 @@ func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 }
 
 func DeleteFile(filepath string) error {
-
 	err := os.Remove(filepath)
 	if err != nil {
 		return fmt.Errorf("failed to remove file: %v", err)
@@ -96,7 +95,7 @@ func IsImage(file multipart.File) (bool, error) {
 	// Detect the file type based on its content
 	filetype := http.DetectContentType(buffer)
 
-	//reset thing
+	// reset thing
 	file.Seek(0, io.SeekStart)
 	switch filetype {
 	case "image/jpeg", "image/jpg", "image/png", "image/gif":

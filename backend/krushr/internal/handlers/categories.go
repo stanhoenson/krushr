@@ -20,7 +20,6 @@ func RegisterCategoryRoutes(r *gin.Engine) {
 			}, func(c *gin.Context, requestBody *models.PostCategoryBody) (*models.Category, error) {
 				return services.CreateCategory(requestBody)
 			})
-
 		}))
 		routes.PUT("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutCategoryBody) error {
