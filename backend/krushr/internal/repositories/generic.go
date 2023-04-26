@@ -106,6 +106,17 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 
 	return &entities, nil
 }
+func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations string, tx *gorm.DB) (*[]T, error) {
+	var entities []T
+
+	result := tx.Preload(associations).Find(&entities)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &entities, nil
+}
 
 func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](IDs *[]uint, tx *gorm.DB) (*[]T, error) {
 	var entities []T
@@ -114,6 +125,9 @@ func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Lin
 
 	if result.Error != nil {
 		return nil, result.Error
+	} else if len(entities) != len(*IDs) {
+		return nil, gorm.ErrRecordNotFound
+
 	}
 
 	return &entities, nil

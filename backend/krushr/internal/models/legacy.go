@@ -1,17 +1,18 @@
 package models
 
 type LegacyRoute struct {
-	RouteID          uint   `json:"RouteId"`
-	RouteName        string `json:"RouteName"`
-	Description      string `json:"Description"`
-	RouteImage       string `json:"RouteImage"`
-	RouteLength      string `json:"RouteLength"`
-	RouteType        string `json:"RouteType"`
-	HasInternalImage bool   `json:"HasInternalImage"`
-	LegacyMenu       `json:"Menu"`
-	RouteOrder       uint     `json:"RouteOrder"`
-	StatusID         uint     `json:"StatusId"`
-	Languages        []string `json:"Languages"`
+	RouteID          uint                    `json:"RouteId"`
+	RouteName        string                  `json:"RouteName"`
+	Description      string                  `json:"Description"`
+	RouteImage       string                  `json:"RouteImage"`
+	RouteLength      string                  `json:"RouteLength"`
+	RouteType        string                  `json:"RouteType"`
+	HasInternalImage bool                    `json:"HasInternalImage"`
+	Menu             LegacyMenu              `json:"Menu"`
+	RouteOrder       uint                    `json:"RouteOrder"`
+	StatusID         uint                    `json:"StatusId"`
+	Languages        []string                `json:"Languages"`
+	POIList          []LegacyPointOfInterest `json:"POIList"`
 }
 
 type LegacyMenu struct {
@@ -40,13 +41,13 @@ type LegacyCategory struct {
 }
 
 type LegacyInfo struct {
-	InfoID            uint   `json:"InfoId"`
-	InfoURL           string `json:"InfoUrl"`
-	InfoURLText       string `json:"InfoUrlText"`
-	InfoURLAddress    string `json:"InfoUrlAddress"`
-	Omschrijving      string `json:"Omschrijving"`
-	InternalText      string `json:"InternalText"`
-	LegacyContentType `json:"ContentType"`
+	InfoID         uint              `json:"InfoId"`
+	InfoURL        string            `json:"InfoUrl"`
+	InfoURLText    string            `json:"InfoUrlText"`
+	InfoURLAddress string            `json:"InfoUrlAddress"`
+	Omschrijving   string            `json:"Omschrijving"`
+	InternalText   string            `json:"InternalText"`
+	ContentType    LegacyContentType `json:"ContentType"`
 }
 
 type LegacyContentType struct {

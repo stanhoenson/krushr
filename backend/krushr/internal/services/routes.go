@@ -47,6 +47,7 @@ func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *
 	route.Links = routeRelatedEntities.links
 	route.Details = routeRelatedEntities.details
 	route.Images = routeRelatedEntities.images
+	route.Categories = routeRelatedEntities.categories
 
 	updatedRoute, err := repositories.UpdateEntity(route, tx)
 	if err != nil {
@@ -160,6 +161,7 @@ func CreateRoute(postRouteBody *models.PostRouteBody, authenticatedUser *models.
 		PointsOfInterest: routeRelatedEntities.pointsOfInterest,
 		Links:            routeRelatedEntities.links,
 		Details:          routeRelatedEntities.details,
+		Categories:       routeRelatedEntities.categories,
 		Images:           routeRelatedEntities.images,
 	}
 	createdRoute, err := repositories.CreateEntity(&route, tx)

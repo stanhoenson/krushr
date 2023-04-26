@@ -9,6 +9,8 @@ const (
 	TitleMaxLength        = 50
 )
 
+var DefaultLegacyRouteLanguages = []string{"Dutch"}
+
 var Roles = []string{
 	AdminRoleName,
 	CreatorRoleName,

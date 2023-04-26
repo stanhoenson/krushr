@@ -7,12 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func FirstOrCreateCategory(postDetailBody *models.PostCategoryBody, tx *gorm.DB) (*models.Category, error) {
+func FirstOrCreateCategory(postCategoryBody *models.PostCategoryBody, tx *gorm.DB) (*models.Category, error) {
 	category := models.Category{
-		Name: postDetailBody.Name,
+		Name:     postCategoryBody.Name,
+		Position: postCategoryBody.Position,
 	}
 
-	createdCategory, err := repositories.FirstOrCreateEntity(&category, &category, tx)
+	createdCategory, err := repositories.FirstOrCreateEntity(&category, &models.Category{Name: postCategoryBody.Name}, tx)
 	if err != nil {
 		return nil, err
 	}
