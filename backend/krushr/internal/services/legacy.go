@@ -13,7 +13,16 @@ func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
 	if err != nil {
 		return nil, err
 	}
-	legacyRoute, err := route.ToLegacyRoute()
+
+	for index, v := range route.PointsOfInterest {
+		pointOfInterestWithAssociations, err := GetEntityByIDWithAssociations[models.PointOfInterest](v.ID, clause.Associations)
+		if err != nil {
+			return nil, err
+		}
+		route.PointsOfInterest[index] = pointOfInterestWithAssociations
+	}
+
+	legacyRoute, err := route.ToLegacyRoute(true)
 
 	return legacyRoute, nil
 
@@ -30,7 +39,7 @@ func GetLegacyRoutes() (*[]models.LegacyRoute, error) {
 	for _, v := range *routes {
 
 		fmt.Printf("%+v", v)
-		legacyRoute, err := v.ToLegacyRoute()
+		legacyRoute, err := v.ToLegacyRoute(false)
 		if err != nil {
 			return nil, err
 		}

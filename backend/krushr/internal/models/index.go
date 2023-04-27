@@ -1,11 +1,10 @@
 package models
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/env"
+	"fmt"
+	"strconv"
 )
 
 type Route struct {
@@ -23,7 +22,7 @@ type Route struct {
 	UserID           uint               `gorm:"not null" json:"userId"`
 }
 
-func (r Route) ToLegacyRoute() (*LegacyRoute, error) {
+func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
 	distance := strconv.FormatFloat(r.Distance, 'f', 2, 64)
 	if len(r.Images) == 0 {
 		return nil, fmt.Errorf("No image for route")
@@ -33,12 +32,6 @@ func (r Route) ToLegacyRoute() (*LegacyRoute, error) {
 		return nil, fmt.Errorf("No category for route")
 	}
 	firstCategory := r.Categories[0]
-
-	var poiList []LegacyPointOfInterest
-
-	for _, v := range r.PointsOfInterest {
-		poiList = append(poiList, v.ToLegacyPointOfInterest())
-	}
 
 	var description string
 	for index, v := range r.Details {
@@ -52,7 +45,7 @@ func (r Route) ToLegacyRoute() (*LegacyRoute, error) {
 
 	}
 
-	return &LegacyRoute{
+	legacyRoute := &LegacyRoute{
 		RouteID:          r.ID,
 		Description:      description,
 		RouteName:        r.Name,
@@ -62,8 +55,17 @@ func (r Route) ToLegacyRoute() (*LegacyRoute, error) {
 		HasInternalImage: true,
 		Menu:             firstCategory.ToLegacyMenu(), RouteOrder: 0,
 		Languages: constants.DefaultLegacyRouteLanguages,
-		POIList:   poiList,
-	}, nil
+	}
+	if withPOIs {
+
+		var poiList []LegacyPointOfInterest
+
+		for _, v := range r.PointsOfInterest {
+			poiList = append(poiList, v.ToLegacyPointOfInterest())
+		}
+		legacyRoute.POIList = poiList
+	}
+	return legacyRoute, nil
 }
 
 type Image struct {
@@ -72,14 +74,15 @@ type Image struct {
 	Routes           []*Route           `gorm:"many2many:routes_images;constraint:OnDelete:CASCADE" json:"routes"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:points_of_interest_images" json:"pointsOfInterest"`
 }
-func (i Image) ToLegacyInfo() LegacyInfo{
-    return LegacyInfo{
-        InfoID: l.ID,
-        ContentType: LegacyContentType{
-            ContentTypeID: constants.LegacyImageContentTypeId,
-            ContentTypeName: constants.LegacyImageContentTypeName,
-        },
-    }
+
+func (i Image) ToLegacyInfo() LegacyInfo {
+	return LegacyInfo{
+		InfoID: i.ID,
+		ContentType: LegacyContentType{
+			ContentTypeID:   constants.LegacyImageContentTypeId,
+			ContentTypeName: constants.LegacyImageContentTypeName,
+		},
+	}
 
 }
 
@@ -90,16 +93,16 @@ type Detail struct {
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"pointsOfInterest"`
 }
 
-func (d Detail) ToLegacyInfo() LegacyInfo{
-    return LegacyInfo{
-        InfoID: d.ID,
-        Omschrijving: d.Text,
-        InternalText: d.Text,
-        ContentType: LegacyContentType{
-            ContentTypeID: constants.LegacyTekstContentTypeId,
-            ContentTypeName: constants.LegacyTekstContentTypeName,
-        },
-    }
+func (d Detail) ToLegacyInfo() LegacyInfo {
+	return LegacyInfo{
+		InfoID:       d.ID,
+		Omschrijving: d.Text,
+		InternalText: d.Text,
+		ContentType: LegacyContentType{
+			ContentTypeID:   constants.LegacyTekstContentTypeId,
+			ContentTypeName: constants.LegacyTekstContentTypeName,
+		},
+	}
 
 }
 
@@ -109,15 +112,16 @@ type Link struct {
 	Routes           []*Route           `gorm:"many2many:routes_links;constraint:OnDelete:CASCADE" json:"routes"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"pointsOfInterest"`
 }
-func (l Link) ToLegacyInfo() LegacyInfo{
-    return LegacyInfo{
-        InfoID: l.ID,
-        InfoURL: l.URL,
-        ContentType: LegacyContentType{
-            ContentTypeID: constants.LegacyWebsiteContentTypeId,
-            ContentTypeName: constants.LegacyWebsiteContentTypeName,
-        },
-    }
+
+func (l Link) ToLegacyInfo() LegacyInfo {
+	return LegacyInfo{
+		InfoID:  l.ID,
+		InfoURL: l.URL,
+		ContentType: LegacyContentType{
+			ContentTypeID:   constants.LegacyWebsiteContentTypeId,
+			ContentTypeName: constants.LegacyWebsiteContentTypeName,
+		},
+	}
 
 }
 
@@ -177,13 +181,26 @@ func (p PointOfInterest) ToLegacyPointOfInterest() LegacyPointOfInterest {
 		categoryList = append(categoryList, v.ToLegacyCategory())
 	}
 
+	var infoList []LegacyInfo
+
+	for _, v := range p.Details {
+		infoList = append(infoList, v.ToLegacyInfo())
+	}
+	for _, v := range p.Links {
+		infoList = append(infoList, v.ToLegacyInfo())
+	}
+	for _, v := range p.Images {
+		infoList = append(infoList, v.ToLegacyInfo())
+	}
+
 	return LegacyPointOfInterest{
 		POIID:        p.ID,
 		POIName:      p.Name,
 		Longitude:    longitude,
 		Latitude:     latitude,
 		CategoryList: categoryList,
-        InfoList: ,
+		InfoList:     infoList,
+		OrderInRoute: 0,
 	}
 }
 
