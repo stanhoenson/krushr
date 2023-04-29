@@ -16,8 +16,8 @@ import (
 func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
-		routes.GET("", func(ctx *gin.Context) {
-			GetAll(ctx, func(c *gin.Context) (*[]models.Route, error) {
+		routes.GET("", func(c *gin.Context) {
+			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
 				return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
 			})
 		})

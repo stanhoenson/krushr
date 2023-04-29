@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Routes | De Boswandeling</title>
+		<link rel="stylesheet" href="../../style.css">
+	</head>
+	<body>
+		<header>
+			<nav class="flex">
+				<div class="flex">
+					<a class="button" href="/">Home</a>
+					<a id="active" class="button" href="/routes">Routes</a>
+					<a class="button" href="/users">Users</a>
+				</div>
+				<div class="flex">
+					<a class="button" href="/sign-up">Sign up</a>
+					<a class="button primary" href="/sign-in">Sign in</a>
+				</div>
+			</nav>
+		</header>
+
+		<main>
+			<form>
+				<section class="card">
+					<p class="upper">Route</p>
+					<div class="grid">
+						<div class="images">
+							<div class="grid">
+								<img class="main" src="../../images/charing-cross-bridge.jpg">
+								<img src="../../images/hampton-court-green.jpg">
+								<img src="../../images/landscape-ile-de-france.jpg">
+								<img src="../../images/charing-cross-bridge.jpg">
+							</div>
+							<a class="button block secondary" href="#">New image</a>
+						</div>
+						<div class="info">
+							<div class="flex input name">
+								<label>Name</label>
+								<input type="text" name="name">
+							</div>
+							<hr>
+							<div class="multiple details">
+								<label>Details</label>
+								<div class="flex column">
+									<textarea name="details" rows="4"></textarea>
+									<a class="button block secondary" href="#">New detail</a>
+								</div>
+							</div>
+							<hr>
+							<div class="multiple links">
+								<label>Links</label>
+								<div class="flex input">
+									<input type="text" name="link">
+									<a class="button block secondary" href="#">New link</a>
+								</div>
+							</div>
+							<!-- <hr> -->
+							<!-- <div class"categories"> -->
+							<!-- 	<label>Categories</label> -->
+							<!-- 	<a class="category" href="#">Nature</a> -->
+							<!-- 	<a class="category selected" href="#">Culture</a> -->
+							<!-- 	<a class="category" href="#">Themed</a> -->
+							<!-- 	<a class="category" href="#">Architecture</a> -->
+							<!-- 	<a class="category" href="#">History</a> -->
+							<!-- 	<a class="category" href="#">Shopping</a> -->
+							<!-- 	<a class="category" href="#">Food</a> -->
+							<!-- </div> -->
+						</div>
+					</div>
+				</section>
+				<a id="save" class="button block primary" href="#">Save route</a>
+			</form>
+		</main>
+
+		<footer>
+			<nav class="flex">
+				<a class="button" href="/">Home</a>
+				<a class="button" href="/routes">Routes</a>
+				<a class="button" href="/users">Users</a>
+			</nav>
+			<p class="soft">2023 &copy; Krushr <span class="pipe">|</span> <a href="https://github.com">Check out the source code</a></p>
+		</footer>
+	</body>
+</html>
