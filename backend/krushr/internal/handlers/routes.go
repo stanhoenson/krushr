@@ -10,12 +10,18 @@ import (
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func RegisterRouteRoutes(r *gin.Engine) {
 	routes := r.Group("/routes")
 	{
-		routes.GET("", GetAllDefault[models.Route])
+		routes.GET("", func(ctx *gin.Context) {
+			GetAll(ctx, func(c *gin.Context) (*[]models.Route, error) {
+				return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
+
+			})
+		})
 		routes.GET("/:id", GetByIDDefault[models.Route])
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Post(ctx, func(c *gin.Context, requestBody *models.PostRouteBody) error {
