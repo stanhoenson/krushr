@@ -22,10 +22,8 @@ func RegisterUserRoutes(r *gin.Engine) {
 		}))
 		routes.PUT("", wrappers.RoleWrapper([]string{constants.AdminRoleName}, func(ctx *gin.Context) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutUserBody) error {
-
 				return nil
 			}, func(c *gin.Context, ID uint, requestBody *models.PutUserBody) (*models.User, error) {
-
 				return services.UpdateUser(ID, requestBody, database.Db)
 			})
 		}))

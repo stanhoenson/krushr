@@ -19,7 +19,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		routes.GET("", func(ctx *gin.Context) {
 			GetAll(ctx, func(c *gin.Context) (*[]models.Route, error) {
 				return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
-
 			})
 		})
 		routes.GET("/:id", GetByIDDefault[models.Route])
@@ -39,7 +38,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		}))
 		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutRouteBody) error {
-
 				return validators.ValidatePutRoute(requestBody)
 			}, func(c *gin.Context, ID uint, requestBody *models.PutRouteBody) (*models.Route, error) {
 				user, err := utils.GetUserFromContext(c)
@@ -53,7 +51,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		}))
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			DeleteByID(ctx, func(c *gin.Context, ID uint) (*models.Route, error) {
-
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
 					return nil, err

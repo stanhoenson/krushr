@@ -15,6 +15,7 @@ func DeleteByIDDefault[EntityType models.Route | models.Image | models.Detail | 
 		return services.DeleteEntityByID[EntityType](ID)
 	})
 }
+
 func DeleteByID[EntityType any](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*EntityType, error)) {
 	id := c.Param("id")
 
@@ -39,6 +40,7 @@ func GetAllDefault[EntityType models.Route | models.Image | models.Detail | mode
 		return services.GetEntities[EntityType]()
 	})
 }
+
 func GetAll[EntityType any](c *gin.Context, getFunction func(c *gin.Context) (*[]EntityType, error)) {
 	entities, err := getFunction(c)
 	if err != nil {
@@ -48,6 +50,7 @@ func GetAll[EntityType any](c *gin.Context, getFunction func(c *gin.Context) (*[
 
 	c.IndentedJSON(http.StatusOK, entities)
 }
+
 func GetByIDDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
 	GetByID(c, func(c *gin.Context, ID uint) (*EntityType, error) {
 		return services.GetEntityByID[EntityType](ID)
@@ -55,7 +58,6 @@ func GetByIDDefault[EntityType models.Route | models.Image | models.Detail | mod
 }
 
 func GetByID[EntityType any](c *gin.Context, getByIDFunction func(c *gin.Context, ID uint) (*EntityType, error)) {
-
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -75,7 +77,6 @@ func GetByID[EntityType any](c *gin.Context, getByIDFunction func(c *gin.Context
 }
 
 func Post[EntityType any, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, createFunction func(c *gin.Context, requestBody *RequestBodyType) (*EntityType, error)) {
-
 	var requestBody RequestBodyType
 
 	if err := c.BindJSON(&requestBody); err != nil {
@@ -98,7 +99,6 @@ func Post[EntityType any, RequestBodyType any](c *gin.Context, validationFunctio
 }
 
 func Put[EntityType any, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, updateFunction func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error)) {
-
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)

@@ -25,7 +25,6 @@ func RegisterCategoryRoutes(r *gin.Engine) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutCategoryBody) error {
 				return validators.ValidatePutCategoryBody(requestBody)
 			}, func(c *gin.Context, ID uint, requestBody *models.PutCategoryBody) (*models.Category, error) {
-
 				return services.UpdateCategory(ID, requestBody)
 			},
 			)

@@ -8,7 +8,6 @@ import (
 
 // Singular
 func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (*T, error) {
-
 	var entity T
 
 	result := tx.First(&entity, ID)
@@ -19,8 +18,8 @@ func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link |
 
 	return &entity, nil
 }
-func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations string, tx *gorm.DB) (*T, error) {
 
+func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations string, tx *gorm.DB) (*T, error) {
 	var entity T
 
 	result := tx.Preload(associations).First(&entity, ID)
@@ -106,6 +105,7 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 
 	return &entities, nil
 }
+
 func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations string, tx *gorm.DB) (*[]T, error) {
 	var entities []T
 
@@ -127,7 +127,6 @@ func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Lin
 		return nil, result.Error
 	} else if len(entities) != len(*IDs) {
 		return nil, gorm.ErrRecordNotFound
-
 	}
 
 	return &entities, nil

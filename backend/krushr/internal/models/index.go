@@ -1,10 +1,11 @@
 package models
 
 import (
-	"github.com/stanhoenson/krushr/internal/constants"
-	"github.com/stanhoenson/krushr/internal/env"
 	"fmt"
 	"strconv"
+
+	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/env"
 )
 
 type Route struct {
@@ -36,13 +37,10 @@ func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
 	var description string
 	for index, v := range r.Details {
 		if index == 0 {
-
 			description += v.Text
 		} else {
-
 			description += "\n\n" + v.Text
 		}
-
 	}
 
 	legacyRoute := &LegacyRoute{
@@ -83,7 +81,6 @@ func (i Image) ToLegacyInfo() LegacyInfo {
 			ContentTypeName: constants.LegacyImageContentTypeName,
 		},
 	}
-
 }
 
 type Detail struct {
@@ -103,7 +100,6 @@ func (d Detail) ToLegacyInfo() LegacyInfo {
 			ContentTypeName: constants.LegacyTekstContentTypeName,
 		},
 	}
-
 }
 
 type Link struct {
@@ -122,7 +118,6 @@ func (l Link) ToLegacyInfo() LegacyInfo {
 			ContentTypeName: constants.LegacyWebsiteContentTypeName,
 		},
 	}
-
 }
 
 type Category struct {
@@ -150,7 +145,6 @@ func (c Category) ToLegacyMenu() LegacyMenu {
 		MenuIcon:        "",
 		MenuDisplayName: c.Name,
 	}
-
 }
 
 type Status struct {
@@ -173,7 +167,6 @@ type PointOfInterest struct {
 }
 
 func (p PointOfInterest) ToLegacyPointOfInterest() LegacyPointOfInterest {
-
 	longitude := strconv.FormatFloat(p.Longitude, 'f', 2, 64)
 	latitude := strconv.FormatFloat(p.Latitude, 'f', 2, 64)
 	var categoryList []LegacyCategory

@@ -8,7 +8,6 @@ import (
 )
 
 func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
-
 	route, err := GetEntityByIDWithAssociations[models.Route](ID, clause.Associations)
 	if err != nil {
 		return nil, err
@@ -25,11 +24,9 @@ func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
 	legacyRoute, err := route.ToLegacyRoute(true)
 
 	return legacyRoute, nil
-
 }
 
 func GetLegacyRoutes() (*[]models.LegacyRoute, error) {
-
 	routes, err := GetEntitiesWithAssociations[models.Route](clause.Associations)
 	if err != nil {
 		return nil, err
@@ -47,7 +44,6 @@ func GetLegacyRoutes() (*[]models.LegacyRoute, error) {
 	}
 
 	return &legacyRoutes, nil
-
 }
 
 func GetLegacyMenus() (*[]models.LegacyMenu, error) {
@@ -58,8 +54,6 @@ func GetLegacyMenus() (*[]models.LegacyMenu, error) {
 	var legacyMenus []models.LegacyMenu
 	for _, v := range *categories {
 		legacyMenus = append(legacyMenus, v.ToLegacyMenu())
-
 	}
 	return &legacyMenus, nil
-
 }

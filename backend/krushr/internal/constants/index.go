@@ -8,6 +8,7 @@ const (
 	CreatorRoleName       = "Creator"
 	TitleMaxLength        = 50
 )
+
 const (
 	LegacyWebsiteContentTypeName = "website"
 	LegacyWebsiteContentTypeId   = 1012
