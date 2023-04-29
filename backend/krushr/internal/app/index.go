@@ -6,6 +6,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/handlers"
 	"github.com/stanhoenson/krushr/internal/middleware"
 	"github.com/stanhoenson/krushr/internal/validators"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,7 @@ func Initialize() {
 
 	// Returns an engine with a Logger and Recovery middleware already attached
 	r := gin.Default()
+	r.Use(cors.Default())
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
 	handlers.RegisterHandlers(r)
