@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Routes from "../components/Routes.svelte";
+import SignIn from "../components/SignIn.svelte";
+---
+
+<Layout title="Krushr">
+  <!-- header could also go in layout -->
+  <header>
+    <Nav />
+  </header>
+  <main>
+    <section><SignIn client:load /></section>
+  </main>
+</Layout>

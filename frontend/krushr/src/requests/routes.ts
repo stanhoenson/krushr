@@ -1,8 +1,9 @@
 import axios from "axios";
 import type { Route } from "../types/models";
 import type { PostRouteBody, PutRouteBody } from "../types/request-bodies";
-import {BASE_URL} from "./endpoints";
+import { BASE_URL } from "./endpoints";
 
+axios.defaults.withCredentials = true;
 export async function getAllRoutes(): Promise<Route[]> {
   const response = await axios.get<Route[]>(`${BASE_URL}/routes`);
   return response.data;

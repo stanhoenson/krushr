@@ -10,7 +10,7 @@ export async function getImageById(id: number): Promise<Image> {
 
 // Delete an image by ID
 export async function deleteImageById(id: number): Promise<void> {
-  await axios.delete(`${BASE_URL}/images/${id}`);
+  await axios.delete(`${BASE_URL}/images/${id}`, { withCredentials: true });
 }
 
 // Create an image
@@ -18,6 +18,8 @@ export async function postImage(file: File): Promise<any> {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await axios.post(`${BASE_URL}/images`, formData);
+  const response = await axios.post(`${BASE_URL}/images`, formData, {
+    withCredentials: true,
+  });
   return response.data;
 }

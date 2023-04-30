@@ -14,7 +14,7 @@ export async function getAllCategories(): Promise<Category[]> {
 
 // Delete a category by ID
 export async function deleteCategoryById(id: number): Promise<void> {
-  await axios.delete(`${BASE_URL}/categories/${id}`);
+  await axios.delete(`${BASE_URL}/categories/${id}`, { withCredentials: true });
 }
 
 // Create a new category
@@ -23,7 +23,8 @@ export async function createCategory(
 ): Promise<Category> {
   const response = await axios.post<Category>(
     `${BASE_URL}/categories`,
-    category
+    category,
+    { withCredentials: true }
   );
   return response.data;
 }
@@ -35,7 +36,8 @@ export async function updateCategory(
 ): Promise<Category> {
   const response = await axios.put<Category>(
     `${BASE_URL}/categories/${id}`,
-    category
+    category,
+    { withCredentials: true }
   );
   return response.data;
 }

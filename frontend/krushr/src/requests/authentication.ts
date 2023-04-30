@@ -14,7 +14,8 @@ export async function signUp(signUpBody: SignUpBody): Promise<User> {
 export async function signIn(signInBody: SignInBody): Promise<string> {
   const response = await axios.post<string>(
     `${BASE_URL}/authentication/sign-in`,
-    signInBody
+    signInBody,
+    { withCredentials: true }
   );
   return response.data;
 }

@@ -26,7 +26,9 @@ export async function getPointOfInterestById(
 
 // Delete a point of interest by ID
 export async function deletePointOfInterestById(id: string): Promise<void> {
-  await axios.delete(`${BASE_URL}/points-of-interest/${id}`);
+  await axios.delete(`${BASE_URL}/points-of-interest/${id}`, {
+    withCredentials: true,
+  });
 }
 
 // Update a point of interest by ID
@@ -36,7 +38,8 @@ export async function updatePointOfInterestById(
 ): Promise<PointOfInterest> {
   const response = await axios.put<PointOfInterest>(
     `${BASE_URL}/points-of-interest/${id}`,
-    requestBody
+    requestBody,
+    { withCredentials: true }
   );
   return response.data;
 }
@@ -47,7 +50,8 @@ export async function createPointOfInterest(
 ): Promise<PointOfInterest> {
   const response = await axios.post<PointOfInterest>(
     `${BASE_URL}/points-of-interest`,
-    requestBody
+    requestBody,
+    { withCredentials: true }
   );
   return response.data;
 }

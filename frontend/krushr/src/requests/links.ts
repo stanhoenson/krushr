@@ -10,5 +10,5 @@ export async function getAllLinks(): Promise<Link[]> {
 
 // Delete a link by ID
 export async function deleteLinkById(id: number): Promise<void> {
-  await axios.delete(`${BASE_URL}/links/${id}`);
+  await axios.delete(`${BASE_URL}/links/${id}`, { withCredentials: true });
 }

@@ -10,5 +10,5 @@ export async function getAllDetails(): Promise<Detail[]> {
 
 // Delete a detail by ID
 export async function deleteDetailById(id: number): Promise<void> {
-  await axios.delete(`${BASE_URL}/details/${id}`);
+  await axios.delete(`${BASE_URL}/details/${id}`, { withCredentials: true });
 }
