@@ -16,6 +16,7 @@ var (
 	FileStorageFolder string
 	DataFolder        string
 	ApiUrl            string
+	Domain            string
 )
 
 func InitializeEnvironment() {
@@ -50,6 +51,10 @@ func InitializeEnvironment() {
 	ApiUrl = os.Getenv("API_URL")
 	if ApiUrl == "" {
 		panicMessage(ApiUrl)
+	}
+	Domain = os.Getenv("DOMAIN")
+	if Domain == "" {
+		panicMessage(Domain)
 	}
 
 	roleIDString := os.Getenv("DEFAULT_ROLE_ID")

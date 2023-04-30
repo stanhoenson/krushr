@@ -9,13 +9,19 @@ import (
 
 func Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		jwt := c.GetHeader("Authorization")
-		if jwt == "" {
+		jwt, err := c.Request.Cookie("jwt")
+		if err != nil {
+			//no cookie found
 			c.Set("authenticatedUser", nil)
+		} else if jwt.Value == "" || jwt.Valid() != nil {
+			//invalid cookie set to null
+			c.Set("authenticatedUser", nil)
+			c.SetCookie("jwt", "", 0, "/", "", true, true)
 		} else {
-			user, err := services.GetUserFromJWT(jwt)
+			user, err := services.GetUserFromJWT(jwt.Value)
 			if err != nil {
 				// TODO maybe StatusBadRequest
+				c.SetCookie("jwt", "", 0, "/", "", true, true)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return
 			}

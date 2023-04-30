@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
@@ -39,7 +41,9 @@ func signIn(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, jwt)
+	c.SetCookie("jwt", jwt, int(constants.TokenValidityPeriod.Seconds()), "/", env.Domain, true, true)
+
+	c.Status(http.StatusOK)
 }
 
 func RegisterAuthenticationRoutes(r *gin.Engine) {

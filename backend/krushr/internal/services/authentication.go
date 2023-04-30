@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
@@ -44,9 +45,8 @@ func Authenticate(signInBody *models.SignInBody) (string, error) {
 		return "", err
 	}
 
-	dayInHours := time.Duration(24)
-	weekInDays := time.Duration(7)
-	token, err := GenerateJWTWithUser(user, dayInHours*weekInDays)
+	expirationTime := time.Now().Add(constants.TokenValidityPeriod)
+	token, err := GenerateJWTWithUser(user, expirationTime)
 
 	return token, nil
 }
@@ -56,10 +56,10 @@ type CustomClaims struct {
 	UserID uint `json:"user_id"`
 }
 
-func GenerateJWTWithUser(user *models.User, hoursValid time.Duration) (string, error) {
+func GenerateJWTWithUser(user *models.User, expirationTime time.Time) (string, error) {
 	claims := CustomClaims{
 		UserID:         user.ID,
-		StandardClaims: jwt.StandardClaims{ExpiresAt: time.Now().Add(time.Hour * hoursValid).Unix()},
+		StandardClaims: jwt.StandardClaims{ExpiresAt: expirationTime.Unix()},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(env.JWTSecret))

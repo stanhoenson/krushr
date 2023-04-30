@@ -1,5 +1,7 @@
 package constants
 
+import "time"
+
 const (
 	PublishedStatusName   = "Published"
 	UnpublishedStatusName = "Unpublished"
@@ -17,6 +19,8 @@ const (
 	LegacyTekstContentTypeName   = "tekst"
 	LegacyTekstContentTypeId     = 1024
 )
+
+const TokenValidityPeriod = time.Hour * 24 * 7 // 7 days
 
 var DefaultLegacyRouteLanguages = []string{"Dutch"}
 
