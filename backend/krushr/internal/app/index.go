@@ -15,7 +15,10 @@ func Initialize() {
 
 	// Returns an engine with a Logger and Recovery middleware already attached
 	r := gin.Default()
-	r.Use(cors.Default())
+	defaultCorsConfig := cors.DefaultConfig()
+	defaultCorsConfig.AllowCredentials = true
+	defaultCorsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	r.Use(cors.New(defaultCorsConfig))
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
 	handlers.RegisterHandlers(r)

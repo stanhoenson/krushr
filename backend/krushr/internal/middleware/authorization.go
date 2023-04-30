@@ -25,6 +25,7 @@ func Authorization() gin.HandlerFunc {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return
 			}
+			gin.DefaultWriter.Write([]byte("authenticated"))
 			c.Set("authenticatedUser", user)
 		}
 		c.Next()
