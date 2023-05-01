@@ -307,8 +307,11 @@ p.upper {
 	margin-bottom: var(--space-xs);
 }
 
+form section.card {
+	margin-bottom: var(--space-s);
+}
+
 #save {
-	margin-top: var(--space-s);
 	padding: var(--space-s);
 }
 
