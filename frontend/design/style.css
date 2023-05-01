@@ -294,10 +294,6 @@ p.upper {
 	margin-bottom: var(--space-s);
 }
 
-.explanation {
-	margin-bottom: var(--space-l);
-}
-
 .explanation h2 {
 	font-size: var(--step-2);
 	margin-bottom: var(--space-2xs);
@@ -305,6 +301,10 @@ p.upper {
 
 .explanation p {
 	margin-bottom: var(--space-xs);
+}
+
+.explanation p:last-child {
+	margin-bottom: 0;
 }
 
 form section.card {
