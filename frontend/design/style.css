@@ -366,3 +366,17 @@ footer p {
 }
 
 /* Responsive */
+@media(max-width: 50rem) {
+	section.grid,
+	section.card .grid {
+		grid-template-columns: 1fr;
+	}
+
+	.images .grid .main {
+		grid-column: 1;
+		height: 16rem;
+	}
+
+	.images .grid img {
+		height: 16rem;
+}
