@@ -367,6 +367,7 @@ footer p {
 
 /* Responsive */
 @media(max-width: 50rem) {
+	section.routes .grid,
 	section.grid,
 	section.card .grid {
 		grid-template-columns: 1fr;
