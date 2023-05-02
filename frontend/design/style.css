@@ -268,6 +268,14 @@ main h1 {
 	height: 18rem;
 }
 
+.coordinates .input {
+	margin-bottom: var(--space-s);
+}
+
+.coordinates input {
+	flex-grow: 2;
+}
+
 .info .name input {
 	flex-grow: 2;
 }
