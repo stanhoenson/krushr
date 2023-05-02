@@ -144,9 +144,8 @@ textarea:focus {
 }
 
 .category.selected {
-	color: var(--background-0);
-	background-color: var(--primary-0);
-	border: 1px solid var(--primary-0);
+	background-color: var(--background-2);
+	border: 1px solid var(--background-3);
 }
 
 .card {
@@ -329,6 +328,15 @@ form section.card {
 
 .multiple.links .flex.input {
 	margin-bottom: var(--space-xs);
+}
+
+#categories {
+	margin-bottom: var(--space-3xs);
+}
+
+.flex.categories {
+	align-items: center;
+	gap: var(--space-3xs);
 }
 
 #save {
