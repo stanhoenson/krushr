@@ -20,24 +20,25 @@
 	--space-3xl: clamp(5.63rem, calc(5.55rem + 0.38vw), 6.00rem);
 
 	/* Custom */
+	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
 	--max-width: 1080px;
 
 	--primary--1: hsl(210, 90%, 40%);
 	--primary-0: hsl(210, 90%, 50%);
 
-	--secondary-0: hsl(210, 5%, 20%);
-	--secondary-1: hsl(210, 5%, 40%);
+	--secondary-0: hsl(210, 20%, 20%);
+	--secondary-1: hsl(210, 20%, 40%);
 
-	--foreground-0: hsl(210, 5%, 24%);
-	--foreground-1: hsl(210, 5%, 30%);
-	--foreground-2: hsl(210, 5%, 36%);
-	--foreground-3: hsl(210, 5%, 42%);
+	--foreground-0: hsl(210, 20%, 24%);
+	--foreground-1: hsl(210, 20%, 30%);
+	--foreground-2: hsl(210, 20%, 36%);
+	--foreground-3: hsl(210, 20%, 42%);
 
-	--background-0: hsl(210, 5%, 99%);
-	--background-1: hsl(210, 5%, 93%);
-	--background-2: hsl(210, 5%, 87%);
-	--background-3: hsl(210, 5%, 81%);
-	--background-4: hsl(210, 5%, 75%);
+	--background-0: hsl(210, 20%, 99%);
+	--background-1: hsl(210, 20%, 93%);
+	--background-2: hsl(210, 20%, 87%);
+	--background-3: hsl(210, 20%, 81%);
+	--background-4: hsl(210, 20%, 75%);
 }
 
 /* Utilities */
@@ -66,7 +67,7 @@
 input,
 textarea {
 	display: block;
-	font-family: sans-serif;
+	font-family: var(--sans-serif);
 	font-size: var(--step-0);
 	color: var(--foreground-0);
 	padding: var(--space-xs) var(--space-s);
@@ -173,7 +174,7 @@ span.dot {
 }
 
 html {
-	font-family: sans-serif;
+	font-family: var(--sans-serif);
 	color: var(--foreground-0);
 	background-color: var(--background-0);
 }
