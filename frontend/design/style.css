@@ -276,6 +276,10 @@ main h1 {
 	flex-grow: 2;
 }
 
+.coordinates a.button {
+	margin-bottom: var(--space-s);
+}
+
 .info .name input {
 	flex-grow: 2;
 }
