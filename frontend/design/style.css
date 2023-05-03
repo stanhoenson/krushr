@@ -65,11 +65,12 @@
 }
 
 input,
-textarea {
+textarea,
+select {
 	display: block;
 	font-family: var(--sans-serif);
 	font-size: var(--step-0);
-	color: var(--foreground-0);
+	color: var(--foreground-1);
 	padding: var(--space-xs) var(--space-s);
 	background-color: var(--background-0);
 	border: 1px solid var(--background-0);
@@ -78,7 +79,8 @@ textarea {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
 	border: 1px solid var(--primary-0);
 	outline: 1px solid var(--primary-0);
 }
@@ -341,6 +343,10 @@ form section.card {
 
 #save {
 	padding: var(--space-s);
+}
+
+.status {
+	margin-bottom: var(--space-s);
 }
 
 hr {
