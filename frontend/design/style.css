@@ -35,7 +35,7 @@
 	--foreground-3: hsl(210, 20%, 30%);
 	--foreground-4: hsl(210, 20%, 36%);
 
-	--background-0: hsl(210, 20%, 99%);
+	--background-0: hsl(210, 90%, 99%);
 	--background-1: hsl(210, 20%, 93%);
 	--background-2: hsl(210, 20%, 87%);
 	--background-3: hsl(210, 20%, 81%);
@@ -326,10 +326,12 @@ p.upper {
 
 .explanation h2 {
 	font-size: var(--step-2);
+	color: var(--foreground-1);
 	margin-bottom: var(--space-2xs);
 }
 
 .explanation p {
+	color: var(--foreground-2);
 	margin-bottom: var(--space-xs);
 }
 
