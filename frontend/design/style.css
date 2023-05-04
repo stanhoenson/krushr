@@ -159,6 +159,17 @@ select:focus {
 	border-radius: var(--space-2xs);
 }
 
+h1 {
+	line-height: 1.2;
+}
+
+.big {
+	max-width: 800px;
+	font-size: var(--step-1);
+	color: var(--foreground-2);
+	line-height: 1.4;
+}
+
 .soft {
 	color: var(--foreground-3);
 }
