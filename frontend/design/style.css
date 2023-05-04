@@ -46,6 +46,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-m);
+	align-items: center;
 }
 
 .flex.input {
@@ -353,6 +354,10 @@ hr {
 	margin: var(--space-m) 0;
 	border: none;
 	border-top: 1px solid var(--background-2);
+}
+
+hr.soft {
+	border-top: 1px solid var(--background-1);
 }
 
 footer {
