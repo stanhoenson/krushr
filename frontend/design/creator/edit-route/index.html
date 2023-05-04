@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>De Boswandeling</title>
+		<link rel="stylesheet" href="../../style.css">
+	</head>
+	<body>
+		<header>
+			<nav class="flex">
+				<div class="flex">
+					<a class="button" href="/admin">Routes</a>
+				</div>
+				<div class="flex">
+					<a class="button secondary" href="#">Sign out</a>
+				</div>
+			</nav>
+		</header>
+
+		<main>
+			<form>
+				<section class="card">
+					<p class="upper">Route</p>
+					<div class="grid">
+						<div class="images">
+							<div class="grid">
+								<img class="main" src="../../_images/charing-cross-bridge.jpg">
+								<img src="../../_images/hampton-court-green.jpg">
+								<img src="../../_images/landscape-ile-de-france.jpg">
+								<img src="../../_images/charing-cross-bridge.jpg">
+							</div>
+							<a class="button block secondary disabled" href="#">New image</a>
+						</div>
+						<div class="info">
+							<div class="flex input name">
+								<label>Name</label>
+								<input type="text" name="name" value="De Boswandeling" disabled>
+							</div>
+							<hr>
+							<div class="multiple details">
+								<label>Details</label>
+								<div class="flex column">
+									<textarea name="details" rows="4" disabled>Geniet van de natuur een maak een wandeling door het mooie bos van Gouda. Eindig met een prachtig uitzicht op het kanaal.</textarea>
+									<a class="button block secondary disabled" href="#">New detail</a>
+								</div>
+							</div>
+							<hr>
+							<div class="multiple links">
+								<label>Links</label>
+								<div class="flex input">
+									<input type="text" name="link" value="https://hoenson.xyz" disabled>
+								</div>
+								<div class="flex input">
+									<input type="text" name="link" value="https://prikbord.lol" disabled>
+									<a class="button block secondary disabled" href="#">New link</a>
+								</div>
+							</div>
+							<hr>
+							<p id="categories">Categories</p>
+							<div class="flex categories">
+								<a class="category disabled" href="#">Architecture</a>
+								<a class="category selected disabled" href="#">Nature</a>
+								<a class="category disabled" href="#">Culture</a>
+								<a class="category disabled" href="#">Dining</a>
+								<a class="category disabled" href="#">Shopping</a>
+								<a class="category disabled" href="#">History</a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<hr class="soft">
+				<section class="card">
+					<p class="upper">Point of interest</p>
+					<div class="grid coordinates">
+						<img src="../../_images/map.jpg">
+						<div>
+							<div class="flex input">
+								<label>Longitude</label>
+								<input type="text" name="longitude" value="43.52875" disabled>
+							</div>
+							<div class="flex input name">
+								<label>Latitude</label>
+								<input type="text" name="latitude" value="31.99843" disabled>
+							</div>
+							<hr>
+							<a class="button block primary disabled" href="#">Move up</a>
+							<a class="button block primary disabled" href="#">Move down</a>
+						</div>
+					</div>
+					<hr>
+					<div class="grid">
+						<div class="images">
+							<div class="grid">
+								<img class="main" src="../../_images/landscape-ile-de-france.jpg">
+								<img src="../../_images/hampton-court-green.jpg">
+								<img src="../../_images/charing-cross-bridge.jpg">
+								<img src="../../_images/charing-cross-bridge.jpg">
+							</div>
+							<a class="button block secondary disabled" href="#">New image</a>
+						</div>
+						<div class="info">
+							<div class="flex input name">
+								<label>Name</label>
+								<input type="text" name="name" value="De Grote Boom" disabled>
+							</div>
+							<hr>
+							<div class="multiple details">
+								<label>Details</label>
+								<div class="flex column">
+									<textarea name="details" rows="4" disabled>Een mooie grote boom, inclusief eenkhoorns.</textarea>
+									<a class="button block secondary disabled" href="#">New detail</a>
+								</div>
+							</div>
+							<hr>
+							<div class="multiple links">
+								<label>Links</label>
+								<div class="flex input">
+									<input type="text" name="link" disabled>
+									<a class="button block secondary disabled" href="#">New link</a>
+								</div>
+							</div>
+							<hr>
+							<p id="categories">Categories</p>
+							<div class="flex categories">
+								<a class="category disabled" href="#">Architecture</a>
+								<a class="category disabled" href="#">Nature</a>
+								<a class="category selected disabled" href="#">Culture</a>
+								<a class="category disabled" href="#">Dining</a>
+								<a class="category selected disabled" href="#">Shopping</a>
+								<a class="category disabled" href="#">History</a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="card">
+					<p class="upper">Point of interest</p>
+					<div class="grid coordinates">
+						<img src="../../_images/map.jpg">
+						<div>
+							<div class="flex input">
+								<label>Longitude</label>
+								<input type="text" name="longitude" value="2.89439" disabled>
+							</div>
+							<div class="flex input name">
+								<label>Latitude</label>
+								<input type="text" name="latitude" value="87.44562" disabled>
+							</div>
+							<hr>
+							<a class="button block primary disabled" href="#">Move up</a>
+							<a class="button block primary disabled" href="#">Move down</a>
+						</div>
+					</div>
+					<hr>
+					<div class="grid">
+						<div class="images">
+							<div class="grid">
+								<img class="main" src="../../_images/hampton-court-green.jpg">
+								<img src="../../_images/landscape-ile-de-france.jpg">
+							</div>
+							<a class="button block secondary disabled" href="#">New image</a>
+						</div>
+						<div class="info">
+							<div class="flex input name">
+								<label>Name</label>
+								<input type="text" name="name" value="Oude Boomhut" disabled>
+							</div>
+							<hr>
+							<div class="multiple details">
+								<label>Details</label>
+								<div class="flex column">
+									<textarea name="details" rows="4" disabled>De Oude Boomhut is behoorlijk oud en ook een beetje eng. Durf jij er in te klimmen?</textarea>
+									<a class="button block secondary disabled" href="#">New detail</a>
+								</div>
+							</div>
+							<hr>
+							<div class="multiple links">
+								<label>Links</label>
+								<div class="flex input">
+									<input type="text" name="link" disabled>
+									<a class="button block secondary disabled" href="#">New link</a>
+								</div>
+							</div>
+							<hr>
+							<p id="categories">Categories</p>
+							<div class="flex categories">
+								<a class="category disabled" href="#">Architecture</a>
+								<a class="category disabled" href="#">Nature</a>
+								<a class="category disabled" href="#">Culture</a>
+								<a class="category selected disabled" href="#">Dining</a>
+								<a class="category disabled" href="#">Shopping</a>
+								<a class="category disabled" href="#">History</a>
+							</div>
+						</div>
+					</div>
+				</section>
+				<a id="save" class="button block secondary disabled" href="#">New point of interest</a>
+				<hr class="soft">
+				<div class="flex input status">
+					<label for="status">Status</label>
+					<select name="status" disabled>
+						<option value="unpublished">Unpublished</option>
+						<option value="published">Published</option>
+					</select>
+				</div>
+				<a id="save" class="button block primary disabled" href="#">Save</a>
+			</form>
+		</main>
+
+		<footer>
+			<nav class="flex">
+				<a class="button" href="/admin">Routes</a>
+				<a class="button" href="/admin/users">Users</a>
+			</nav>
+			<p class="soft">&copy; 2023 Krushr <span class="pipe">|</span> <a href="#">Check out the source code</a></p>
+		</footer>
+	</body>
+</html>

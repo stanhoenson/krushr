@@ -25,6 +25,7 @@
 
 	--primary--1: hsl(210, 90%, 40%);
 	--primary-0: hsl(210, 90%, 50%);
+	--primary-1: hsl(210, 40%, 50%);
 
 	--secondary-0: hsl(210, 20%, 20%);
 	--secondary-1: hsl(210, 20%, 40%);
@@ -33,7 +34,7 @@
 	--foreground-1: hsl(210, 20%, 18%);
 	--foreground-2: hsl(210, 20%, 24%);
 	--foreground-3: hsl(210, 20%, 30%);
-	--foreground-4: hsl(210, 20%, 36%);
+	--foreground-4: hsl(210, 20%, 42%);
 
 	--background-0: hsl(210, 90%, 99%);
 	--background-1: hsl(210, 20%, 93%);
@@ -73,7 +74,7 @@ select {
 	font-family: var(--sans-serif);
 	font-size: var(--step-0);
 	color: var(--foreground-1);
-	padding: var(--space-xs) var(--space-s);
+	padding: var(--space-xs);
 	background-color: var(--background-0);
 	border: 1px solid var(--background-0);
 	border-radius: var(--space-2xs);
@@ -85,6 +86,21 @@ textarea:focus,
 select:focus {
 	border: 1px solid var(--primary-0);
 	outline: 1px solid var(--primary-0);
+}
+
+input:disabled,
+textarea:disabled {
+	color: var(--foreground-4);
+	background-color: var(--background-2);
+	border: 1px solid var(--background-2);
+	outline: 1px solid var(--background-3);
+}
+
+select:disabled {
+	color: var(--foreground-4);
+	background-color: var(--background-1);
+	border: 1px solid var(--background-1);
+	outline: 1px solid var(--background-2);
 }
 
 .button {
@@ -115,12 +131,22 @@ select:focus {
 	background-color: var(--primary--1);
 }
 
+.button.primary.disabled {
+	color: var(--background-2);
+	background-color: var(--primary-1);
+}
+
 .button.secondary {
 	color: var(--background-0);
 	background-color: var(--secondary-0);
 }
 
 .button.secondary:hover {
+	background-color: var(--secondary-1);
+}
+
+.button.secondary.disabled {
+	color: var(--background-3);
 	background-color: var(--secondary-1);
 }
 
@@ -135,13 +161,19 @@ select:focus {
 .category {
 	transition: background-color 200ms, border 200ms;
 	display: inline-block;
-	color: var(--foreground-3);
+	color: var(--foreground-1);
 	text-decoration: none;
 	padding: var(--space-2xs) var(--space-s);
 	background-color: var(--background-0);
 	border: 1px solid var(--background-2);
 	border-radius: var(--space-m);
 }
+
+.category.disabled {
+	color: var(--foreground-4);
+	background-color: var(--background-1);
+}
+
 
 .category:hover {
 	background-color: var(--background-1);
