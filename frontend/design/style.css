@@ -33,6 +33,7 @@
 	--foreground-1: hsl(210, 20%, 18%);
 	--foreground-2: hsl(210, 20%, 24%);
 	--foreground-3: hsl(210, 20%, 30%);
+	--foreground-4: hsl(210, 20%, 36%);
 
 	--background-0: hsl(210, 20%, 99%);
 	--background-1: hsl(210, 20%, 93%);
@@ -348,6 +349,16 @@ form section.card {
 
 .status {
 	margin-bottom: var(--space-s);
+}
+
+p.status {
+	color: var(--foreground-4);
+}
+
+p.status span {
+	text-transform: uppercase;
+	font-weight: bold;
+	color: var(--foreground-1);
 }
 
 hr {
