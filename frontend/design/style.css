@@ -345,7 +345,10 @@ main h1 {
 
 .images .grid {
 	gap: var(--space-s);
-	margin-bottom: var(--space-s);
+}
+
+.images .grid > .button {
+	margin-top: var(--space-s);
 }
 
 .images .grid img {
