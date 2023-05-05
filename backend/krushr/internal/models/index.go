@@ -51,8 +51,9 @@ func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
 		RouteLength:      distance,
 		RouteType:        firstCategory.Name,
 		HasInternalImage: true,
-		Menu:             firstCategory.ToLegacyMenu(), RouteOrder: 0,
-		Languages: constants.DefaultLegacyRouteLanguages,
+		Menu:             firstCategory.ToLegacyMenu(),
+		RouteOrder:       r.ID,
+		Languages:        constants.DefaultLegacyRouteLanguages,
 	}
 	if withPOIs {
 
