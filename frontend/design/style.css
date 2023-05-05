@@ -30,9 +30,12 @@
 	--secondary-0: hsl(210, 20%, 20%);
 	--secondary-1: hsl(210, 20%, 40%);
 
-	--error--1: hsl(0, 70%, 40%);
-	--error-0: hsl(0, 70%, 55%);
-	--error-1: hsl(0, 50%, 60%);
+	--error-bg--1: hsl(350, 30%, 95%);
+	--error-bg-0: hsl(350, 30%, 89%);
+	--error-bg-1: hsl(350, 30%, 83%);
+
+	--error-fg-0: hsl(0, 80%, 45%);
+	--error-fg-1: hsl(350, 30%, 55%);
 
 	--foreground-0: hsl(210, 20%, 12%);
 	--foreground-1: hsl(210, 20%, 18%);
@@ -169,18 +172,27 @@ select:disabled {
 	background-color: var(--secondary-1);
 }
 
+.button.error.soft {
+	color: var(--error-fg-0);
+	background-color: var(--error-bg--1);
+}
+
+.button.error.soft:hover {
+	background-color: var(--error-bg-0);
+}
+
 .button.error {
-	color: var(--background-0);
-	background-color: var(--error-0);
+	color: var(--error-fg-0);
+	background-color: var(--error-bg-0);
 }
 
 .button.error:hover {
-	background-color: var(--error--1);
+	background-color: var(--error-bg-1);
 }
 
 .button.error.disabled {
-	color: var(--background-1);
-	background-color: var(--error-1);
+	color: var(--error-fg-1);
+	background-color: var(--error-bg-1);
 }
 
 .button.shade {
