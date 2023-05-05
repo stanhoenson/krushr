@@ -59,8 +59,8 @@ func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
 
 		var poiList []LegacyPointOfInterest
 
-		for _, v := range r.PointsOfInterest {
-			poiList = append(poiList, v.ToLegacyPointOfInterest())
+		for index, v := range r.PointsOfInterest {
+			poiList = append(poiList, v.ToLegacyPointOfInterest(uint(index)))
 		}
 		legacyRoute.POIList = poiList
 	}
@@ -167,7 +167,7 @@ type PointOfInterest struct {
 	UserID     uint        `gorm:"not null" json:"userId"`
 }
 
-func (p PointOfInterest) ToLegacyPointOfInterest() LegacyPointOfInterest {
+func (p PointOfInterest) ToLegacyPointOfInterest(orderInRoute uint) LegacyPointOfInterest {
 	longitude := strconv.FormatFloat(p.Longitude, 'f', 2, 64)
 	latitude := strconv.FormatFloat(p.Latitude, 'f', 2, 64)
 	var categoryList []LegacyCategory
@@ -194,7 +194,7 @@ func (p PointOfInterest) ToLegacyPointOfInterest() LegacyPointOfInterest {
 		Latitude:     latitude,
 		CategoryList: categoryList,
 		InfoList:     infoList,
-		OrderInRoute: 0,
+		OrderInRoute: orderInRoute,
 	}
 }
 

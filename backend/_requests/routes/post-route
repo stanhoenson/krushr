@@ -1,2 +1,2 @@
 #!/bin/sh
-curl --header @headers.txt --json @post-route-body.json http://localhost:8080/routes
+curl --header @headers.txt --cookie cookies.txt --json @post-route-body.json http://localhost:8080/routes

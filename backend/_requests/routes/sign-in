@@ -1,11 +1,14 @@
 #!/bin/sh
 
-TOKEN=$(curl --silent --request POST --header 'Content-Type: application/json' --data @sign-in-body.json http://localhost:8080/authentication/sign-in )
+curl --silent --request POST \
+  --header 'Content-Type: application/json' \
+  --data @sign-in-body.json \
+  --cookie-jar cookies.txt \
+  http://localhost:8080/authentication/sign-in
 
-if [ -n "$TOKEN" ]; then
-  TOKEN=$(echo "$TOKEN" | sed 's/"//g')
-  sed -i "s/^Authorization:.*$/Authorization: $TOKEN/" headers.txt || echo "Authorization: $TOKEN" >> headers.txt
-  echo "Authorization header updated with token: $TOKEN"
+if [ -f "cookies.txt" ]; then
+  echo "Cookie 'jwt' updated with token:"
+  grep -oP '(?<=jwt=)[^;]+' cookies.txt
 else
   echo "Failed to get token from sign-in response"
 fi
