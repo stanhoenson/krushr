@@ -30,6 +30,10 @@
 	--secondary-0: hsl(210, 20%, 20%);
 	--secondary-1: hsl(210, 20%, 40%);
 
+	--error--1: hsl(0, 70%, 40%);
+	--error-0: hsl(0, 70%, 55%);
+	--error-1: hsl(0, 50%, 60%);
+
 	--foreground-0: hsl(210, 20%, 12%);
 	--foreground-1: hsl(210, 20%, 18%);
 	--foreground-2: hsl(210, 20%, 24%);
@@ -67,6 +71,11 @@
 	gap: var(--space-m);
 }
 
+.grid.buttons {
+	margin-top: var(--space-xs);
+	gap: var(--space-xs);
+}
+
 input,
 textarea,
 select {
@@ -83,7 +92,10 @@ select {
 
 input:focus,
 textarea:focus,
-select:focus {
+select:focus,
+input.error:focus,
+textarea.error:focus, 
+select.error:focus {
 	border: 1px solid var(--primary-0);
 	outline: 1px solid var(--primary-0);
 }
@@ -94,6 +106,13 @@ textarea:disabled {
 	background-color: var(--background-2);
 	border: 1px solid var(--background-2);
 	outline: 1px solid var(--background-3);
+}
+
+input.error,
+textarea.error,
+select.error {
+	border: 1px solid var(--error-0);
+	outline: 1px solid var(--error-0);
 }
 
 select:disabled {
@@ -148,6 +167,20 @@ select:disabled {
 .button.secondary.disabled {
 	color: var(--background-3);
 	background-color: var(--secondary-1);
+}
+
+.button.error {
+	color: var(--background-0);
+	background-color: var(--error-0);
+}
+
+.button.error:hover {
+	background-color: var(--error--1);
+}
+
+.button.error.disabled {
+	color: var(--background-1);
+	background-color: var(--error-1);
 }
 
 .button.shade {

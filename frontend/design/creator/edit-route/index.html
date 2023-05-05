@@ -18,6 +18,8 @@
 		</header>
 
 		<main>
+			<a id="save" class="button block error" href="#">Delete route</a>
+			<hr>
 			<form>
 				<section class="card">
 					<p class="upper">Route</p>
@@ -29,7 +31,10 @@
 								<img src="../../_images/landscape-ile-de-france.jpg">
 								<img src="../../_images/charing-cross-bridge.jpg">
 							</div>
-							<a class="button block secondary" href="#">New image</a>
+							<div class="grid">
+								<a class="button block secondary" href="#">New image</a>
+								<a class="button block error" href="#">Delete last image</a>
+							</div>
 						</div>
 						<div class="info">
 							<div class="flex input name">
@@ -41,8 +46,11 @@
 								<label>Details</label>
 								<div class="flex column">
 									<textarea name="details" rows="4">Geniet van de natuur een maak een wandeling door het mooie bos van Gouda. Eindig met een prachtig uitzicht op het kanaal.</textarea>
-									<a class="button block secondary" href="#">New detail</a>
 								</div>
+									<div class="grid buttons">
+										<a class="button block secondary" href="#">New detail</a>
+										<a class="button block error disabled" href="#">Delete last detail</a>
+									</div>
 							</div>
 							<hr>
 							<div class="multiple links">
@@ -54,6 +62,7 @@
 									<input type="text" name="link" value="https://hoenson.xyz">
 									<a class="button block secondary" href="#">New link</a>
 								</div>
+								<a class="button block error" href="#">Delete last link</a>
 							</div>
 							<hr>
 							<p id="categories">Categories</p>
@@ -96,7 +105,10 @@
 								<img src="../../_images/charing-cross-bridge.jpg">
 								<img src="../../_images/charing-cross-bridge.jpg">
 							</div>
-							<a class="button block secondary" href="#">New image</a>
+							<div class="grid">
+								<a class="button block secondary" href="#">New image</a>
+								<a class="button block error" href="#">Delete last image</a>
+							</div>
 						</div>
 						<div class="info">
 							<div class="flex input name">
@@ -108,7 +120,10 @@
 								<label>Details</label>
 								<div class="flex column">
 									<textarea name="details" rows="4">Wat spannend, een grote boom...</textarea>
+								</div>
+								<div class="grid buttons">
 									<a class="button block secondary" href="#">New detail</a>
+									<a class="button block error disabled" href="#">Delete last detail</a>
 								</div>
 							</div>
 							<hr>
@@ -118,6 +133,7 @@
 									<input type="text" name="link">
 									<a class="button block secondary" href="#">New link</a>
 								</div>
+								<a class="button block error disabled" href="#">Delete last link</a>
 							</div>
 							<hr>
 							<p id="categories">Categories</p>
@@ -131,6 +147,8 @@
 							</div>
 						</div>
 					</div>
+					<hr>
+					<a id="save" class="button block error" href="#">Delete point of interest</a>
 				</section>
 				<section class="card">
 					<p class="upper">Point of interest</p>
@@ -157,7 +175,10 @@
 								<img class="main" src="../../_images/hampton-court-green.jpg">
 								<img src="../../_images/landscape-ile-de-france.jpg">
 							</div>
-							<a class="button block secondary" href="#">New image</a>
+							<div class="grid">
+								<a class="button block secondary" href="#">New image</a>
+								<a class="button block error" href="#">Delete last image</a>
+							</div>
 						</div>
 						<div class="info">
 							<div class="flex input name">
@@ -169,7 +190,10 @@
 								<label>Details</label>
 								<div class="flex column">
 									<textarea name="details" rows="4">Een oude hut. Jippie...</textarea>
+								</div>
+								<div class="grid buttons">
 									<a class="button block secondary" href="#">New detail</a>
+									<a class="button block error disabled" href="#">Delete last detail</a>
 								</div>
 							</div>
 							<hr>
@@ -179,6 +203,7 @@
 									<input type="text" name="link">
 									<a class="button block secondary" href="#">New link</a>
 								</div>
+								<a class="button block error disabled" href="#">Delete last link</a>
 							</div>
 							<hr>
 							<p id="categories">Categories</p>
@@ -192,6 +217,8 @@
 							</div>
 						</div>
 					</div>
+					<hr>
+					<a id="save" class="button block error" href="#">Delete point of interest</a>
 				</section>
 				<a id="save" class="button block secondary" href="#">New point of interest</a>
 				<hr class="soft">
