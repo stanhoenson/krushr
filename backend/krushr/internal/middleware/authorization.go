@@ -11,10 +11,10 @@ func Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		jwt, err := c.Request.Cookie("jwt")
 		if err != nil {
-			//no cookie found
+			// no cookie found
 			c.Set("authenticatedUser", nil)
 		} else if jwt.Value == "" || jwt.Valid() != nil {
-			//invalid cookie set to null
+			// invalid cookie set to null
 			c.Set("authenticatedUser", nil)
 			c.SetCookie("jwt", "", 0, "/", "", true, true)
 		} else {
