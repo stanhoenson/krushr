@@ -22,6 +22,7 @@
 	/* Custom */
 	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
 	--max-width: 1080px;
+	--half-width: calc(var(--max-width) / 2);
 
 	--primary--1: hsl(210, 90%, 40%);
 	--primary-0: hsl(210, 90%, 50%);
@@ -150,6 +151,30 @@ button.button,
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
 	border-radius: var(--space-2xs);
+}
+
+.alert {
+	color: var(--foreground-0);
+	text-decoration: none;
+	padding: var(--space-xs) var(--space-s);
+	border-radius: var(--space-2xs);
+}
+
+.alert.error {
+	color: var(--error-fg-0);
+	background-color: var(--error-bg-0);
+	border: 1px solid var(--error-bg-1);
+}
+
+.alert.error.soft {
+	background-color: var(--error-bg--1);
+	border: 1px solid var(--error-bg-0);
+}
+
+#half-width {
+	box-sizing: border-box;
+	max-width: var(--half-width);
+	margin: auto;
 }
 
 .button:hover,
@@ -486,7 +511,7 @@ hr.soft {
 }
 
 form.sign-up {
-	max-width: calc(var(--max-width) / 2);
+	max-width: var(--half-width);
 	margin: auto;
 }
 
