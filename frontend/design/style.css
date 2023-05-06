@@ -93,6 +93,13 @@ select {
 	outline: 1px solid var(--background-2);
 }
 
+input.invalid,
+textarea.invalid,
+select.invalid {
+	border: 1px solid var(--error-fg-0);
+	outline: 1px solid var(--error-fg-0);
+}
+
 input:focus,
 textarea:focus,
 select:focus,
@@ -125,8 +132,20 @@ select:disabled {
 	outline: 1px solid var(--background-2);
 }
 
+button {
+	all: unset;
+}
+
+button.button {
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+}
+
+button.button,
 .button {
 	transition: background-color 200ms;
+	cursor: pointer;
 	color: var(--foreground-0);
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
@@ -219,7 +238,6 @@ select:disabled {
 	background-color: var(--background-1);
 }
 
-
 .category:hover {
 	background-color: var(--background-1);
 }
@@ -308,6 +326,9 @@ header nav.flex div.flex {
 }
 
 main {
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* align-items: space-between; */
 	max-width: var(--max-width);
 	margin: var(--space-2xl) auto;
 	padding: 0 var(--space-s);
@@ -462,6 +483,34 @@ hr {
 
 hr.soft {
 	border-top: 1px solid var(--background-1);
+}
+
+form.sign-up {
+	max-width: calc(var(--max-width) / 2);
+	margin: auto;
+}
+
+.sign-up label {
+	display: block;
+	margin-bottom: var(--space-3xs);
+}
+
+.sign-up input {
+	display: block;
+	width: 100%;
+}
+
+label.invalid {
+	color: var(--error-fg-0);
+	margin-top: var(--space-2xs);
+}
+
+.input-label {
+	margin-bottom: var(--space-m);
+}
+
+input#last {
+	margin-bottom: 0;
 }
 
 footer {

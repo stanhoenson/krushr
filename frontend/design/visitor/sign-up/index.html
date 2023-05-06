@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sign up</title>
+		<link rel="stylesheet" href="../../style.css">
+	</head>
+	<body>
+		<header>
+			<nav class="flex">
+				<div class="flex">
+					<a class="button" href="/visitor">Routes</a>
+				</div>
+				<div class="flex">
+					<a id="active" class="button" href="#">Sign up</a>
+					<a class="button primary" href="#">Sign in</a>
+				</div>
+			</nav>
+		</header>
+
+		<main>
+			<form class="sign-up" action="#submitted">
+				<section class="card">
+					<div class="input-label">
+						<label>Email</label>
+						<div class="flex">
+							<input class="invalid" type="email" name="email" required>
+						</div>
+						<label class="invalid">This field must be a valid email address</label>
+					</div>
+					<div class="input-label">
+						<label>Password</label>
+						<div class="flex">
+							<input type="password" name="password" required>
+						</div>
+					</div>
+					<label>Confirm password</label>
+					<div class="flex">
+						<input id="last" type="password" name="password" required>
+					</div>
+					<hr>
+					<button class="button block primary">Sign up</a>
+				</section>
+			</form>
+		</main>
+		<footer>
+			<nav class="flex">
+				<a class="button" href="/visitor/">Routes</a>
+			</nav>
+			<p class="soft">2023 &copy; Krushr <span class="pipe">|</span> <a href="#">Check out the source code</a></p>
+		</footer>
+	</body>
+</html>
