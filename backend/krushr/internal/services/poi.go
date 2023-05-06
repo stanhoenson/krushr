@@ -164,3 +164,29 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 		return retrievedPointOfInterest, nil
 	}
 }
+
+type PointOfInterestWithPosition struct {
+	models.PointOfInterest
+	position uint
+}
+
+// func OrderPointsOfInterestByRoutePosition(routeID uint, pointsOfInterest *[]models.PointOfInterest) {
+
+// 	derefrencedPointsOfInterest := *pointsOfInterest
+// 	pointsOfInterestWithPositions
+// 	sort.Slice(pointsOfInterest, func(i, j int) bool {
+// 		poiA := derefrencedPointsOfInterest[i]
+// 		poiB := derefrencedPointsOfInterest[j]
+// 		routePointOfInterest := models.RoutesPointsOfInterest{
+// 			RouteID:           routeID,
+// 			PointOfInterestID: poiA.ID,
+// 		}
+// 		repositories.GetEntityByConditions[models.RoutesPointsOfInterest]()
+
+// 	})
+
+// }
+
+func GetPointsOfInterestByRouteIDOrderedByPositionWithAssociations(routeID uint) (*[]models.PointOfInterest, error) {
+	return repositories.GetPointsOfInterestByRouteIDOrderedByPositionWithAssociations(routeID, database.Db)
+}
