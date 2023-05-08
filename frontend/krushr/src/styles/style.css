@@ -1,3 +1,4 @@
+
 :root {
 	/* Utopia */
 	--step--2: clamp(0.56rem, calc(0.61rem + -0.04vw), 0.60rem);
@@ -21,6 +22,7 @@
 
 	/* Custom */
 	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
+	--monospace: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
 	--max-width: 1080px;
 	--half-width: calc(var(--max-width) / 2);
 
@@ -37,6 +39,13 @@
 
 	--error-fg-0: hsl(0, 80%, 45%);
 	--error-fg-1: hsl(350, 30%, 55%);
+
+	--success-bg--1: hsl(120, 30%, 95%);
+	--success-bg-0: hsl(120, 30%, 89%);
+	--success-bg-1: hsl(120, 30%, 83%);
+
+	--success-fg-0: hsl(110, 100%, 35%);
+	--success-fg-1: hsl(120, 50%, 45%);
 
 	--foreground-0: hsl(210, 20%, 12%);
 	--foreground-1: hsl(210, 20%, 18%);
@@ -153,10 +162,15 @@ button.button,
 	border-radius: var(--space-2xs);
 }
 
+.alerts {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-2xs);
+}
+
 .alert {
-        display:flex;
-        align-items: center;
-        justify-content: space-between;
+	font-family: var(--monospace);
+	width: 100%;
 	color: var(--foreground-0);
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
@@ -174,21 +188,15 @@ button.button,
 	border: 1px solid var(--error-bg-0);
 }
 
- /* TODO misschien niet volgens convention */
-.alert .icon {
+.alert.success {
+	color: var(--success-fg-0);
+	background-color: var(--success-bg-0);
+	border: 1px solid var(--success-bg-0);
+}
 
-    padding:4px;
-    width: 20px;
-    height: 20px;
-}
-.alert .icon svg{
-    height: 100%;
-    width: 100%;
-}
-.alert .icon:hover {
-    cursor: pointer;
-    border-radius: var(--space-2xs);
-    background-color: grey;
+.alert.success.soft {
+	background-color: var(--success-bg--1);
+	border: 1px solid var(--success-bg-0);
 }
 
 #half-width {
@@ -573,7 +581,6 @@ footer nav.flex {
 footer p {
 	text-align: center;
 }
-
 
 /* Responsive */
 @media(max-width: 50rem) {

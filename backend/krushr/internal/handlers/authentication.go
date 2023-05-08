@@ -45,6 +45,7 @@ func signIn(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+
 func signOut(c *gin.Context) {
 	c.SetCookie("jwt", "", 0, "/", "", true, true)
 
