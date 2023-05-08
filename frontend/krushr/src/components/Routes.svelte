@@ -36,6 +36,7 @@
   {#if user}
     <a class="button block primary" href="/routes/create">Create a new route</a>
   {/if}
+	<hr class="soft">
   {#each groupedRoutes as routeGroup}
     {#each routeGroup.routes as innerRouteGroup}
       <p class="status">

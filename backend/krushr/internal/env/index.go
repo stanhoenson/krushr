@@ -27,34 +27,34 @@ func InitializeEnvironment() {
 
 	JWTSecret = os.Getenv("JWT_SECRET")
 	if JWTSecret == "" {
-		panicMessage(JWTSecret)
+		panicMessage("JWT_SECRET")
 	}
 
 	DatabaseName = os.Getenv("DATABASE_NAME")
 	if DatabaseName == "" {
-		panicMessage(DatabaseName)
+		panicMessage("DATABASE_NAME")
 	}
 
 	Address = os.Getenv("ADDRESS")
 	if Address == "" {
-		panicMessage(Address)
+		panicMessage("ADDRESS")
 	}
 	FileStorageFolder = os.Getenv("FILE_STORAGE_FOLDER")
 	if FileStorageFolder == "" {
-		panicMessage(FileStorageFolder)
+		panicMessage("FILE_STORAGE_FOLDER")
 	}
 
 	DataFolder = os.Getenv("DATA_FOLDER")
 	if DataFolder == "" {
-		panicMessage(DataFolder)
+		panicMessage("DATA_FOLDER")
 	}
 	ApiUrl = os.Getenv("API_URL")
 	if ApiUrl == "" {
-		panicMessage(ApiUrl)
+		panicMessage("API_URL")
 	}
 	Domain = os.Getenv("DOMAIN")
 	if Domain == "" {
-		panicMessage(Domain)
+		panicMessage("DOMAIN")
 	}
 
 	roleIDString := os.Getenv("DEFAULT_ROLE_ID")

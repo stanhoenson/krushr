@@ -167,12 +167,32 @@ button.button,
 	gap: var(--space-2xs);
 }
 
+.icon {
+	transition: background-color 200ms;
+	cursor: pointer;
+	height: 24px;
+	padding: var(--space-3xs);
+	border-radius: var(--space-3xs);
+}
+
+.icon:hover {
+	background-color: var(--error-bg-0);
+}
+
+.icon svg {
+	width: 24px;
+	height: 24px;
+}
+
 .alert {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	font-family: var(--monospace);
 	width: 100%;
 	color: var(--foreground-0);
 	text-decoration: none;
-	padding: var(--space-xs) var(--space-s);
+	padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) var(--space-s);
 	border-radius: var(--space-2xs);
 }
 

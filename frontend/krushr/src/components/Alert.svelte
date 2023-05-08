@@ -9,6 +9,6 @@
 <div id="half-width" class={`alert block ${type} soft`}>
   <span class="message"><slot /></span>
   {#if onClose !== null}
-    <button class="icon" on:click={onClose}><XMark /></button>
+    <div class="icon" on:click={onClose}><XMark /></div>
   {/if}
 </div>

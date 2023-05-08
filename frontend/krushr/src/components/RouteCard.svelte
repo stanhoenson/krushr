@@ -7,8 +7,8 @@
   let kmFormatter = new Intl.NumberFormat("en-US", {
     style: "unit",
     unit: "kilometer",
-    unitDisplay: "long",
-    maximumFractionDigits: 2,
+    unitDisplay: "short",
+    maximumFractionDigits: 1,
   });
 
   onMount(async () => {});
@@ -31,7 +31,7 @@
       {kmFormatter.format(route.distance)} <span class="pipe">| </span>
       {#each route.categories as category, i}
         {#if i !== 0}
-          <span class="dot">&#x2022;</span>
+					<span class="dot">{" "}&#x2022;</span>
         {/if}
         {category.name}
       {/each}
