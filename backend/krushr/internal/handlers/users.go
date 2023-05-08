@@ -31,7 +31,7 @@ func GetMe(c *gin.Context) {
 func RegisterUserRoutes(r *gin.Engine) {
 	routes := r.Group("/users")
 	{
-		routes.GET("/me", GetMe)
+		routes.GET("/me", wrappers.RoleWrapper(constants.Roles, GetMe))
 		routes.GET("", wrappers.RoleWrapper([]string{constants.AdminRoleName}, GetAllDefault[models.User]))
 		routes.POST("", wrappers.RoleWrapper([]string{constants.AdminRoleName}, func(ctx *gin.Context) {
 			Post(ctx, func(c *gin.Context, requestBody *models.PostUserBody) error {

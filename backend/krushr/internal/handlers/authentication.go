@@ -45,11 +45,17 @@ func signIn(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+func signOut(c *gin.Context) {
+	c.SetCookie("jwt", "", 0, "/", "", true, true)
+
+	c.Status(http.StatusOK)
+}
 
 func RegisterAuthenticationRoutes(r *gin.Engine) {
 	routes := r.Group("/authentication")
 	{
 		routes.POST("/sign-in", signIn)
+		routes.GET("/sign-out", signOut)
 		routes.POST("/sign-up", signUp)
 	}
 }
