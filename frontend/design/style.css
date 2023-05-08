@@ -21,6 +21,7 @@
 
 	/* Custom */
 	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
+	--monospace: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
 	--max-width: 1080px;
 	--half-width: calc(var(--max-width) / 2);
 
@@ -37,6 +38,13 @@
 
 	--error-fg-0: hsl(0, 80%, 45%);
 	--error-fg-1: hsl(350, 30%, 55%);
+
+	--success-bg--1: hsl(120, 30%, 95%);
+	--success-bg-0: hsl(120, 30%, 89%);
+	--success-bg-1: hsl(120, 30%, 83%);
+
+	--success-fg-0: hsl(110, 100%, 35%);
+	--success-fg-1: hsl(120, 50%, 45%);
 
 	--foreground-0: hsl(210, 20%, 12%);
 	--foreground-1: hsl(210, 20%, 18%);
@@ -153,7 +161,15 @@ button.button,
 	border-radius: var(--space-2xs);
 }
 
+.alerts {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-2xs);
+}
+
 .alert {
+	font-family: var(--monospace);
+	width: 100%;
 	color: var(--foreground-0);
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
@@ -169,6 +185,17 @@ button.button,
 .alert.error.soft {
 	background-color: var(--error-bg--1);
 	border: 1px solid var(--error-bg-0);
+}
+
+.alert.success {
+	color: var(--success-fg-0);
+	background-color: var(--success-bg-0);
+	border: 1px solid var(--success-bg-0);
+}
+
+.alert.success.soft {
+	background-color: var(--success-bg--1);
+	border: 1px solid var(--success-bg-0);
 }
 
 #half-width {
