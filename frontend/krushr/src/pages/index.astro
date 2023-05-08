@@ -5,14 +5,7 @@ import Routes from "../components/Routes.svelte";
 ---
 
 <Layout title="Krushr">
-  <!-- header could also go in layout -->
-  <header>
-    <Nav />
-  </header>
   <main>
-    <section>
-      <a class="primary" href="/">Create a new route</a>
-    <Routes client:load/>
-    </section>
+    <Routes client:load />
   </main>
 </Layout>

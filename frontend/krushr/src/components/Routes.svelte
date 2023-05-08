@@ -1,56 +1,58 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getAllRoutes } from "../requests/routes";
-  import type { Route } from "../types/models";
+  import { getMeUser } from "../requests/users";
+  import type { Route, Status, User } from "../types/models";
+  import {
+    groupRoutesByStatus,
+    groupRoutesByStatusAndUserId,
+  } from "../utils/routes";
+  import RouteCard from "./RouteCard.svelte";
 
-  let routes: Route[] = [];
+  // let routes: Route[] = [];
   let error: any = null;
-  let kmFormatter = new Intl.NumberFormat("en-US", {
-    style: "unit",
-    unit: "kilometer",
-    unitDisplay: "long",
-    maximumFractionDigits: 2,
-  });
+  let user: User;
+  let groupedRoutes: {
+    isUser: boolean;
+    routes: { status: Status["name"]; routes: Route[] }[];
+  }[] = [];
 
   onMount(async () => {
     try {
-      routes = await getAllRoutes();
+      user = await getMeUser();
+      console.log(user);
+    } catch (e) {}
+    try {
+      let routes = await getAllRoutes();
+      groupedRoutes = groupRoutesByStatus(routes, user ? user.id : -1);
+      console.log(groupedRoutes);
     } catch (e: any) {
       error = e.response.data.error;
     }
   });
 </script>
 
-<h1>All Routes</h1>
-<div class="routes">
-  {#each routes as route}
-    <div>
-      <div class="route">
-        <img
-          src={`${import.meta.env.PUBLIC_API_BASE_URL}/imagedata/${
-            route.images[0].id
-          }`}
-        />
-        <h1>{route.name}</h1>
-        <p class="details">
-          {kmFormatter.format(route.distance)} <span>| </span>
-          {#each route.categories as category, i}
-            {#if i !== 0}
-              <span class="dot">&#x2022;</span>
-            {/if}
-            {category.name}
-          {/each}
-
-          <span>|</span>
-          {route.status.name}
-        </p>
-        <p class="description">
-          {#each route.details as detail}
-            {detail.text}.{" "}
-          {/each}
-        </p>
-        <a href="/">Go to route</a>
+<section class="routes">
+  {#if user}
+    <a class="button block primary" href="/routes/create">Create a new route</a>
+  {/if}
+  {#each groupedRoutes as routeGroup}
+    {#each routeGroup.routes as innerRouteGroup}
+      <p class="status">
+        <span>
+          {innerRouteGroup.status} routes
+        </span>
+        {#if routeGroup.isUser && user}
+          by yourself
+        {:else if user}
+          by others
+        {/if}
+      </p>
+      <div class="grid">
+        {#each innerRouteGroup.routes as route}
+          <RouteCard {route} />
+        {/each}
       </div>
-    </div>
+    {/each}
   {/each}
-</div>
+</section>

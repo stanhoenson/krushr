@@ -3,6 +3,12 @@ import type { User } from "../types/models";
 import type { PostUserBody, PutUserBody } from "../types/request-bodies";
 import { BASE_URL } from "./endpoints";
 
+export async function getMeUser(): Promise<User> {
+  const response = await axios.get<User>(`${BASE_URL}/users/me`, {
+    withCredentials: true,
+  });
+  return response.data;
+}
 export async function getAllUsers(): Promise<User[]> {
   const response = await axios.get<User[]>(`${BASE_URL}/users`, {
     withCredentials: true,

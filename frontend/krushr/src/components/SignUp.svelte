@@ -1,15 +1,18 @@
 <script lang="ts">
-  import { signIn } from "../requests/authentication";
+  import { signIn, signUp } from "../requests/authentication";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
   let email = "";
   let password = "";
+  let confirmPassword = "";
   let error: string | null = "test";
+  let user;
 
   async function handleSubmit(event: Event) {
     try {
-      let token = await signIn({ email, password });
-      window.location.href = "/";
+      let user = await signUp({ email, password });
+      console.log({ user });
+      window.location.href = "/sign-in";
     } catch (e: any) {
       error = e.response.data.error;
     }
@@ -33,8 +36,16 @@
       type="password"
       required
     />
+    <InputLabel
+      bind:value={confirmPassword}
+      label={"Confirm password"}
+      error={""}
+      name="confirmPassword"
+      type="password"
+      required
+    />
     <hr />
-    <button class="button block primary">Sign in</button>
+    <button class="button block primary">Sign up</button>
   </section>
 </form>
 {#if error}

@@ -19,3 +19,10 @@ export async function signIn(signInBody: SignInBody): Promise<string> {
   );
   return response.data;
 }
+
+export async function signOut(): Promise<any> {
+  const response = await axios.get(`${BASE_URL}/authentication/sign-out`, {
+    withCredentials: true,
+  });
+  return response.data;
+}
