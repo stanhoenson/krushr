@@ -22,6 +22,7 @@
 	/* Custom */
 	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
 	--max-width: 1080px;
+	--half-width: calc(var(--max-width) / 2);
 
 	--primary--1: hsl(210, 90%, 40%);
 	--primary-0: hsl(210, 90%, 50%);
@@ -93,6 +94,13 @@ select {
 	outline: 1px solid var(--background-2);
 }
 
+input.invalid,
+textarea.invalid,
+select.invalid {
+	border: 1px solid var(--error-fg-0);
+	outline: 1px solid var(--error-fg-0);
+}
+
 input:focus,
 textarea:focus,
 select:focus,
@@ -125,12 +133,48 @@ select:disabled {
 	outline: 1px solid var(--background-2);
 }
 
+button {
+	all: unset;
+}
+
+button.button {
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+}
+
+button.button,
 .button {
 	transition: background-color 200ms;
+	cursor: pointer;
 	color: var(--foreground-0);
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
 	border-radius: var(--space-2xs);
+}
+
+.alert {
+	color: var(--foreground-0);
+	text-decoration: none;
+	padding: var(--space-xs) var(--space-s);
+	border-radius: var(--space-2xs);
+}
+
+.alert.error {
+	color: var(--error-fg-0);
+	background-color: var(--error-bg-0);
+	border: 1px solid var(--error-bg-1);
+}
+
+.alert.error.soft {
+	background-color: var(--error-bg--1);
+	border: 1px solid var(--error-bg-0);
+}
+
+#half-width {
+	box-sizing: border-box;
+	max-width: var(--half-width);
+	margin: auto;
 }
 
 .button:hover,
@@ -218,7 +262,6 @@ select:disabled {
 	color: var(--foreground-4);
 	background-color: var(--background-1);
 }
-
 
 .category:hover {
 	background-color: var(--background-1);
@@ -308,6 +351,9 @@ header nav.flex div.flex {
 }
 
 main {
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* align-items: space-between; */
 	max-width: var(--max-width);
 	margin: var(--space-2xl) auto;
 	padding: 0 var(--space-s);
@@ -462,6 +508,34 @@ hr {
 
 hr.soft {
 	border-top: 1px solid var(--background-1);
+}
+
+form.sign-up {
+	max-width: var(--half-width);
+	margin: auto;
+}
+
+.sign-up label {
+	display: block;
+	margin-bottom: var(--space-3xs);
+}
+
+.sign-up input {
+	display: block;
+	width: 100%;
+}
+
+label.invalid {
+	color: var(--error-fg-0);
+	margin-top: var(--space-2xs);
+}
+
+.input-label {
+	margin-bottom: var(--space-m);
+}
+
+input#last {
+	margin-bottom: 0;
 }
 
 footer {
