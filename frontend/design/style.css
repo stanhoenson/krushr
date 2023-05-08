@@ -448,6 +448,31 @@ main h1 {
 	margin-bottom: var(--space-s);
 }
 
+.position .three {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--space-2xl);
+}
+
+.position .three .block {
+	flex-grow: 2;
+	margin-bottom: 0;
+}
+
+.position .three span {
+	color: var(--foreground-1);
+	font-family: var(--monospace);
+	font-size: var(--step-1);
+	font-weight: bold;
+}
+
+.position label {
+	display: block;
+	text-align: center;
+	margin-bottom: var(--space-3xs);
+}
+
 .info .name input {
 	flex-grow: 2;
 }
