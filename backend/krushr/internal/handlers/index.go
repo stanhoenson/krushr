@@ -14,4 +14,5 @@ func RegisterHandlers(r *gin.Engine) {
 	RegisterAuthenticationRoutes(r)
 	RegisterImageRoutes(r)
 	RegisterLegacyRoutes(r)
+	RegisterStatusRoutes(r)
 }
