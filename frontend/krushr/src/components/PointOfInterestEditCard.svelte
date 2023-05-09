@@ -12,8 +12,14 @@
         <input type="text" name="latitude" />
       </div>
       <hr />
-      <a class="button block primary" href="#">Move up</a>
-      <a class="button block primary" href="#">Move down</a>
+			<div class="position">
+				<label>Position</label>
+				<div class="three">
+					<a class="button block secondary disabled" href="#">Move to 1</a>
+					<span>1</span>
+					<a class="button block secondary disabled" href="#">Move to 3</a>
+				</div>
+			</div>
     </div>
   </div>
   <hr />
