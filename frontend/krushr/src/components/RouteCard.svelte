@@ -31,7 +31,7 @@
       {kmFormatter.format(route.distance)} <span class="pipe">| </span>
       {#each route.categories as category, i}
         {#if i !== 0}
-					<span class="dot">{" "}&#x2022;</span>
+          <span class="dot">{" "}&#x2022;</span>
         {/if}
         {category.name}
       {/each}
@@ -44,6 +44,8 @@
         {detail.text}.{" "}
       {/each}
     </p>
-    <a class="button block shade" href={`/routes/${route.id}`}>Go to route</a>
+    <a class="button block shade" href={`/routes/edit?id=${route.id}`}
+      >Go to route</a
+    >
   </div>
 </div>

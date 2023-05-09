@@ -454,7 +454,11 @@ main h1 {
 	grid-column: 1 / span 2;
 	height: 18rem;
 }
+.grid .map{
 
+	grid-column: 1;
+	height: 18rem;
+}
 .coordinates .input {
 	margin-bottom: var(--space-s);
 }
@@ -623,6 +627,10 @@ footer nav.flex {
 
 footer p {
 	text-align: center;
+}
+
+.map {
+
 }
 
 /* Responsive */

@@ -1,15 +1,21 @@
+<script lang="ts">
+  import LeafletMap from "./LeafletMap.svelte";
+  export let longitude: number;
+  export let latitude: number;
+</script>
+
 <section class="card">
   <p class="upper">Point of interest</p>
   <div class="grid coordinates">
-    <img src="../../_images/map.jpg" />
+    <LeafletMap bind:latitude bind:longitude />
     <div>
       <div class="flex input">
         <label>Longitude</label>
-        <input type="text" name="longitude" />
+        <input bind:value={longitude} type="text" name="longitude" />
       </div>
       <div class="flex input name">
         <label>Latitude</label>
-        <input type="text" name="latitude" />
+        <input bind:value={latitude} type="text" name="latitude" />
       </div>
       <hr />
       <a class="button block primary" href="#">Move up</a>

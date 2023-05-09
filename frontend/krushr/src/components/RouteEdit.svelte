@@ -8,8 +8,8 @@
   import RouteEditExplanation from "./RouteEditExplanation.svelte";
   let error: string | null = null;
   let user: User;
-  // let queryParams = new URLSearchParams(window.location.search);
-  // console.log({ queryParams });
+  let queryParams = new URLSearchParams(window.location.search);
+  console.log({ queryParams });
 
   onMount(async () => {
     try {
