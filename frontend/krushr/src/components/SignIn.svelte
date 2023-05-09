@@ -24,6 +24,7 @@
       error={""}
       type="email"
       required
+      autofocus={true}
     />
     <InputLabel
       bind:value={password}

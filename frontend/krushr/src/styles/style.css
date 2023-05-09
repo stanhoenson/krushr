@@ -584,6 +584,7 @@ form section.card {
 	border: 1px solid var(--background-2);
 	border-radius: var(--space-xs);
 	box-shadow: 0 10px 20px 2px var(--background-4);
+        z-index: 1001;
 }
 
 .input.status label {
@@ -656,8 +657,10 @@ footer p {
 	text-align: center;
 }
 
-.map {
+.map-marker {
 
+    color:red;
+    background-color: white;
 }
 
 /* Responsive */

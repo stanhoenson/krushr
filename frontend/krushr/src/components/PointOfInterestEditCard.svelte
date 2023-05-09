@@ -1,31 +1,44 @@
 <script lang="ts">
+  import type { PointOfInterest } from "../types/models";
+
   import LeafletMap from "./LeafletMap.svelte";
-  export let longitude: number;
-  export let latitude: number;
+  export let pointOfInterest: PointOfInterest;
 </script>
 
 <section class="card">
   <p class="upper">Point of interest</p>
   <div class="grid coordinates">
-    <LeafletMap bind:latitude bind:longitude />
+    <LeafletMap
+      allMarkers={}
+      bind:latitude={pointOfInterest.latitude}
+      bind:longitude={pointOfInterest.longitude}
+    />
     <div>
       <div class="flex input">
         <label>Longitude</label>
-        <input bind:value={longitude} type="text" name="longitude" />
+        <input
+          bind:value={pointOfInterest.longitude}
+          type="text"
+          name="longitude"
+        />
       </div>
       <div class="flex input name">
         <label>Latitude</label>
-        <input bind:value={latitude} type="text" name="latitude" />
+        <input
+          bind:value={pointOfInterest.latitude}
+          type="text"
+          name="latitude"
+        />
       </div>
       <hr />
-			<div class="position">
-				<label>Position</label>
-				<div class="three">
-					<a class="button block secondary disabled" href="#">Move to 1</a>
-					<span>1</span>
-					<a class="button block secondary disabled" href="#">Move to 3</a>
-				</div>
-			</div>
+      <div class="position">
+        <label>Position</label>
+        <div class="three">
+          <a class="button block secondary disabled" href="#">Move to 1</a>
+          <span>1</span>
+          <a class="button block secondary disabled" href="#">Move to 3</a>
+        </div>
+      </div>
     </div>
   </div>
   <hr />

@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { signOut } from "../requests/authentication";
+  import { authenticatedUser } from "../stores/user";
+  import type { User } from "../types/models";
 
-  import { getMeUser } from "../requests/users";
+  let user: User | null;
 
-  let loggedIn: boolean;
+  let unsubscribe = authenticatedUser.subscribe((value) => (user = value));
 
   async function handleSignOut() {
     try {
@@ -13,11 +15,8 @@
     } catch (e: any) {}
   }
 
-  onMount(async () => {
-    try {
-      let user = await getMeUser();
-      loggedIn = true;
-    } catch (e) {}
+  onDestroy(() => {
+    unsubscribe();
   });
 </script>
 
@@ -26,7 +25,7 @@
     <a id="active" class="button" href="/">Routes</a>
   </div>
   <div class="flex">
-    {#if !loggedIn}
+    {#if !user}
       <a class="button" href="/sign-up">Sign up</a>
       <a class="button primary" href="/sign-in">Sign in</a>
     {:else}

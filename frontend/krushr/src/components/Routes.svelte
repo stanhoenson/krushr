@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { getAllRoutes } from "../requests/routes";
   import { getMeUser } from "../requests/users";
+  import { authenticatedUser } from "../stores/user";
   import type { Route, Status, User } from "../types/models";
   import {
     groupRoutesByStatus,
@@ -11,17 +12,18 @@
 
   // let routes: Route[] = [];
   let error: any = null;
-  let user: User;
+  let user: User | null;
+
+  let unsubscribe = authenticatedUser.subscribe((value) => {
+    user = value;
+  });
+
   let groupedRoutes: {
     isUser: boolean;
     routes: { status: Status["name"]; routes: Route[] }[];
   }[] = [];
 
   onMount(async () => {
-    try {
-      user = await getMeUser();
-      console.log(user);
-    } catch (e) {}
     try {
       let routes = await getAllRoutes();
       groupedRoutes = groupRoutesByStatus(routes, user ? user.id : -1);
@@ -30,12 +32,15 @@
       error = e.response.data.error;
     }
   });
+  onDestroy(() => {
+    unsubscribe();
+  });
 </script>
 
 <section class="routes">
   {#if user}
     <a class="button block primary" href="/routes/create">Create a new route</a>
-		<hr class="soft">
+    <hr class="soft" />
   {/if}
   {#each groupedRoutes as routeGroup}
     {#each routeGroup.routes as innerRouteGroup}
