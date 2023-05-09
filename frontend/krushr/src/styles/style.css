@@ -526,6 +526,11 @@ p.upper {
 	margin-bottom: var(--space-s);
 }
 
+.edit {
+	max-width: 1080px;
+	margin: auto;
+}
+
 .explanation h2 {
 	font-size: var(--step-2);
 	color: var(--foreground-1);
