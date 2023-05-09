@@ -372,7 +372,7 @@ a {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: var(--space-3xs);
+	border-radius: var(--space-2xs);
 }
 
 p {
@@ -557,8 +557,24 @@ form section.card {
 	padding: var(--space-s);
 }
 
-.status {
-	margin-bottom: var(--space-s);
+.fixed {
+	position: sticky;
+	bottom: var(--space-2xl);
+	box-sizing: border-box;
+	width: var(--max-width);
+	display: flex;
+	flex-wrap: flex;
+	gap: var(--space-m);
+	padding: var(--space-s);
+	background-color: var(--background-1);
+	border: 1px solid var(--background-2);
+	border-radius: var(--space-xs);
+	box-shadow: 0 10px 20px 2px var(--background-4);
+}
+
+.input.status label {
+	display: block;
+	margin-bottom: var(--space-3xs);
 }
 
 p.status {

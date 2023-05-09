@@ -26,12 +26,14 @@
   <PointOfInterestEditCard />
   <a id="save" class="button block secondary" href="#">New point of interest</a>
   <hr class="soft" />
-  <div class="flex input status">
-    <label for="status">Status</label>
-    <select name="status">
-      <option value="unpublished">Unpublished</option>
-      <option value="published">Published</option>
-    </select>
-  </div>
-  <button id="save" class="button block primary" href="#">Save</button>
+	<div class="fixed">
+		<div class="input status">
+			<label for="status">Status</label>
+			<select name="status">
+				<option value="unpublished">Unpublished</option>
+				<option value="published">Published</option>
+			</select>
+		</div>
+		<button id="save" class="button block primary" href="#">Save</button>
+	</div>
 </form>
