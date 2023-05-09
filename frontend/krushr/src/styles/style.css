@@ -361,6 +361,9 @@ html {
 }
 
 body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 	font-size: var(--step-0);
 	line-height: 1.5;
 }
@@ -372,7 +375,7 @@ a {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: var(--space-3xs);
+	border-radius: var(--space-2xs);
 }
 
 p {
@@ -398,17 +401,19 @@ header nav.flex div.flex {
 }
 
 main {
-	/* display: flex; */
-	/* flex-direction: column; */
-	/* align-items: space-between; */
-	max-width: var(--max-width);
-	margin: var(--space-2xl) auto;
+	flex-grow: 1;
+	margin: var(--space-2xl) 0;
 	padding: 0 var(--space-s);
 }
 
 main h1 {
 	font-size: var(--step-3);
 	margin-bottom: var(--space-s);
+}
+
+.routes {
+	max-width: var(--max-width);
+	margin: auto;
 }
 
 .routes .button.primary {
@@ -525,6 +530,11 @@ p.upper {
 	margin-bottom: var(--space-s);
 }
 
+.edit {
+	max-width: 1080px;
+	margin: auto;
+}
+
 .explanation h2 {
 	font-size: var(--step-2);
 	color: var(--foreground-1);
@@ -561,12 +571,29 @@ form section.card {
 	padding: var(--space-s);
 }
 
-.status {
-	margin-bottom: var(--space-s);
+.fixed {
+	position: sticky;
+	bottom: var(--space-2xl);
+	box-sizing: border-box;
+	width: var(--max-width);
+	display: flex;
+	flex-wrap: flex;
+	gap: var(--space-m);
+	padding: var(--space-s);
+	background-color: var(--background-1);
+	border: 1px solid var(--background-2);
+	border-radius: var(--space-xs);
+	box-shadow: 0 10px 20px 2px var(--background-4);
+}
+
+.input.status label {
+	display: block;
+	margin-bottom: var(--space-3xs);
 }
 
 p.status {
 	color: var(--foreground-4);
+	margin-bottom: var(--space-2xs);
 }
 
 p.status span {

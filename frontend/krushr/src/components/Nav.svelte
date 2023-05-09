@@ -30,7 +30,7 @@
       <a class="button" href="/sign-up">Sign up</a>
       <a class="button primary" href="/sign-in">Sign in</a>
     {:else}
-      <button on:click={handleSignOut} class="button secondary">Sign Out</button
+      <button on:click={handleSignOut} class="button secondary">Sign out</button
       >
     {/if}
   </div>
