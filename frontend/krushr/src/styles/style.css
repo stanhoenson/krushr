@@ -398,9 +398,6 @@ header nav.flex div.flex {
 }
 
 main {
-	/* display: flex; */
-	/* flex-direction: column; */
-	/* align-items: space-between; */
 	max-width: var(--max-width);
 	margin: var(--space-2xl) auto;
 	padding: 0 var(--space-s);
@@ -579,6 +576,7 @@ form section.card {
 
 p.status {
 	color: var(--foreground-4);
+	margin-bottom: var(--space-2xs);
 }
 
 p.status span {
