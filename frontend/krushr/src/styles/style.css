@@ -568,23 +568,31 @@ form section.card {
 }
 
 #save {
-	padding: var(--space-s);
+	padding: var(--space-m);
 }
 
 .fixed {
 	position: sticky;
-	bottom: var(--space-2xl);
+	bottom: var(--space-l);
 	box-sizing: border-box;
-	width: var(--max-width);
+	max-width: var(--max-width);
 	display: flex;
 	flex-wrap: flex;
-	gap: var(--space-m);
 	padding: var(--space-s);
 	background-color: var(--background-1);
 	border: 1px solid var(--background-2);
 	border-radius: var(--space-xs);
 	box-shadow: 0 10px 20px 2px var(--background-4);
         z-index: 1001;
+}
+
+.input.status {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+	padding-right: var(--space-m);
+	border-right: 1px solid var(--background-2);
+	margin-right: var(--space-m);
 }
 
 .input.status label {
