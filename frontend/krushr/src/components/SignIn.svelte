@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   import { signIn } from "../requests/authentication";
+  import { getMeUser } from "../requests/users";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
   let email = "";
@@ -14,6 +17,12 @@
       error = e.response.data.error;
     }
   }
+  onMount(async () => {
+    try {
+      let user = await getMeUser();
+      window.location.href = "/";
+    } catch (e: any) {}
+  });
 </script>
 
 <form class="sign-up" on:submit|preventDefault={handleSubmit}>

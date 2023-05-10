@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   import { signIn, signUp } from "../requests/authentication";
+  import { getMeUser } from "../requests/users";
   import type { User } from "../types/models";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
@@ -26,6 +29,12 @@
       error = e.response.data.error;
     }
   }
+  onMount(async () => {
+    try {
+      let user = await getMeUser();
+      window.location.href = "/";
+    } catch (e: any) {}
+  });
 </script>
 
 <form class="sign-up" on:submit|preventDefault={handleSubmit}>
@@ -36,7 +45,7 @@
       error={""}
       type="email"
       required
-            autofocus={true}
+      autofocus={true}
     />
     <InputLabel
       bind:value={password}

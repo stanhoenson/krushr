@@ -479,7 +479,7 @@ main h1 {
 .position .three {
 	display: flex;
 	align-items: center;
-	flex-wrap: wrap;
+	/* flex-wrap: wrap; */
 	gap: var(--space-2xl);
 }
 
@@ -663,6 +663,17 @@ footer nav.flex {
 
 footer p {
 	text-align: center;
+}
+
+.delete-icon{
+
+    
+}
+
+.delete-icon svg{
+    color: var(--error-fg-0);
+    width: 24px;
+    height: 24px;
 }
 
 .map-marker {

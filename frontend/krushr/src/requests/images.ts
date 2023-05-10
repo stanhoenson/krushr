@@ -14,7 +14,7 @@ export async function deleteImageById(id: number): Promise<void> {
 }
 
 // Create an image
-export async function postImage(file: File): Promise<any> {
+export async function createImage(file: File): Promise<Image> {
   const formData = new FormData();
   formData.append("file", file);
 

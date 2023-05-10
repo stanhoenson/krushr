@@ -7,7 +7,7 @@
     ExtendedMarkerOptions,
   } from "../types/misc";
   let element: any;
-  export let allPointsOfInterestLatLngs: LatLngTuple[] = [];
+  export let allPointsOfInterestLatLngs: LatLngTuple[];
   export let position: number;
   export let longitude: number;
   export let latitude: number;
@@ -21,30 +21,46 @@
   const initialZoom = 13;
 
   function onMapClick(e: LeafletMouseEvent) {
+    console.log("updating position", position);
     longitude = e.latlng.lng;
     latitude = e.latlng.lat;
-    marker.setLatLng(e.latlng);
+    // marker.setLatLng(e.latlng);
   }
 
   function handlePoisUpdate(map: L.Map, pois: LatLngTuple[]) {
-    // for (let poi of pois) {
-    //   marker = L.marker(initialLatLng, {
-    //     icon: L.divIcon({
-    //       html: `<div>${position}</div>`,
-    //       className: "map-marker",
-    //     }),
-    //     position,
-    //   } as ExtendedMarkerOptions).addTo(map);
-    // }
+    let poiIndexesFound: number[] = [];
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         let options = layer.options as ExtendedMarkerOptions;
-        if (options.position) {
+        console.log(options);
+        if (
+          options.position !== null &&
+          !poiIndexesFound.includes(options.position)
+        ) {
           let poi = pois[options.position];
+          console.log(
+            options.position,
+            "position found",
+            poi,
+            " in map",
+            position
+          );
           layer.setLatLng(poi);
+          poiIndexesFound.push(options.position);
         }
       }
     });
+    pois
+      .filter((value, index) => !poiIndexesFound.includes(index))
+      .forEach((value, index) => {
+        marker = L.marker(value, {
+          icon: L.divIcon({
+            html: `<div>${index}</div>`,
+            className: "map-marker",
+          }),
+          position,
+        } as ExtendedMarkerOptions).addTo(map);
+      });
   }
 
   onMount(() => {
@@ -57,7 +73,7 @@
     map.on("click", onMapClick);
     marker = L.marker(initialLatLng, {
       icon: L.divIcon({
-        html: position.toString(),
+        html: `<div>${position}</div>`,
         className: "map-marker",
       }),
       position,

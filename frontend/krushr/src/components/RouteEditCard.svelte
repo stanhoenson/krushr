@@ -1,16 +1,90 @@
+<script lang="ts">
+  import {createImage} from "../requests/images";
+
+  import type {Category} from "../types/models";
+
+  import type { PostRouteBody } from "../types/request-bodies";
+
+  export let route: PostRouteBody;
+
+  function handleCategoryToggle(category: Category) {
+    let categoryNames = route.categories.map(
+      (category) => category.name
+    );
+    if (!categoryNames.includes(category.name)) {
+      route.categories.push(category);
+      route = route;
+    }
+  }
+
+  function handleNewDetail() {
+    route.details.push({ text: "" });
+    route = route;
+  }
+
+  function handleDeleteDetail(index: number) {}
+
+  function handleNewLink() {
+    route.links.push({ url: "" });
+    route = route;
+  }
+
+  function handleDeleteLink(index: number) {}
+
+  function handleNewImage() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = handleFileUpload;
+    input.click();
+  }
+
+  async function handleFileUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      let image = await createImage(file);
+      route.imageIds.push(image.id);
+      route = route;
+    }
+  }
+
+  function handleDeleteImage(index: number) {}
+
+  function handleDeletePointOfInterest() {}
+</script>
+
 <section class="card">
   <p class="upper">Route</p>
   <div class="grid">
     <div class="images">
       <div class="grid">
-        <img class="main" src="../../_images/charing-cross-bridge.jpg" />
-        <img src="../../_images/hampton-court-green.jpg" />
-        <img src="../../_images/landscape-ile-de-france.jpg" />
-        <img src="../../_images/charing-cross-bridge.jpg" />
+        {#each route.imageIds as imageId, i}
+          {#if i === 0}
+            <img
+              class="main"
+              src={`${
+                import.meta.env.PUBLIC_API_BASE_URL
+              }/imagedata/${imageId}`}
+            />
+          {:else}
+            <img
+              src={`${
+                import.meta.env.PUBLIC_API_BASE_URL
+              }/imagedata/${imageId}`}
+            />
+          {/if}
+        {/each}
       </div>
       <div class="grid">
-        <a class="button block secondary" href="#">New image</a>
-        <a class="button block error" href="#">Delete last image</a>
+        <button
+          type="button"
+          on:click={handleNewImage}
+          class="button block secondary"
+          href="#">New image</button
+        >
+        <button type="button" class="button block error" href="#"
+          >Delete last image</button
+        >
       </div>
     </div>
     <div class="info">

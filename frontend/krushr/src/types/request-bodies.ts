@@ -2,10 +2,10 @@
 export interface PostRouteBody {
   name: string;
   pointsOfInterest: PostPointOfInterestBody[];
-  imageIds?: number[];
-  details?: PostDetailBody[];
-  links?: PostLinkBody[];
-  categories?: PostCategoryBody[];
+  imageIds: number[];
+  details: PostDetailBody[];
+  links: PostLinkBody[];
+  categories: PostCategoryBody[];
   statusId: number;
 }
 
@@ -59,10 +59,10 @@ export interface PutStatusBody extends PostStatusBody {}
 
 // PointOfInterest
 export interface PostPointOfInterestBody extends GetPointOfInterestBody {
-  imageIds?: number[];
-  details?: PostDetailBody[];
-  links?: PostLinkBody[];
-  categories?: PostCategoryBody[];
+  imageIds: number[];
+  details: PostDetailBody[];
+  links: PostLinkBody[];
+  categories: PostCategoryBody[];
 }
 
 export interface GetPointOfInterestBody {
