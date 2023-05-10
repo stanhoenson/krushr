@@ -663,6 +663,10 @@ footer p {
     background-color: white;
 }
 
+.button.block.thick{
+    padding:var(--space-s);
+}
+
 /* Responsive */
 @media(max-width: 50rem) {
 	section.routes .grid,

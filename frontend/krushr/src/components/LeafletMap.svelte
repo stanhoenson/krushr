@@ -1,14 +1,23 @@
 <script lang="ts">
   import L, { LatLngTuple, LeafletMouseEvent } from "leaflet";
-  import { onMount, afterUpdate } from "svelte";
+  import { onMount, afterUpdate, onDestroy } from "svelte";
+  import { goudaCoordinates } from "../constants";
+  import type {
+    CoordinatesWithPosition,
+    ExtendedMarkerOptions,
+  } from "../types/misc";
   let element: any;
-  export let allMarkers: L.Marker[];
+  export let allPointsOfInterestLatLngs: LatLngTuple[] = [];
+  export let position: number;
   export let longitude: number;
   export let latitude: number;
   let map: L.Map;
   let marker: L.Marker;
 
-  const initialLatLng: LatLngTuple = [52.0164830842629, 4.710044860839845];
+  const initialLatLng: LatLngTuple = [
+    goudaCoordinates.latitude,
+    goudaCoordinates.longitude,
+  ];
   const initialZoom = 13;
 
   function onMapClick(e: LeafletMouseEvent) {
@@ -17,10 +26,25 @@
     marker.setLatLng(e.latlng);
   }
 
-  function handleMarkerUpdates(map: L.Map, markers: L.Marker[]) {
-    for (let marker of markers) {
-      marker.addTo(map);
-    }
+  function handlePoisUpdate(map: L.Map, pois: LatLngTuple[]) {
+    // for (let poi of pois) {
+    //   marker = L.marker(initialLatLng, {
+    //     icon: L.divIcon({
+    //       html: `<div>${position}</div>`,
+    //       className: "map-marker",
+    //     }),
+    //     position,
+    //   } as ExtendedMarkerOptions).addTo(map);
+    // }
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        let options = layer.options as ExtendedMarkerOptions;
+        if (options.position) {
+          let poi = pois[options.position];
+          layer.setLatLng(poi);
+        }
+      }
+    });
   }
 
   onMount(() => {
@@ -32,17 +56,16 @@
     }).addTo(map);
     map.on("click", onMapClick);
     marker = L.marker(initialLatLng, {
-      icon: L.divIcon({ html: "1", className: "map-marker" }),
-    }).addTo(map);
-    if (map && allMarkers.length > 0) {
-      handleMarkerUpdates(map, allMarkers);
-    }
+      icon: L.divIcon({
+        html: position.toString(),
+        className: "map-marker",
+      }),
+      position,
+    } as ExtendedMarkerOptions).addTo(map);
   });
 
   afterUpdate(() => {
-    if (map && allMarkers.length > 0) {
-      handleMarkerUpdates(map, allMarkers);
-    }
+    handlePoisUpdate(map, allPointsOfInterestLatLngs);
   });
 </script>
 
@@ -53,4 +76,4 @@
   crossorigin=""
 />
 
-<div class="map  main" bind:this={element} />
+<div class="map  main" id={`map${position}`} bind:this={element} />

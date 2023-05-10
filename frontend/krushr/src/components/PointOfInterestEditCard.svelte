@@ -1,15 +1,19 @@
 <script lang="ts">
+  import type { LatLng, LatLngTuple } from "leaflet";
   import type { PointOfInterest } from "../types/models";
-
   import LeafletMap from "./LeafletMap.svelte";
+
+  export let position: number;
   export let pointOfInterest: PointOfInterest;
+  export let allPointsOfInterestLatLngs: LatLngTuple[];
 </script>
 
 <section class="card">
   <p class="upper">Point of interest</p>
   <div class="grid coordinates">
     <LeafletMap
-      allMarkers={}
+      {allPointsOfInterestLatLngs}
+      {position}
       bind:latitude={pointOfInterest.latitude}
       bind:longitude={pointOfInterest.longitude}
     />
@@ -93,7 +97,7 @@
     </div>
   </div>
   <hr />
-  <a id="save" class="button block error disabled" href="#"
+  <a class="button thick block error disabled" href="#"
     >Delete point of interest</a
   >
 </section>
