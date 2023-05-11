@@ -188,7 +188,7 @@ button.button,
 }
 
 .images button {
-	margin-top: var(--space-xs);
+	margin-top: var(--space-s);
 }
 
 .icon:hover {
@@ -729,22 +729,28 @@ footer p {
     height: 100%;
     
 }
+
 .image-placeholder {
     background-color: #d0d0d0;
-    
+}
+
+.image-with-delete {
+	display: inherit;
+	position: relative;
 }
 
 .input-with-delete {
     position: relative;
     width: 100%;
 }
+
 .input-with-delete input{
     width: 100%;
     box-sizing: border-box;
 }
+
 .input-with-delete textarea{
     box-sizing: border-box;
-
 }
 
 /* Responsive */

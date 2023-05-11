@@ -67,6 +67,11 @@
     input.click();
   }
 
+  function handleDeleteImage(index: number) {
+    pointOfInterest.imageIds.splice(index, 1);
+    pointOfInterest = pointOfInterest;
+  }
+
   async function handleFileUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -75,11 +80,6 @@
       pointOfInterest.imageIds.push(image.id);
       pointOfInterest = pointOfInterest;
     }
-  }
-
-  function handleDeleteImage(index: number) {
-    pointOfInterest.imageIds.splice(index, 1);
-    pointOfInterest = pointOfInterest;
   }
 
   function handleDeletePointOfInterest() {
@@ -150,12 +150,20 @@
         {/if}
         {#each pointOfInterest.imageIds as imageId, i}
 					<div
-							class={`${i === 0 ? "main" : ""}`}>
+							class={`image-with-delete ${i === 0 ? "main" : ""}`}>
               <img
                 src={`${
                   import.meta.env.PUBLIC_API_BASE_URL
                 }/imagedata/${imageId}`}
               />
+              {#if i !== 0}
+                <div
+                  on:click={handleDeleteImage.bind(null, i)}
+                  class="icon delete-icon"
+                >
+                  <XMark />
+                </div>
+              {/if}
           </div>
         {/each}
       </div>
