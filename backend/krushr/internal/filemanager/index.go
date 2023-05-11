@@ -14,11 +14,10 @@ import (
 
 func StoreMulitpartImage(fileHeader *multipart.FileHeader) (string, error) {
 	file, err := fileHeader.Open()
-	defer file.Close()
-
 	if err != nil {
 		return "", fmt.Errorf("failed to open fileHeader's file: %v", err)
 	}
+	defer file.Close()
 
 	// Check if the uploaded file is an image
 	isImage, err := IsImage(file)

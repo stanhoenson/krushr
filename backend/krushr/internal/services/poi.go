@@ -165,10 +165,10 @@ func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPoi
 	}
 }
 
-type PointOfInterestWithPosition struct {
-	models.PointOfInterest
-	position uint
-}
+// type PointOfInterestWithPosition struct {
+// 	models.PointOfInterest
+// 	position uint
+// }
 
 // func OrderPointsOfInterestByRoutePosition(routeID uint, pointsOfInterest *[]models.PointOfInterest) {
 

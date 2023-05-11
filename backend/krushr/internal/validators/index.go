@@ -11,8 +11,8 @@ func customValidation(fl validator.FieldLevel) bool {
 }
 
 func InitializeValidators() {
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v = validator.New()
+	if _, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v := validator.New()
 		v.RegisterValidation("custom", customValidation)
 	}
 }

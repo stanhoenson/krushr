@@ -47,6 +47,9 @@ func Authenticate(signInBody *models.SignInBody) (string, error) {
 
 	expirationTime := time.Now().Add(constants.TokenValidityPeriod)
 	token, err := GenerateJWTWithUser(user, expirationTime)
+	if err != nil {
+		return "", err
+	}
 
 	return token, nil
 }
@@ -73,11 +76,11 @@ func GetUserFromJWT(jwtString string) (*models.User, error) {
 		return nil, err
 	}
 	if !token.Valid {
-		return nil, errors.New("Invalid token")
+		return nil, errors.New("invalid token")
 	}
 	claims, ok := token.Claims.(*CustomClaims)
 	if !ok {
-		return nil, errors.New("Invalid claims")
+		return nil, errors.New("invalid claims")
 	}
 
 	user, err := repositories.GetUserByIDWithRole(claims.UserID)

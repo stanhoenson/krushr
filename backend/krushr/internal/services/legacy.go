@@ -18,7 +18,7 @@ func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
 	}
 
 	if len(route.PointsOfInterest) != len(*pointsOfInterest) {
-		return nil, fmt.Errorf("Error retrieving legacyRoute")
+		return nil, fmt.Errorf("error retrieving legacyRoute")
 	}
 
 	for index := range route.PointsOfInterest {
@@ -26,6 +26,9 @@ func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
 	}
 
 	legacyRoute, err := route.ToLegacyRoute(true)
+	if err != nil {
+		return nil, err
+	}
 
 	return legacyRoute, nil
 }

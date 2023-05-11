@@ -36,7 +36,7 @@ func GetUserFromContext(c *gin.Context) (*models.User, error) {
 	value, exists := c.Get("authenticatedUser")
 	user, ok := value.(*models.User)
 	if !exists || !ok {
-		return nil, errors.New("No user in context")
+		return nil, errors.New("no user in context")
 	}
 	return user, nil
 }

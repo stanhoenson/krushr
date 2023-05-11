@@ -11,10 +11,6 @@ func ValidatePostCategoryBody(postCategoryBody *models.PostCategoryBody) error {
 		return errors.New("category is required")
 	}
 
-	if postCategoryBody.Position < 0 {
-		return errors.New("weight must be a non-negative integer")
-	}
-
 	// add more validation rules here
 
 	return nil
@@ -23,10 +19,6 @@ func ValidatePostCategoryBody(postCategoryBody *models.PostCategoryBody) error {
 func ValidatePutCategoryBody(putCategoryBody *models.PutCategoryBody) error {
 	if putCategoryBody.Name == "" {
 		return errors.New("category is required")
-	}
-
-	if putCategoryBody.Position < 0 {
-		return errors.New("weight must be a non-negative integer")
 	}
 
 	// add more validation rules here

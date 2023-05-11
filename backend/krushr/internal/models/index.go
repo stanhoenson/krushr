@@ -26,11 +26,11 @@ type Route struct {
 func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
 	distance := strconv.FormatFloat(r.Distance, 'f', 2, 64)
 	if len(r.Images) == 0 {
-		return nil, fmt.Errorf("No image for route")
+		return nil, fmt.Errorf("no image for route")
 	}
 	firstImage := r.Images[0]
 	if len(r.Categories) == 0 {
-		return nil, fmt.Errorf("No category for route")
+		return nil, fmt.Errorf("no category for route")
 	}
 	firstCategory := r.Categories[0]
 
