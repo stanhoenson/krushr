@@ -480,6 +480,10 @@ main h1 {
 	height: 18rem;
 }
 
+.images .grid .main img {
+	height: 18rem;
+}
+
 .map {
 	border-radius: var(--space-2xs);
 }

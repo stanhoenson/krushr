@@ -149,21 +149,13 @@
           </div>
         {/if}
         {#each pointOfInterest.imageIds as imageId, i}
-          <div>
-            {#if i === 0}
-              <img
-                class="main"
-                src={`${
-                  import.meta.env.PUBLIC_API_BASE_URL
-                }/imagedata/${imageId}`}
-              />
-            {:else}
+					<div
+							class={`${i === 0 ? "main" : ""}`}>
               <img
                 src={`${
                   import.meta.env.PUBLIC_API_BASE_URL
                 }/imagedata/${imageId}`}
               />
-            {/if}
           </div>
         {/each}
       </div>

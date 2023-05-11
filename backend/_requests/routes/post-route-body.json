@@ -1,22 +1,19 @@
 {
-  "name": "My Routeee2",
+  "name": "De Boswandeling",
   "pointsOfInterest": [
     {
-      "name": "POI A",
-      "longitude": 123.456,
+      "name": "De Grote Boom",
+      "longitude": 123.45,
       "latitude": 78.9,
       "imageIds": [1, 2, 3],
       "details": [
         {
-          "text": "Detail 1"
-        },
-        {
-          "text": "Detail 2"
+          "text": "Wat spannend, een grote boom..."
         }
       ],
       "links": [
         {
-          "url": "http://example.com"
+          "url": "https://hoenson.xyz"
         },
         {
           "url": "http://google.com"
@@ -24,43 +21,37 @@
       ],
       "categories": [
         {
-          "name": "Category 1",
+          "name": "Architecture",
           "position": 1
         },
         {
-          "name": "Category 2",
+          "name": "Dining",
           "position": 2
         }
       ]
     },
     {
-      "name": "POI B",
+      "name": "Oude Boomhut",
       "longitude": 456.789,
       "latitude": 12.34,
       "imageIds": [4, 5, 6],
       "details": [
         {
-          "text": "Detail 3"
-        },
-        {
-          "text": "Detail 4"
+          "text": "Een oude hut. Jippie..."
         }
       ],
       "links": [
-        {
-          "url": "http://example.com"
-        },
         {
           "url": "http://google.com"
         }
       ],
       "categories": [
         {
-          "name": "Category 3",
+          "name": "Shopping",
           "position": 1
         },
         {
-          "name": "Category 4",
+          "name": "History",
           "position": 2
         }
       ]
@@ -69,27 +60,21 @@
   "imageIds": [7, 8, 9],
   "details": [
     {
-      "text": "Route detail 1"
-    },
-    {
-      "text": "Route detail 2"
+      "text": "Geniet van de natuur een maak een wandeling door het mooie bos van Gouda. Eindig met een prachtig uitzicht op het kanaal."
     }
   ],
   "links": [
-    {
-      "url": "http://example.com"
-    },
     {
       "url": "http://google.com"
     }
   ],
   "categories": [
     {
-      "name": "Route category 1",
+      "name": "Culture",
       "position": 1
     },
     {
-      "name": "Route category 2",
+      "name": "Nature",
       "position": 2
     }
   ],
