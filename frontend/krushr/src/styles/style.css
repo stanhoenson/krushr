@@ -73,7 +73,19 @@
 }
 
 .flex.column {
-	gap: var(--space-s);
+	gap: var(--space-xs);
+}
+
+.leaflet-marker-icon.map-marker {
+	margin-left: -.75rem !important;
+	margin-top: -.75rem !important;
+	width: auto !important;
+	height: auto !important;
+	color: var(--background-0);
+	font-weight: bold;
+	padding: .3rem .6rem;
+	background-color: var(--primary-0);
+	border-radius: 1rem;
 }
 
 .grid {
@@ -173,6 +185,10 @@ button.button,
 	height: 24px;
 	padding: var(--space-3xs);
 	border-radius: var(--space-3xs);
+}
+
+.images button {
+	margin-top: var(--space-xs);
 }
 
 .icon:hover {
@@ -463,11 +479,20 @@ main h1 {
 	grid-column: 1 / span 2;
 	height: 18rem;
 }
-.grid .map{
 
+.map {
+	border-radius: var(--space-2xs);
+}
+
+.image-placeholder {
+	border-radius: var(--space-2xs);
+}
+
+.grid .map {
 	grid-column: 1;
 	height: 18rem;
 }
+
 .coordinates .input {
 	margin-bottom: var(--space-s);
 }
@@ -672,13 +697,13 @@ footer p {
 .icon:hover {
 	background-color: var(--error-bg-0);
 }
-.delete-icon{
+
+.delete-icon {
     cursor: pointer;
     position: absolute;
-    top: 0;
-    right: 0;
-
-    
+	background-color: var(--error-bg--1);
+    top: calc(.1rem + var(--space-3xs));
+    right: calc(.1rem + var(--space-3xs));
 }
 
 .delete-icon svg{

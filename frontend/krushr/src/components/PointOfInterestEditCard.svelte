@@ -167,17 +167,12 @@
           </div>
         {/each}
       </div>
-      <div class="grid">
         <button
           type="button"
           on:click={handleNewImage}
           class="button block secondary"
           href="#">New image</button
         >
-        <!-- <button type="button" class="button block error" href="#" -->
-        <!--   >Delete last image</button -->
-        <!-- > -->
-      </div>
     </div>
     <div class="info">
       <div class="flex input name">
@@ -201,17 +196,12 @@
               {/if}
             </div>
           {/each}
-        </div>
-        <div class="grid buttons">
           <button
             type="button"
             on:click={handleNewDetail}
             class="button block secondary"
             href="#">New detail</button
           >
-          <!-- <button type="button" class="button block error disabled" href="#" -->
-          <!--   >Delete last detail</button -->
-          <!-- > -->
         </div>
       </div>
       <hr />
