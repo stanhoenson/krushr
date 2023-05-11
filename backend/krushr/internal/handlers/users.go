@@ -14,7 +14,6 @@ import (
 )
 
 func GetMe(c *gin.Context) {
-
 	user, err := utils.GetUserFromContext(c)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(&models.User{})})
