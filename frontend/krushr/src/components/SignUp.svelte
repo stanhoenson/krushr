@@ -9,7 +9,7 @@
   let email = "";
   let password = "";
   let confirmPassword = "";
-  let error: string | null = "test";
+  let error: string | null = "";
   let user: User | null;
 
   async function handleSubmit(event: Event) {

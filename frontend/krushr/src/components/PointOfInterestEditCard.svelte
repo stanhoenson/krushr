@@ -6,10 +6,16 @@
     Detail,
     Image,
     PointOfInterest,
+    Route,
   } from "../types/models";
-  import type { PostPointOfInterestBody } from "../types/request-bodies";
+  import type {
+    PostPointOfInterestBody,
+    PostRouteBody,
+  } from "../types/request-bodies";
+  import CategoryButtonGroup from "./CategoryButtonGroup.svelte";
   import XMark from "./icons/XMark.svelte";
   import LeafletMap from "./LeafletMap.svelte";
+  import ImagePlaceholder from "./svg/ImagePlaceholder.svelte";
 
   let categories: Category[] = [];
 
@@ -19,14 +25,17 @@
   ) => any;
   export let position: number;
   export let pointOfInterest: PostPointOfInterestBody;
-  export let allPointsOfInterestLatLngs: LatLngTuple[];
+  export let route: PostRouteBody;
 
   function handleCategoryToggle(category: Category) {
-    let categoryNames = pointOfInterest.categories.map(
-      (category) => category.name
+    let matchedCategoryIndex = pointOfInterest.categories.findIndex(
+      (innerCategory) => innerCategory.name === category.name
     );
-    if (!categoryNames.includes(category.name)) {
+    if (matchedCategoryIndex === -1) {
       pointOfInterest.categories.push(category);
+      pointOfInterest = pointOfInterest;
+    } else {
+      pointOfInterest.categories.splice(matchedCategoryIndex, 1);
       pointOfInterest = pointOfInterest;
     }
   }
@@ -36,14 +45,20 @@
     pointOfInterest = pointOfInterest;
   }
 
-  function handleDeleteDetail(index: number) {}
+  function handleDeleteDetail(index: number) {
+    pointOfInterest.details.splice(index, 1);
+    pointOfInterest = pointOfInterest;
+  }
 
   function handleNewLink() {
     pointOfInterest.links.push({ url: "" });
     pointOfInterest = pointOfInterest;
   }
 
-  function handleDeleteLink(index: number) {}
+  function handleDeleteLink(index: number) {
+    pointOfInterest.links.splice(index, 1);
+    pointOfInterest = pointOfInterest;
+  }
 
   function handleNewImage() {
     const input = document.createElement("input");
@@ -62,9 +77,15 @@
     }
   }
 
-  function handleDeleteImage(index: number) {}
+  function handleDeleteImage(index: number) {
+    pointOfInterest.imageIds.splice(index, 1);
+    pointOfInterest = pointOfInterest;
+  }
 
-  function handleDeletePointOfInterest() {}
+  function handleDeletePointOfInterest() {
+    route.pointsOfInterest.splice(position, 1);
+    route = route;
+  }
 
   function handlePositionChange(newPosition: number) {
     positionExchange(position, newPosition);
@@ -75,7 +96,7 @@
   <p class="upper">Point of interest</p>
   <div class="grid coordinates">
     <LeafletMap
-      {allPointsOfInterestLatLngs}
+      allPointsOfInterest={route.pointsOfInterest}
       {position}
       bind:latitude={pointOfInterest.latitude}
       bind:longitude={pointOfInterest.longitude}
@@ -122,21 +143,28 @@
   <div class="grid">
     <div class="images">
       <div class="grid">
+        {#if pointOfInterest.imageIds.length === 0}
+          <div class="main image-placeholder">
+            <ImagePlaceholder />
+          </div>
+        {/if}
         {#each pointOfInterest.imageIds as imageId, i}
-          {#if i === 0}
-            <img
-              class="main"
-              src={`${
-                import.meta.env.PUBLIC_API_BASE_URL
-              }/imagedata/${imageId}`}
-            />
-          {:else}
-            <img
-              src={`${
-                import.meta.env.PUBLIC_API_BASE_URL
-              }/imagedata/${imageId}`}
-            />
-          {/if}
+          <div>
+            {#if i === 0}
+              <img
+                class="main"
+                src={`${
+                  import.meta.env.PUBLIC_API_BASE_URL
+                }/imagedata/${imageId}`}
+              />
+            {:else}
+              <img
+                src={`${
+                  import.meta.env.PUBLIC_API_BASE_URL
+                }/imagedata/${imageId}`}
+              />
+            {/if}
+          </div>
         {/each}
       </div>
       <div class="grid">
@@ -146,9 +174,9 @@
           class="button block secondary"
           href="#">New image</button
         >
-        <button type="button" class="button block error" href="#"
-          >Delete last image</button
-        >
+        <!-- <button type="button" class="button block error" href="#" -->
+        <!--   >Delete last image</button -->
+        <!-- > -->
       </div>
     </div>
     <div class="info">
@@ -160,9 +188,18 @@
       <div class="multiple details">
         <label>Details</label>
         <div class="flex column">
-          {#each pointOfInterest.details as detail}
-            <textarea bind:value={detail.text} name="details" rows="4" />
-            <div class="delete-icon"><XMark /></div>
+          {#each pointOfInterest.details as detail, i}
+            <div class="input-with-delete">
+              <textarea bind:value={detail.text} name="details" rows="4" />
+              {#if i !== 0}
+                <div
+                  on:click={handleDeleteDetail.bind(null, i)}
+                  class="icon delete-icon"
+                >
+                  <XMark />
+                </div>
+              {/if}
+            </div>
           {/each}
         </div>
         <div class="grid buttons">
@@ -172,17 +209,27 @@
             class="button block secondary"
             href="#">New detail</button
           >
-          <button type="button" class="button block error disabled" href="#"
-            >Delete last detail</button
-          >
+          <!-- <button type="button" class="button block error disabled" href="#" -->
+          <!--   >Delete last detail</button -->
+          <!-- > -->
         </div>
       </div>
       <hr />
       <div class="multiple links">
         <label>Links</label>
         <div class="flex input">
-          {#each pointOfInterest.links as link}
-            <input bind:value={link.url} type="text" name="link" />
+          {#each pointOfInterest.links as link, i}
+            <div class="input-with-delete">
+              <input bind:value={link.url} type="text" name="link" />
+              {#if i !== 0}
+                <div
+                  on:click={handleDeleteLink.bind(null, i)}
+                  class="icon delete-icon"
+                >
+                  <XMark />
+                </div>
+              {/if}
+            </div>
           {/each}
           <button
             type="button"
@@ -191,29 +238,26 @@
             href="#">New link</button
           >
         </div>
-        <button type="button" class="button block error disabled" href="#"
-          >Delete last link</button
-        >
+        <!-- <button type="button" class="button block error disabled" href="#" -->
+        <!--   >Delete last link</button -->
+        <!-- > -->
       </div>
       <hr />
       <p id="categories">Categories</p>
-      <div class="flex categories">
-        {#each categories as category}
-          <button
-            type="button"
-            on:click={handleCategoryToggle.bind(null, category)}
-            class="category"
-            href="#">{category.name}</button
-          >
-        {/each}
-      </div>
+      <CategoryButtonGroup
+        selectedCategories={pointOfInterest.categories}
+        {handleCategoryToggle}
+      />
     </div>
   </div>
   <hr />
   <button
     type="button"
     on:click={handleDeletePointOfInterest}
-    class="button thick block error disabled"
+    disabled={route.pointsOfInterest.length <= 2}
+    class={`button thick block error ${
+      route.pointsOfInterest.length <= 2 ? "disabled" : ""
+    }`}
     href="#">Delete point of interest</button
   >
 </section>

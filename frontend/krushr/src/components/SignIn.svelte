@@ -7,7 +7,7 @@
   import InputLabel from "./InputLabel.svelte";
   let email = "";
   let password = "";
-  let error: string | null = "test";
+  let error: string | null = "";
 
   async function handleSubmit(event: Event) {
     try {
@@ -51,7 +51,6 @@
   <Alert
     onClose={() => {
       error = "";
-    }}
-    message={error}
-  />
+    }}>{error}</Alert
+  >
 {/if}

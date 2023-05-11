@@ -49,8 +49,8 @@
       longitude: goudaCoordinates.longitude,
       latitude: goudaCoordinates.latitude,
       imageIds: [],
-      details: [],
-      links: [],
+      details: [{text:""}],
+      links: [{url:""}],
       categories: [],
     };
     route.pointsOfInterest.push(newPointOfInterest);
@@ -142,7 +142,7 @@
       {#each route.pointsOfInterest as pointOfInterest, i}
         <PointOfInterestEditCard
           {positionExchange}
-          {allPointsOfInterestLatLngs}
+                    bind:route
           position={i}
           bind:pointOfInterest
         />

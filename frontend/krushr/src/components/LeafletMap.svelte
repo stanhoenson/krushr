@@ -6,8 +6,9 @@
     CoordinatesWithPosition,
     ExtendedMarkerOptions,
   } from "../types/misc";
+  import type { PutPointOfInterestBody } from "../types/request-bodies";
   let element: any;
-  export let allPointsOfInterestLatLngs: LatLngTuple[];
+  export let allPointsOfInterest: PutPointOfInterestBody[];
   export let position: number;
   export let longitude: number;
   export let latitude: number;
@@ -27,7 +28,7 @@
     // marker.setLatLng(e.latlng);
   }
 
-  function handlePoisUpdate(map: L.Map, pois: LatLngTuple[]) {
+  function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
     let poiIndexesFound: number[] = [];
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
@@ -45,7 +46,7 @@
             " in map",
             position
           );
-          layer.setLatLng(poi);
+          layer.setLatLng([poi.latitude, poi.longitude]);
           poiIndexesFound.push(options.position);
         }
       }
@@ -53,7 +54,7 @@
     pois
       .filter((value, index) => !poiIndexesFound.includes(index))
       .forEach((value, index) => {
-        marker = L.marker(value, {
+        marker = L.marker([value.latitude, value.longitude], {
           icon: L.divIcon({
             html: `<div>${index}</div>`,
             className: "map-marker",
@@ -81,7 +82,7 @@
   });
 
   afterUpdate(() => {
-    handlePoisUpdate(map, allPointsOfInterestLatLngs);
+    handlePoisUpdate(map, allPointsOfInterest);
   });
 </script>
 

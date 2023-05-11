@@ -305,6 +305,10 @@ button.button,
 	border-radius: var(--space-m);
 }
 
+button.category{
+    cursor: pointer;
+}
+
 .category.disabled {
 	color: var(--foreground-4);
 	background-color: var(--background-1);
@@ -665,15 +669,20 @@ footer p {
 	text-align: center;
 }
 
+.icon:hover {
+	background-color: var(--error-bg-0);
+}
 .delete-icon{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
 
     
 }
 
 .delete-icon svg{
     color: var(--error-fg-0);
-    width: 24px;
-    height: 24px;
 }
 
 .map-marker {
@@ -684,6 +693,29 @@ footer p {
 
 .button.block.thick{
     padding:var(--space-s);
+}
+
+.image-placeholder svg{
+    width: 100%;
+    height: 100%;
+    
+}
+.image-placeholder {
+    background-color: #d0d0d0;
+    
+}
+
+.input-with-delete {
+    position: relative;
+    width: 100%;
+}
+.input-with-delete input{
+    width: 100%;
+    box-sizing: border-box;
+}
+.input-with-delete textarea{
+    box-sizing: border-box;
+
 }
 
 /* Responsive */
