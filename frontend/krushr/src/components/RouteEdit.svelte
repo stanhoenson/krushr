@@ -27,6 +27,7 @@
   let status: Status;
 
   let error: string | null = null;
+  let successMessage: string | null = null;
   let user: User;
   let allPointsOfInterestLatLngs: LatLngTuple[] = [];
 
@@ -49,8 +50,8 @@
       longitude: goudaCoordinates.longitude,
       latitude: goudaCoordinates.latitude,
       imageIds: [],
-      details: [{text:""}],
-      links: [{url:""}],
+      details: [{ text: "" }],
+      links: [{ url: "" }],
       categories: [],
     };
     route.pointsOfInterest.push(newPointOfInterest);
@@ -80,11 +81,44 @@
   }
 
   async function handleSave(event: Event) {
-    if (!id) {
-      let createdRoute = await createRoute(route);
-    } else {
-      let updatedRoute = await updateRoute(parseInt(id), route);
+    try {
+      if (!id) {
+        let createdRoute = await createRoute(route);
+        successMessage = "Succesfully created route!";
+        await existingRouteToEditableRoute(createdRoute.id);
+        id = createdRoute.id.toString();
+        const url = new URL(window.location.origin + "/routes/edit");
+        url.searchParams.set("id", createdRoute.id.toString());
+        const newUrl = url.toString();
+        window.history.pushState({ path: newUrl }, "", newUrl);
+      } else {
+        let updatedRoute = await updateRoute(parseInt(id), route);
+        successMessage = "Succesfully updated route!";
+        await existingRouteToEditableRoute(updatedRoute.id);
+        id = updatedRoute.id.toString();
+        const url = new URL(window.location.origin + "/routes/edit");
+        url.searchParams.set("id", updatedRoute.id.toString());
+        const newUrl = url.toString();
+        window.history.pushState({ path: newUrl }, "", newUrl);
+      }
+    } catch (e: any) {
+      console.log(e);
+      error = e.response.data.error;
     }
+  }
+
+  async function existingRouteToEditableRoute(id: number) {
+    let existingRoute = await getRouteById(id);
+    console.log({ existingRoute });
+    route = Object.assign({}, existingRoute, {
+      imageIds: existingRoute.images.map((image) => image.id),
+      pointsOfInterest: existingRoute.pointsOfInterest.map(
+        (poi) =>
+          Object.assign({}, poi, {
+            imageIds: poi.images.map((image) => image.id),
+          }) as PostPointOfInterestBody
+      ),
+    });
   }
 
   onMount(async () => {
@@ -94,40 +128,31 @@
     if (!id) {
       //create it is then
       route = {
-        name: "My Awesome Route",
+        name: "",
         imageIds: [],
-        details: [],
-        links: [],
+        details: [{ text: "" }],
+        links: [{ url: "" }],
         categories: [],
         statusId: statuses[0].id,
         pointsOfInterest: [],
       };
+      newPointOfInterest();
+      newPointOfInterest();
     } else {
       //get existing route
-      let existingRoute = await getRouteById(parseInt(id));
-      route = Object.assign({}, existingRoute, {
-        imageIds: existingRoute.images.map((image) => image.id),
-        pointsOfInterest: existingRoute.pointsOfInterest.map(
-          (poi) =>
-            Object.assign({}, poi, {
-              imageIds: poi.images.map((image) => image.id),
-            }) as PostPointOfInterestBody
-        ),
-      });
+      await existingRouteToEditableRoute(parseInt(id));
     }
-    newPointOfInterest();
-    newPointOfInterest();
 
     // getRouteById(queryParams);
   });
 
   afterUpdate(async () => {
     updateAllPointsOfInterestLatLngs();
-      //scroll if necessary
+    //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
       let element = document.getElementById(`poi-${poiToScrollToAfterUpdate}`);
-      console.log("scrolling",element);
-      element?.scrollIntoView({behavior:"smooth"});
+      console.log("scrolling", element);
+      element?.scrollIntoView({ behavior: "smooth" });
       poiToScrollToAfterUpdate = -1;
     }
   });
@@ -142,7 +167,7 @@
       {#each route.pointsOfInterest as pointOfInterest, i}
         <PointOfInterestEditCard
           {positionExchange}
-                    bind:route
+          bind:route
           position={i}
           bind:pointOfInterest
         />
@@ -155,15 +180,36 @@
       >
       <hr class="soft" />
       <div class="fixed">
-        <StatusSelect />
-        <button
-          on:click={handleSave}
-          class="button thick  block primary"
-          href="#">Save</button
-        >
+        <div class="controls">
+          <StatusSelect />
+          <button class="button thick  block primary" href="#">Save</button>
+        </div>
+
+        <div class="alerts">
+          {#if error}
+            <Alert
+              type="error"
+              onClose={() => {
+                error = "";
+              }}
+            >
+              {error}
+            </Alert>
+          {/if}
+          {#if successMessage}
+            <Alert
+              type="success"
+              onClose={() => {
+                successMessage = "";
+              }}
+            >
+              {successMessage}
+            </Alert>
+          {/if}
+        </div>
       </div>
     </form>
   {:else}
-    <Alert type="error">Unauthorized</Alert>
+    <div />
   {/if}
 </div>

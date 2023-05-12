@@ -39,11 +39,11 @@
       <span class="pipe">|</span>
       {route.status.name}
     </p>
-    <p>
-      {#each route.details as detail}
-        {detail.text}.{" "}
-      {/each}
-    </p>
+    {#each route.details as detail}
+      <p>
+        {detail.text}
+      </p>
+    {/each}
     <a class="button block shade" href={`/routes/edit?id=${route.id}`}
       >Go to route</a
     >

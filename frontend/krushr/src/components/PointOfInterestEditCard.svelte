@@ -1,13 +1,6 @@
 <script lang="ts">
-  import type { LatLng, LatLngTuple } from "leaflet";
   import { createImage } from "../requests/images";
-  import type {
-    Category,
-    Detail,
-    Image,
-    PointOfInterest,
-    Route,
-  } from "../types/models";
+  import type { Category } from "../types/models";
   import type {
     PostPointOfInterestBody,
     PostRouteBody,
@@ -105,6 +98,7 @@
       <div class="flex input">
         <label>Longitude</label>
         <input
+          required
           bind:value={pointOfInterest.longitude}
           type="text"
           name="longitude"
@@ -113,6 +107,7 @@
       <div class="flex input name">
         <label>Latitude</label>
         <input
+          required
           bind:value={pointOfInterest.latitude}
           type="text"
           name="latitude"
@@ -149,35 +144,39 @@
           </div>
         {/if}
         {#each pointOfInterest.imageIds as imageId, i}
-					<div
-							class={`image-with-delete ${i === 0 ? "main" : ""}`}>
-              <img
-                src={`${
-                  import.meta.env.PUBLIC_API_BASE_URL
-                }/imagedata/${imageId}`}
-              />
-              {#if i !== 0}
-                <div
-                  on:click={handleDeleteImage.bind(null, i)}
-                  class="icon delete-icon"
-                >
-                  <XMark />
-                </div>
-              {/if}
+          <div class={`image-with-delete ${i === 0 ? "main" : ""}`}>
+            <img
+              src={`${
+                import.meta.env.PUBLIC_API_BASE_URL
+              }/imagedata/${imageId}`}
+            />
+            {#if pointOfInterest.imageIds.length > 1}
+              <div
+                on:click={handleDeleteImage.bind(null, i)}
+                class="icon delete-icon"
+              >
+                <XMark />
+              </div>
+            {/if}
           </div>
         {/each}
       </div>
-        <button
-          type="button"
-          on:click={handleNewImage}
-          class="button block secondary"
-          href="#">New image</button
-        >
+      <button
+        type="button"
+        on:click={handleNewImage}
+        class="button block secondary"
+        href="#">New image</button
+      >
     </div>
     <div class="info">
       <div class="flex input name">
         <label>Name</label>
-        <input bind:value={pointOfInterest.name} type="text" name="name" />
+        <input
+          required
+          bind:value={pointOfInterest.name}
+          type="text"
+          name="name"
+        />
       </div>
       <hr />
       <div class="multiple details">
@@ -186,7 +185,7 @@
           {#each pointOfInterest.details as detail, i}
             <div class="input-with-delete">
               <textarea bind:value={detail.text} name="details" rows="4" />
-              {#if i !== 0}
+              {#if pointOfInterest.details.length > 1}
                 <div
                   on:click={handleDeleteDetail.bind(null, i)}
                   class="icon delete-icon"
@@ -210,8 +209,8 @@
         <div class="flex input">
           {#each pointOfInterest.links as link, i}
             <div class="input-with-delete">
-              <input bind:value={link.url} type="text" name="link" />
-              {#if i !== 0}
+              <input required bind:value={link.url} type="text" name="link" />
+              {#if pointOfInterest.links.length > 0}
                 <div
                   on:click={handleDeleteLink.bind(null, i)}
                   class="icon delete-icon"

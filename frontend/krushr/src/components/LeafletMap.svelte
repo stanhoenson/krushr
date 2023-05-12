@@ -16,15 +16,17 @@
   let marker: L.Marker;
 
   const initialLatLng: LatLngTuple = [
-    goudaCoordinates.latitude,
-    goudaCoordinates.longitude,
+    Number(goudaCoordinates.latitude.toFixed(6)),
+    Number(goudaCoordinates.longitude.toFixed(6)),
   ];
+  console.log(initialLatLng);
+
   const initialZoom = 13;
 
   function onMapClick(e: LeafletMouseEvent) {
     console.log("updating position", position);
-    longitude = e.latlng.lng;
-    latitude = e.latlng.lat;
+    longitude = Number(e.latlng.lng.toFixed(6));
+    latitude = Number(e.latlng.lat.toFixed(6));
     // marker.setLatLng(e.latlng);
   }
 

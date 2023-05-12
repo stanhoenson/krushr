@@ -3,10 +3,10 @@
 
   export let onClose: null | (() => any) = null;
   export let type: "error" | "success" = "error";
-  console.log(onClose !==null)
+  console.log(onClose !== null);
 </script>
 
-<div id="half-width" class={`alert block ${type} soft`}>
+<div class={`alert block ${type} soft`}>
   <span class="message"><slot /></span>
   {#if onClose !== null}
     <div class="icon" on:click={onClose}><XMark /></div>

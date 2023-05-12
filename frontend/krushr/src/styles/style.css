@@ -201,6 +201,8 @@ button.button,
 }
 
 .alert {
+    margin-top:var(--space-xs);
+    box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -609,14 +611,21 @@ form section.card {
 	bottom: var(--space-l);
 	box-sizing: border-box;
 	max-width: var(--max-width);
-	display: flex;
-	flex-wrap: flex;
 	padding: var(--space-s);
 	background-color: var(--background-1);
 	border: 1px solid var(--background-2);
 	border-radius: var(--space-xs);
 	box-shadow: 0 10px 20px 2px var(--background-4);
         z-index: 1001;
+}
+.fixed .controls{
+
+	display: flex;
+	flex-wrap: flex;
+}
+.fixed .alerts{
+    max-width: 100%;
+    width: 100%;
 }
 
 .input.status {
