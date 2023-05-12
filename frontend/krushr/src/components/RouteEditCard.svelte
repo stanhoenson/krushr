@@ -47,6 +47,7 @@
     const input = document.createElement("input");
     input.type = "file";
     input.onchange = handleFileUpload;
+    input.multiple = true;
     input.click();
   }
 
@@ -57,13 +58,15 @@
 
   async function handleFileUpload(event: Event) {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (file) {
-      let image = await createImage(file);
-      console.log(route.imageIds);
-      route.imageIds.push(image.id);
+    const files = input.files;
+    if (files) {
+      for (let file of files)
+        if (file) {
+          let image = await createImage(file);
+          route.imageIds.push(image.id);
+        }
+
       route = route;
-      console.log(route.imageIds);
     }
   }
 </script>
