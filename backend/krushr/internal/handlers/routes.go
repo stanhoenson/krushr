@@ -10,7 +10,6 @@ import (
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 func RegisterRouteRoutes(r *gin.Engine) {
@@ -18,7 +17,11 @@ func RegisterRouteRoutes(r *gin.Engine) {
 	{
 		routes.GET("", func(c *gin.Context) {
 			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
-				return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return services.GetPublishedRoutes()
+				}
+				return services.GetRoutesWithAssociationsByUserID(user.ID)
 			})
 		})
 		routes.GET("/:id", func(ctx *gin.Context) {

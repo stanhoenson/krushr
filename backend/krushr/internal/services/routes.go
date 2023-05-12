@@ -30,6 +30,17 @@ func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
 	return route, nil
 }
 
+func GetRoutesWithAssociationsByUserID(userID uint) (*[]models.Route, error) {
+
+	return repositories.GetRoutesWithAssociationsByUserID(userID, database.Db)
+
+}
+func GetPublishedRoutes() (*[]models.Route, error) {
+
+	return repositories.GetPublishedRoutes( database.Db)
+
+}
+
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.Route](ID, database.Db)

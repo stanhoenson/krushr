@@ -132,6 +132,31 @@ func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Lin
 	return &entities, nil
 }
 
+func GetEntitiesByIDsAndConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](IDs *[]uint, conditions *T, tx *gorm.DB) (*[]T, error) {
+	var entities []T
+
+	result := tx.Find(&entities, IDs, conditions)
+
+	if result.Error != nil {
+		return nil, result.Error
+	} else if len(entities) != len(*IDs) {
+		return nil, gorm.ErrRecordNotFound
+	}
+
+	return &entities, nil
+}
+
+func GetEntitiesByConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](conditions *T, tx *gorm.DB) (*[]T, error) {
+	var entities []T
+
+	result := tx.Find(&entities, conditions)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &entities, nil
+}
+
 func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entities *[]T, tx *gorm.DB) (*[]T, error) {
 	result := tx.Create(&entities)
 

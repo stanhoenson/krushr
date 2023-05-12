@@ -44,6 +44,14 @@ func GetEntitiesByIDs[T models.Route | models.Image | models.Detail | models.Lin
 	return repositories.GetEntitiesByIDs[T](IDs, database.Db)
 }
 
+func GetEntitiesByIDsAndConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](IDs *[]uint, conditions *T) (*[]T, error) {
+	return repositories.GetEntitiesByIDsAndConditions[T](IDs, conditions, database.Db)
+}
+
+func GetEntitiesByConditions[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](conditions *T) (*[]T, error) {
+	return repositories.GetEntitiesByConditions[T](conditions, database.Db)
+}
+
 func CreateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entities *[]T) (*[]T, error) {
 	return repositories.CreateEntities(entities, database.Db)
 }

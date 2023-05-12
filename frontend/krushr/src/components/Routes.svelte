@@ -43,7 +43,7 @@
   {/if}
   {#each groupedRoutes as routeGroup}
     {#each routeGroup.routes as innerRouteGroup}
-    <hr class="soft" />
+      <hr class="soft" />
       <p class="status">
         <span>
           {innerRouteGroup.status} routes
