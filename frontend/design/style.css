@@ -61,6 +61,11 @@
 }
 
 /* Utilities */
+.mb-s{
+    margin-bottom: var(--space-s);
+}
+
+
 .flex {
 	display: flex;
 	flex-wrap: wrap;

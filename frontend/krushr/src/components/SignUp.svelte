@@ -22,11 +22,15 @@
   }
 
   async function handleSignIn() {
-    try {
-      let token = await signIn({ email, password });
-      window.location.href = "/";
-    } catch (e: any) {
-      error = e.response.data.error;
+    if (password === confirmPassword) {
+      try {
+        let token = await signIn({ email, password });
+        window.location.href = "/";
+      } catch (e: any) {
+        error = e.response.data.error;
+      }
+    } else {
+      error = "Passwords dont match";
     }
   }
   onMount(async () => {
@@ -67,7 +71,7 @@
     <button class="button block primary">Sign up</button>
   </section>
 </form>
-<div class="alerts">
+<div class="alerts half-width">
   {#if error}
     <Alert
       type="error"

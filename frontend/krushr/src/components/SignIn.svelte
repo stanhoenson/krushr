@@ -47,6 +47,7 @@
     <button class="button block primary">Sign in</button>
   </section>
 </form>
+<div class="alerts half-width">
 {#if error}
   <Alert
     onClose={() => {
@@ -54,3 +55,4 @@
     }}>{error}</Alert
   >
 {/if}
+        </div>

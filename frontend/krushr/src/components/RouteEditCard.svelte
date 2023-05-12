@@ -60,8 +60,10 @@
     const file = input.files?.[0];
     if (file) {
       let image = await createImage(file);
+      console.log(route.imageIds);
       route.imageIds.push(image.id);
       route = route;
+      console.log(route.imageIds);
     }
   }
 </script>

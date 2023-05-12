@@ -3,7 +3,12 @@
 
   import { afterUpdate, onDestroy, onMount } from "svelte";
   import { goudaCoordinates } from "../constants";
-  import { createRoute, getRouteById, updateRoute } from "../requests/routes";
+  import {
+    createRoute,
+    deleteRouteById,
+    getRouteById,
+    updateRoute,
+  } from "../requests/routes";
   import { getAllStatuses } from "../requests/statuses";
   import { getMeUser } from "../requests/users";
   import { authenticatedUser } from "../stores/user";
@@ -121,6 +126,17 @@
     });
   }
 
+  async function handleDeleteRoute() {
+    try {
+      if (id) {
+        let deletedRoute = await deleteRouteById(parseInt(id));
+        window.location.href = "/";
+      }
+    } catch (e: any) {
+      error = e.response.data.error;
+    }
+  }
+
   onMount(async () => {
     user = await getMeUser();
     statuses = await getAllStatuses();
@@ -147,6 +163,7 @@
   });
 
   afterUpdate(async () => {
+    console.log(route.statusId);
     updateAllPointsOfInterestLatLngs();
     //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
@@ -161,6 +178,12 @@
 <div class="edit">
   {#if user && route}
     <RouteEditExplanation />
+    {#if id}
+      <button
+        class="button thick block error soft mb-s"
+        on:click={handleDeleteRoute}>Delete route</button
+      >
+    {/if}
     <form on:submit|preventDefault={handleSave}>
       <RouteEditCard bind:route />
       <hr class="soft" />
@@ -181,7 +204,7 @@
       <hr class="soft" />
       <div class="fixed">
         <div class="controls">
-          <StatusSelect />
+          <StatusSelect bind:value={route.statusId} />
           <button class="button thick  block primary" href="#">Save</button>
         </div>
 

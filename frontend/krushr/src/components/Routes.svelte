@@ -40,10 +40,10 @@
 <section class="routes">
   {#if user}
     <a class="button block primary" href="/routes/create">Create a new route</a>
-    <hr class="soft" />
   {/if}
   {#each groupedRoutes as routeGroup}
     {#each routeGroup.routes as innerRouteGroup}
+    <hr class="soft" />
       <p class="status">
         <span>
           {innerRouteGroup.status} routes

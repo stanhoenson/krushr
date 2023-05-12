@@ -60,6 +60,10 @@
 }
 
 /* Utilities */
+.mb-s{
+    margin-bottom: var(--space-s);
+}
+
 .flex {
 	display: flex;
 	flex-wrap: wrap;
@@ -237,6 +241,12 @@ button.button,
 }
 
 #half-width {
+	box-sizing: border-box;
+	max-width: var(--half-width);
+	margin: auto;
+}
+
+.half-width {
 	box-sizing: border-box;
 	max-width: var(--half-width);
 	margin: auto;

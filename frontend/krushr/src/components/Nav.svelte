@@ -11,7 +11,7 @@
   async function handleSignOut() {
     try {
       await signOut();
-      window.location.reload();
+      window.location.href = "/";
     } catch (e: any) {}
   }
 
