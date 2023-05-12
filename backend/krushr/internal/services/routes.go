@@ -9,10 +9,25 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/utils"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
-	return repositories.GetRouteByIDWithAssociations(ID, database.Db)
+	route, err := repositories.GetEntityByIDWithAssociations[models.Route](ID, clause.Associations, database.Db)
+
+	if err != nil {
+		return nil, err
+	}
+	pointsOfInterest, err := GetPointsOfInterestByRouteIDOrderedByPositionWithAssociations(route.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for index := range route.PointsOfInterest {
+		route.PointsOfInterest[index] = &(*pointsOfInterest)[index]
+	}
+
+	return route, nil
 }
 
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
@@ -44,17 +59,22 @@ func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *
 	route.Distance = utils.PointsOfInterestToDistance(routeRelatedEntities.pointsOfInterest)
 	route.User = *authenticatedUser
 	route.PointsOfInterest = routeRelatedEntities.pointsOfInterest
+	tx.Model(&route).Association("PointsOfInterest").Replace(route.PointsOfInterest)
 	route.Links = routeRelatedEntities.links
+	tx.Model(&route).Association("Links").Replace(route.Links)
 	route.Details = routeRelatedEntities.details
+	tx.Model(&route).Association("Details").Replace(route.Details)
 	route.Images = routeRelatedEntities.images
+	tx.Model(&route).Association("Images").Replace(route.Images)
 	route.Categories = routeRelatedEntities.categories
+	tx.Model(&route).Association("Categories").Replace(route.Categories)
 
 	updatedRoute, err := repositories.UpdateEntity(route, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	for index, pointOfInterest := range route.PointsOfInterest {
+	for index, pointOfInterest := range updatedRoute.PointsOfInterest {
 
 		routePointOfInterest := models.RoutesPointsOfInterest{
 			RouteID:           route.ID,

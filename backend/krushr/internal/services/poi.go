@@ -34,9 +34,13 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 	retrievedPointOfInterest.Longitude = putPointOfInterestBody.Longitude
 	retrievedPointOfInterest.Latitude = putPointOfInterestBody.Latitude
 	retrievedPointOfInterest.Categories = pointOfInterestRelatedEntries.categories
+	tx.Model(&retrievedPointOfInterest).Association("Categories").Replace(retrievedPointOfInterest.Categories)
 	retrievedPointOfInterest.Details = pointOfInterestRelatedEntries.details
+	tx.Model(&retrievedPointOfInterest).Association("Details").Replace(retrievedPointOfInterest.Details)
 	retrievedPointOfInterest.Links = pointOfInterestRelatedEntries.links
+	tx.Model(&retrievedPointOfInterest).Association("Links").Replace(retrievedPointOfInterest.Links)
 	retrievedPointOfInterest.Images = pointOfInterestRelatedEntries.images
+	tx.Model(&retrievedPointOfInterest).Association("Images").Replace(retrievedPointOfInterest.Images)
 
 	updatePointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
 	if err != nil {

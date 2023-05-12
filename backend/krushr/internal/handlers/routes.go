@@ -21,7 +21,11 @@ func RegisterRouteRoutes(r *gin.Engine) {
 				return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
 			})
 		})
-		routes.GET("/:id", GetByIDDefault[models.Route])
+		routes.GET("/:id", func(ctx *gin.Context) {
+			GetByID(ctx, func(c *gin.Context, ID uint) (*models.Route, error) {
+				return services.GetRouteByIDWithAssociations(ID)
+			})
+		})
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Post(ctx, func(c *gin.Context, requestBody *models.PostRouteBody) error {
 				return validators.ValidatePostRouteBody(requestBody)
