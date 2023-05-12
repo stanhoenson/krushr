@@ -98,7 +98,8 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 
 	imagesPointers := []*models.Image{}
 	for _, image := range *images {
-		imagesPointers = append(imagesPointers, &image)
+		img := image
+		imagesPointers = append(imagesPointers, &img)
 	}
 
 	return &pointOfInterestRelatedEntries{

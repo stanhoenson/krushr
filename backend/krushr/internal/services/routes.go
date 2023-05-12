@@ -122,6 +122,7 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 	}
 
 	images, err := GetEntitiesByIDs[models.Image](&postRouteBody.ImageIDs)
+	fmt.Println(images)
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving images")
 	}
@@ -150,7 +151,8 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 
 	imagesPointers := []*models.Image{}
 	for _, image := range *images {
-		imagesPointers = append(imagesPointers, &image)
+		img := image
+		imagesPointers = append(imagesPointers, &img)
 	}
 
 	return &routeRelatedEntities{
