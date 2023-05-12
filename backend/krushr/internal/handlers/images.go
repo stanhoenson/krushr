@@ -28,6 +28,8 @@ func getImageDataByID(c *gin.Context) {
 
 	}
 
+	c.Header("Cache-Control", "no-store")
+
 	c.File(image.Path)
 	c.Status(200)
 }
