@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -16,12 +17,12 @@ func Authorization() gin.HandlerFunc {
 		} else if jwt.Value == "" || jwt.Valid() != nil {
 			// invalid cookie set to null
 			c.Set("authenticatedUser", nil)
-			c.SetCookie("jwt", "", 0, "/", "", true, true)
+			c.SetCookie("jwt", "", 0, "/", env.Domain, true, true)
 		} else {
 			user, err := services.GetUserFromJWT(jwt.Value)
 			if err != nil {
 				// TODO maybe StatusBadRequest
-				c.SetCookie("jwt", "", 0, "/", "", true, true)
+				c.SetCookie("jwt", "", 0, "/", env.Domain, true, true)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return
 			}
