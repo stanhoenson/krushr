@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from "svelte";
+  import { afterUpdate, onDestroy, onMount } from "svelte";
   import { getAllRoutes } from "../requests/routes";
   import { getMeUser } from "../requests/users";
   import { authenticatedUser } from "../stores/user";
@@ -18,14 +18,16 @@
     user = value;
   });
 
+  let routes: Route[];
+
   let groupedRoutes: {
-    isUser: boolean;
-    routes: { status: Status["name"]; routes: Route[] }[];
-  }[] = [];
+    isUser: { status: Status["name"]; routes: Route[] }[];
+    notUser: { status: Status["name"]; routes: Route[] }[];
+  } = { isUser: [], notUser: [] };
 
   onMount(async () => {
     try {
-      let routes = await getAllRoutes();
+      routes = await getAllRoutes();
       groupedRoutes = groupRoutesByStatus(routes, user ? user.id : -1);
       console.log(groupedRoutes);
     } catch (e: any) {
@@ -35,30 +37,46 @@
   onDestroy(() => {
     unsubscribe();
   });
+
+  afterUpdate(async () => {
+    groupedRoutes = groupRoutesByStatus(routes, user ? user.id : -1);
+  });
 </script>
 
 <section class="routes">
   {#if user}
     <a class="button block primary" href="/routes/create">Create a new route</a>
   {/if}
-  {#each groupedRoutes as routeGroup}
-    {#each routeGroup.routes as innerRouteGroup}
+  {#each groupedRoutes.isUser as innerRouteGroup}
+    {#if innerRouteGroup.routes.length > 0}
       <hr class="soft" />
       <p class="status">
         <span>
           {innerRouteGroup.status} routes
         </span>
-        {#if routeGroup.isUser && user}
-          by yourself
-        {:else if user}
-          by others
-        {/if}
+        by yourself
       </p>
       <div class="grid">
         {#each innerRouteGroup.routes as route}
-          <RouteCard {route} />
+          <RouteCard loggedIn={user !== null} {route} />
         {/each}
       </div>
-    {/each}
+    {/if}
+  {/each}
+  {#each groupedRoutes.notUser as innerRouteGroup}
+    {#if innerRouteGroup.routes.length > 0}
+      <hr class="soft" />
+      <p class="status">
+        <span>
+          {innerRouteGroup.status} routes
+        </span>
+        by others
+      </p>
+      <div class="grid">
+        {#each innerRouteGroup.routes as route}
+          <RouteCard loggedIn={user !== null} {route} />
+        {/each}
+      </div>
+    {/if}
   {/each}
 </section>

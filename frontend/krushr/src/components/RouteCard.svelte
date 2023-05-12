@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import type { Route } from "../types/models";
 
+  export let loggedIn: boolean;
   export let route: Route;
   // let error: any = null;
   let kmFormatter = new Intl.NumberFormat("en-US", {
@@ -44,8 +45,10 @@
         {detail.text}
       </p>
     {/each}
-    <a class="button block shade" href={`/routes/edit?id=${route.id}`}
-      >Go to route</a
-    >
+    {#if loggedIn}
+      <a class="button block shade" href={`/routes/edit?id=${route.id}`}
+        >Go to route</a
+      >
+    {/if}
   </div>
 </div>

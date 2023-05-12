@@ -19,7 +19,6 @@
     Number(goudaCoordinates.latitude.toFixed(6)),
     Number(goudaCoordinates.longitude.toFixed(6)),
   ];
-  console.log(initialLatLng);
 
   const initialZoom = 13;
 
@@ -31,39 +30,37 @@
   }
 
   function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
+    console.log(position);
     let poiIndexesFound: number[] = [];
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         let options = layer.options as ExtendedMarkerOptions;
-        console.log(options);
+        console.log("found", options.position);
         if (
           options.position !== null &&
           !poiIndexesFound.includes(options.position)
         ) {
+          console.log("updating", options.position);
           let poi = pois[options.position];
-          console.log(
-            options.position,
-            "position found",
-            poi,
-            " in map",
-            position
-          );
           layer.setLatLng([poi.latitude, poi.longitude]);
           poiIndexesFound.push(options.position);
         }
       }
     });
-    pois
-      .filter((value, index) => !poiIndexesFound.includes(index))
-      .forEach((value, index) => {
-        marker = L.marker([value.latitude, value.longitude], {
-          icon: L.divIcon({
-            html: `<div>${index}</div>`,
-            className: "map-marker",
-          }),
-          position,
-        } as ExtendedMarkerOptions).addTo(map);
-      });
+    for (let index in pois) {
+      if (poiIndexesFound.includes(parseInt(index))) {
+        continue;
+      }
+      let poi = pois[index];
+      console.log("creating", index);
+      marker = L.marker([poi.latitude, poi.longitude], {
+        icon: L.divIcon({
+          html: `<div>${index}</div>`,
+          className: "map-marker",
+        }),
+        position: parseInt(index),
+      } as ExtendedMarkerOptions).addTo(map);
+    }
   }
 
   onMount(() => {

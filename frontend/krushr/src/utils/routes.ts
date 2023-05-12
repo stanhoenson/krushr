@@ -34,9 +34,9 @@ export function groupRoutesByStatus(
   routes: Route[],
   userId: number
 ): {
-  isUser: boolean;
-  routes: { status: Status["name"]; routes: Route[] }[];
-}[] {
+  isUser: { status: Status["name"]; routes: Route[] }[];
+  notUser: { status: Status["name"]; routes: Route[] }[];
+} {
   const groupedRoutes: {
     [key: string]: { isUser: Route[]; notUser: Route[] };
   } = {};
@@ -56,13 +56,19 @@ export function groupRoutesByStatus(
     }
   });
 
-  return Object.entries(groupedRoutes).map(([status, routes]) => ({
-    isUser: !!routes.isUser.length,
-    routes: [
-      {
-        status,
-        routes: [...routes.isUser, ...routes.notUser],
-      },
-    ],
-  }));
+  const isUserGroups = Object.entries(groupedRoutes).map(
+    ([status, routes]) => ({
+      status,
+      routes: routes.isUser,
+    })
+  );
+
+  const notUserGroups = Object.entries(groupedRoutes).map(
+    ([status, routes]) => ({
+      status,
+      routes: routes.notUser,
+    })
+  );
+
+  return { isUser: isUserGroups, notUser: notUserGroups };
 }

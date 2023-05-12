@@ -18,9 +18,15 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		routes.GET("", func(c *gin.Context) {
 			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
 				user, err := utils.GetUserFromContext(c)
+
 				if err != nil {
 					return services.GetPublishedRoutes()
 				}
+
+				if utils.HasRole(c, []string{constants.AdminRoleName}) {
+					return services.GetEntities[models.Route]()
+				}
+
 				return services.GetRoutesWithAssociationsByUserID(user.ID)
 			})
 		})

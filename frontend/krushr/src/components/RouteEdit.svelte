@@ -141,6 +141,14 @@
     user = await getMeUser();
     statuses = await getAllStatuses();
 
+    let unpublishedStatus = statuses.find(
+      (status) => status.name === "Unpublished"
+    );
+    let defaultStatusId = 0;
+    if (unpublishedStatus) {
+      defaultStatusId = unpublishedStatus.id;
+    }
+
     if (!id) {
       //create it is then
       route = {
@@ -149,7 +157,7 @@
         details: [{ text: "" }],
         links: [{ url: "" }],
         categories: [],
-        statusId: statuses[0].id,
+        statusId: defaultStatusId,
         pointsOfInterest: [],
       };
       newPointOfInterest();
