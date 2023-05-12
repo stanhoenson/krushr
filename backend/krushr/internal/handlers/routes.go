@@ -10,6 +10,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func RegisterRouteRoutes(r *gin.Engine) {
@@ -24,7 +25,7 @@ func RegisterRouteRoutes(r *gin.Engine) {
 				}
 
 				if utils.HasRole(c, []string{constants.AdminRoleName}) {
-					return services.GetEntities[models.Route]()
+					return services.GetEntitiesWithAssociations[models.Route](clause.Associations)
 				}
 
 				return services.GetRoutesWithAssociationsByUserID(user.ID)
