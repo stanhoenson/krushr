@@ -73,7 +73,7 @@
       </p>
       <div class="grid">
         {#each innerRouteGroup.routes as route}
-          <RouteCard  {route} />
+          <RouteCard {route} />
         {/each}
       </div>
     {/if}

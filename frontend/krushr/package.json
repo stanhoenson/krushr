@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/svelte": "^2.1.0",
     "@types/leaflet": "^1.9.3",
+    "@types/leaflet-routing-machine": "^3.2.4",
     "astro": "^2.1.8",
     "axios": "^1.4.0",
     "leaflet": "^1.9.3",

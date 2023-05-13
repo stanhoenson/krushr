@@ -44,8 +44,8 @@
         {detail.text}
       </p>
     {/each}
-      <a class="button block shade" href={`/routes/edit?id=${route.id}`}
-        >Go to route</a
-      >
+    <a class="button block shade" href={`/routes/edit?id=${route.id}`}
+      >Go to route</a
+    >
   </div>
 </div>

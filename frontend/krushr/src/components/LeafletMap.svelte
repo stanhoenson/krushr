@@ -1,7 +1,8 @@
 <script lang="ts">
-  import L, { LatLngTuple, LeafletMouseEvent } from "leaflet";
+  import L, { LatLng, LatLngTuple, LeafletMouseEvent } from "leaflet";
   import { onMount, afterUpdate, onDestroy } from "svelte";
   import { goudaCoordinates } from "../constants";
+  import "leaflet-routing-machine";
   import type {
     CoordinatesWithPosition,
     ExtendedMarkerOptions,
@@ -16,6 +17,7 @@
   export let latitude: number;
   let map: L.Map;
   let marker: L.Marker;
+  let routingControl: L.Routing.Control;
 
   const initialLatLng: LatLngTuple = [
     Number(goudaCoordinates.latitude.toFixed(6)),
@@ -25,14 +27,16 @@
   const initialZoom = 13;
 
   function onMapClick(e: LeafletMouseEvent) {
-      if(disabled) return
+    if (disabled) return;
     console.log("updating position", position);
     longitude = Number(e.latlng.lng.toFixed(6));
     latitude = Number(e.latlng.lat.toFixed(6));
     // marker.setLatLng(e.latlng);
   }
 
+  //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it!
   function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
+    let waypoints: L.LatLng[] = [];
     console.log(position);
     let poiIndexesFound: number[] = [];
     map.eachLayer((layer) => {
@@ -45,16 +49,20 @@
         ) {
           console.log("updating", options.position);
           let poi = pois[options.position];
-          layer.setLatLng([poi.latitude, poi.longitude]);
-          poiIndexesFound.push(options.position);
+          if (poi) {
+            layer.setLatLng([poi.latitude, poi.longitude]);
+            poiIndexesFound.push(options.position);
+          }
         }
       }
     });
     for (let index in pois) {
+      let poi = pois[index];
+      if (!poi) continue;
+      waypoints.push(new LatLng(poi.latitude, poi.longitude));
       if (poiIndexesFound.includes(parseInt(index))) {
         continue;
       }
-      let poi = pois[index];
       console.log("creating", index);
       marker = L.marker([poi.latitude, poi.longitude], {
         icon: L.divIcon({
@@ -63,6 +71,13 @@
         }),
         position: parseInt(index),
       } as ExtendedMarkerOptions).addTo(map);
+    }
+    if (!routingControl) {
+      routingControl = L.Routing.control({
+        waypoints,
+      }).addTo(map);
+    } else {
+      routingControl.setWaypoints(waypoints);
     }
   }
 
