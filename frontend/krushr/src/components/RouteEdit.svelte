@@ -23,7 +23,9 @@
   import RouteEditExplanation from "./RouteEditExplanation.svelte";
   import StatusSelect from "./StatusSelect.svelte";
 
+  let existingRoute: Route;
   let route: PostRouteBody;
+  let viewOnly: boolean = false;
 
   let statuses: Status[];
 
@@ -91,7 +93,7 @@
   }
 
   async function existingRouteToEditableRoute(id: number) {
-    let existingRoute = await getRouteById(id);
+    existingRoute = await getRouteById(id);
     console.log({ existingRoute });
     route = Object.assign({}, existingRoute, {
       imageIds: existingRoute.images.map((image) => image.id),
@@ -147,6 +149,12 @@
       await existingRouteToEditableRoute(parseInt(id));
     }
 
+    //TODO magic string not good
+    viewOnly = !(
+      existingRoute.userId === (user ? user.id : -1) ||
+      user.role.name === "Admin"
+    );
+
     // getRouteById(queryParams);
   });
 
@@ -164,18 +172,19 @@
 <div class="edit">
   {#if route}
     <RouteEditExplanation />
-    {#if id && user}
+    {#if id}
       <button
+        disabled={viewOnly}
         class="button thick block error soft mb-s"
         on:click={handleDeleteRoute}>Delete route</button
       >
     {/if}
     <form on:submit|preventDefault={handleSave}>
-      <RouteEditCard bind:route viewOnly={!user} />
+      <RouteEditCard bind:route {viewOnly} />
       <hr class="soft" />
       {#each route.pointsOfInterest as pointOfInterest, i}
         <PointOfInterestEditCard
-          viewOnly={!user}
+          {viewOnly}
           {positionExchange}
           bind:route
           position={i}
@@ -183,7 +192,7 @@
         />
       {/each}
       <button
-                disabled={!user}
+        disabled={viewOnly}
         on:click={newPointOfInterest}
         type="button"
         class="button block secondary thick"
@@ -192,8 +201,12 @@
       <hr class="soft" />
       <div class="fixed">
         <div class="controls">
-          <StatusSelect disabled={!user} bind:value={route.statusId} />
-          <button disabled={!user} class="button thick  block primary" href="#">Save</button>
+          <StatusSelect disabled={viewOnly} bind:value={route.statusId} />
+          <button
+            disabled={viewOnly}
+            class="button thick  block primary"
+            href="#">Save</button
+          >
         </div>
 
         <div class="alerts">

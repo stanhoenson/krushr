@@ -310,7 +310,7 @@ button.button,
 	background-color: var(--error-bg-1);
 }
 
-.button.error.disabled {
+.button.error.disabled,.button.error:disabled {
 	color: var(--error-fg-1);
 	background-color: var(--error-bg-1);
 }
