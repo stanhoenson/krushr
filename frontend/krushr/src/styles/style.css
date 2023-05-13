@@ -272,7 +272,8 @@ button.button,
 	background-color: var(--primary--1);
 }
 
-.button.primary.disabled {
+
+.button.primary.disabled,.button.primary:disabled {
 	color: var(--background-2);
 	background-color: var(--primary-1);
 }
@@ -286,7 +287,7 @@ button.button,
 	background-color: var(--secondary-1);
 }
 
-.button.secondary.disabled {
+.button.secondary.disabled,.button.secondary:disabled {
 	color: var(--background-3);
 	background-color: var(--secondary-1);
 }
@@ -337,7 +338,7 @@ button.category{
     cursor: pointer;
 }
 
-.category.disabled {
+.category.disabled,.category:disabled {
 	color: var(--foreground-4);
 	background-color: var(--background-1);
 }

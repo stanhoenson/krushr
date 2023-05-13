@@ -8,6 +8,7 @@
   import XMark from "./icons/XMark.svelte";
   import ImagePlaceholder from "./svg/ImagePlaceholder.svelte";
 
+  export let viewOnly: boolean;
   export let route: PostRouteBody;
 
   function handleCategoryToggle(category: Category) {
@@ -88,7 +89,7 @@
                 import.meta.env.PUBLIC_API_BASE_URL
               }/imagedata/${imageId}`}
             />
-            {#if route.imageIds.length > 1}
+            {#if route.imageIds.length > 1 && !viewOnly}
               <div
                 on:click={handleDeleteImage.bind(null, i)}
                 class="icon delete-icon"
@@ -101,6 +102,7 @@
       </div>
       <div class="grid">
         <button
+          disabled={viewOnly}
           type="button"
           on:click={handleNewImage}
           class="button block secondary"
@@ -111,7 +113,13 @@
     <div class="info">
       <div class="flex input name">
         <label>Name</label>
-        <input bind:value={route.name} type="text" name="name" required />
+        <input
+          bind:value={route.name}
+          type="text"
+          name="name"
+          required
+          disabled={viewOnly}
+        />
       </div>
       <hr />
       <div class="multiple details">
@@ -120,12 +128,13 @@
           {#each route.details as detail, i}
             <div class="input-with-delete">
               <textarea
+                disabled={viewOnly}
                 bind:value={detail.text}
                 name="details"
                 rows="4"
                 required
               />
-              {#if route.details.length > 1}
+              {#if route.details.length > 1 && !viewOnly}
                 <div
                   on:click={handleDeleteDetail.bind(null, i)}
                   class="icon delete-icon"
@@ -136,6 +145,7 @@
             </div>
           {/each}
           <button
+            disabled={viewOnly}
             type="button"
             on:click={handleNewDetail}
             class="button block secondary"
@@ -149,8 +159,14 @@
         <div class="flex input">
           {#each route.links as link, i}
             <div class="input-with-delete">
-              <input bind:value={link.url} type="text" name="link" required />
-              {#if route.links.length > 0}
+              <input
+                bind:value={link.url}
+                type="text"
+                name="link"
+                required
+                disabled={viewOnly}
+              />
+              {#if route.links.length > 0 && !viewOnly}
                 <div
                   on:click={handleDeleteLink.bind(null, i)}
                   class="icon delete-icon"
@@ -161,6 +177,7 @@
             </div>
           {/each}
           <button
+            disabled={viewOnly}
             type="button"
             on:click={handleNewLink}
             class="button block secondary"
@@ -174,6 +191,7 @@
       <hr />
       <p id="categories">Categories</p>
       <CategoryButtonGroup
+        disabled={viewOnly}
         selectedCategories={route.categories}
         {handleCategoryToggle}
       />

@@ -4,6 +4,7 @@
   import { statusesStore } from "../stores/statuses";
   import type { Status } from "../types/models";
 
+  export let disabled: boolean = false;
   export let value: number;
 
   let statuses: Status[] = [];
@@ -19,7 +20,7 @@
 
 <div class="input status">
   <label for="status">Status</label>
-  <select bind:value name="status">
+  <select {disabled} bind:value name="status">
     {#each statuses as status}
       <option value={status.id}>{status.name}</option>
     {/each}

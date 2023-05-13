@@ -29,7 +29,6 @@
     try {
       routes = await getAllRoutes();
       groupedRoutes = groupRoutesByStatus(routes, user ? user.id : -1);
-      console.log(groupedRoutes);
     } catch (e: any) {
       error = e.response.data.error;
     }
@@ -74,7 +73,7 @@
       </p>
       <div class="grid">
         {#each innerRouteGroup.routes as route}
-          <RouteCard loggedIn={user !== null} {route} />
+          <RouteCard  {route} />
         {/each}
       </div>
     {/if}

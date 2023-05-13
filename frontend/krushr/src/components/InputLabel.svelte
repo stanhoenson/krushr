@@ -5,7 +5,7 @@
 </script>
 
 <div class="input-label">
-  <label>{label}</label>
+  <label >{label}</label>
   <div class="flex">
     <input bind:value {...$$restProps} />
   </div>

@@ -5,6 +5,7 @@
   import { getMeUser } from "../requests/users";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
+
   let email = "";
   let password = "";
   let error: string | null = "";
@@ -17,6 +18,7 @@
       error = e.response.data.error;
     }
   }
+
   onMount(async () => {
     try {
       let user = await getMeUser();

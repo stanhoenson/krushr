@@ -8,6 +8,8 @@
   } from "../types/misc";
   import type { PutPointOfInterestBody } from "../types/request-bodies";
   let element: any;
+
+  export let disabled: boolean;
   export let allPointsOfInterest: PutPointOfInterestBody[];
   export let position: number;
   export let longitude: number;
@@ -23,6 +25,7 @@
   const initialZoom = 13;
 
   function onMapClick(e: LeafletMouseEvent) {
+      if(disabled) return
     console.log("updating position", position);
     longitude = Number(e.latlng.lng.toFixed(6));
     latitude = Number(e.latlng.lat.toFixed(6));

@@ -12,6 +12,7 @@
 
   let categories: Category[] = [];
 
+  export let viewOnly: boolean;
   export let positionExchange: (
     sourcePoiIndex: number,
     targetPoiIndex: number
@@ -94,6 +95,7 @@
   <p class="upper">Point of interest</p>
   <div class="grid coordinates">
     <LeafletMap
+      disabled={viewOnly}
       allPointsOfInterest={route.pointsOfInterest}
       {position}
       bind:latitude={pointOfInterest.latitude}
@@ -103,6 +105,7 @@
       <div class="flex input">
         <label>Longitude</label>
         <input
+          disabled={viewOnly}
           required
           bind:value={pointOfInterest.longitude}
           type="text"
@@ -112,6 +115,7 @@
       <div class="flex input name">
         <label>Latitude</label>
         <input
+          disabled={viewOnly}
           required
           bind:value={pointOfInterest.latitude}
           type="text"
@@ -123,6 +127,7 @@
         <label>Position</label>
         <div class="three">
           <button
+            disabled={viewOnly}
             on:click={handlePositionChange.bind(null, position - 1)}
             type="button"
             class={`button block secondary ${position === 0 ? "disabled" : ""}`}
@@ -130,6 +135,7 @@
           >
           <span>{position}</span>
           <button
+            disabled={viewOnly}
             on:click={handlePositionChange.bind(null, position + 1)}
             type="button"
             class="button block secondary"
@@ -155,7 +161,7 @@
                 import.meta.env.PUBLIC_API_BASE_URL
               }/imagedata/${imageId}`}
             />
-            {#if pointOfInterest.imageIds.length > 1}
+            {#if pointOfInterest.imageIds.length > 1 && !viewOnly}
               <div
                 on:click={handleDeleteImage.bind(null, i)}
                 class="icon delete-icon"
@@ -167,6 +173,7 @@
         {/each}
       </div>
       <button
+          disabled={viewOnly}
         type="button"
         on:click={handleNewImage}
         class="button block secondary"
@@ -177,6 +184,7 @@
       <div class="flex input name">
         <label>Name</label>
         <input
+          disabled={viewOnly}
           required
           bind:value={pointOfInterest.name}
           type="text"
@@ -189,8 +197,11 @@
         <div class="flex column">
           {#each pointOfInterest.details as detail, i}
             <div class="input-with-delete">
-              <textarea bind:value={detail.text} name="details" rows="4" />
-              {#if pointOfInterest.details.length > 1}
+              <textarea bind:value={detail.text} name="details" rows="4"
+
+                                disabled={viewOnly}
+                            />
+              {#if pointOfInterest.details.length > 1 && !viewOnly}
                 <div
                   on:click={handleDeleteDetail.bind(null, i)}
                   class="icon delete-icon"
@@ -201,6 +212,7 @@
             </div>
           {/each}
           <button
+                        disabled={viewOnly}
             type="button"
             on:click={handleNewDetail}
             class="button block secondary"
@@ -214,8 +226,8 @@
         <div class="flex input">
           {#each pointOfInterest.links as link, i}
             <div class="input-with-delete">
-              <input required bind:value={link.url} type="text" name="link" />
-              {#if pointOfInterest.links.length > 0}
+              <input required bind:value={link.url} type="text" name="link" disabled={viewOnly} />
+              {#if pointOfInterest.links.length > 0 && !viewOnly}
                 <div
                   on:click={handleDeleteLink.bind(null, i)}
                   class="icon delete-icon"
@@ -226,6 +238,7 @@
             </div>
           {/each}
           <button
+                        disabled={viewOnly}
             type="button"
             on:click={handleNewLink}
             class="button block secondary"
@@ -239,6 +252,8 @@
       <hr />
       <p id="categories">Categories</p>
       <CategoryButtonGroup
+
+                        disabled={viewOnly}
         selectedCategories={pointOfInterest.categories}
         {handleCategoryToggle}
       />
@@ -248,7 +263,7 @@
   <button
     type="button"
     on:click={handleDeletePointOfInterest}
-    disabled={route.pointsOfInterest.length <= 2}
+    disabled={route.pointsOfInterest.length <= 2 || viewOnly}
     class={`button thick block error ${
       route.pointsOfInterest.length <= 2 ? "disabled" : ""
     }`}

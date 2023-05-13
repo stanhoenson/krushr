@@ -34,18 +34,8 @@
   let error: string | null = null;
   let successMessage: string | null = null;
   let user: User;
-  let allPointsOfInterestLatLngs: LatLngTuple[] = [];
 
   let poiToScrollToAfterUpdate = -1;
-
-  // $: allPointsOfInterestLatLngs = route.pointsOfInterest.map(
-  //   (pointOfInterest) => {
-  //     return [
-  //       pointOfInterest.latitude,
-  //       pointOfInterest.longitude,
-  //     ] as LatLngTuple;
-  //   }
-  // );
 
   let queryParams = new URLSearchParams(window.location.search);
   let id = queryParams.get("id");
@@ -61,18 +51,6 @@
     };
     route.pointsOfInterest.push(newPointOfInterest);
     route = route;
-    updateAllPointsOfInterestLatLngs();
-  }
-
-  function updateAllPointsOfInterestLatLngs() {
-    allPointsOfInterestLatLngs = route.pointsOfInterest.map(
-      (pointOfInterest) => {
-        return [
-          pointOfInterest.latitude,
-          pointOfInterest.longitude,
-        ] as LatLngTuple;
-      }
-    );
   }
 
   function positionExchange(sourcePoiIndex: number, targetPoiIndex: number) {
@@ -138,7 +116,9 @@
   }
 
   onMount(async () => {
-    user = await getMeUser();
+    try {
+      user = await getMeUser();
+    } catch (e: any) {}
     statuses = await getAllStatuses();
 
     let unpublishedStatus = statuses.find(
@@ -171,8 +151,6 @@
   });
 
   afterUpdate(async () => {
-    console.log(route.statusId);
-    updateAllPointsOfInterestLatLngs();
     //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
       let element = document.getElementById(`poi-${poiToScrollToAfterUpdate}`);
@@ -184,19 +162,20 @@
 </script>
 
 <div class="edit">
-  {#if user && route}
+  {#if route}
     <RouteEditExplanation />
-    {#if id}
+    {#if id && user}
       <button
         class="button thick block error soft mb-s"
         on:click={handleDeleteRoute}>Delete route</button
       >
     {/if}
     <form on:submit|preventDefault={handleSave}>
-      <RouteEditCard bind:route />
+      <RouteEditCard bind:route viewOnly={!user} />
       <hr class="soft" />
       {#each route.pointsOfInterest as pointOfInterest, i}
         <PointOfInterestEditCard
+          viewOnly={!user}
           {positionExchange}
           bind:route
           position={i}
@@ -204,6 +183,7 @@
         />
       {/each}
       <button
+                disabled={!user}
         on:click={newPointOfInterest}
         type="button"
         class="button block secondary thick"
@@ -212,8 +192,8 @@
       <hr class="soft" />
       <div class="fixed">
         <div class="controls">
-          <StatusSelect bind:value={route.statusId} />
-          <button class="button thick  block primary" href="#">Save</button>
+          <StatusSelect disabled={!user} bind:value={route.statusId} />
+          <button disabled={!user} class="button thick  block primary" href="#">Save</button>
         </div>
 
         <div class="alerts">

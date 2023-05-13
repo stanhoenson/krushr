@@ -15,7 +15,7 @@ async function fetchUser() {
   }
 }
 
-export function initializeUser() {
+function initializeUser() {
   if (!initialized) {
     fetchUser();
     initialized = true;
