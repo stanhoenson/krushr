@@ -149,10 +149,10 @@
       await existingRouteToEditableRoute(parseInt(id));
     }
 
-    //TODO magic string not good
+    //TODO magic string not good, some undefined checks as well :(
     viewOnly = !(
       existingRoute.userId === (user ? user.id : -1) ||
-      user.role.name === "Admin"
+      user ? user.role.name === "Admin" : false
     );
 
     // getRouteById(queryParams);
