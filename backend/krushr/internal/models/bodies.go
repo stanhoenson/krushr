@@ -75,9 +75,9 @@ type PostPointOfInterestBody struct {
 }
 
 type GetPointOfInterestBody struct {
-	Name      string  `json:"name"`
-	Longitude float64 `json:"longitude"`
-	Latitude  float64 `json:"latitude"`
+	Name      string  `json:"name" binding:"required"`
+	Longitude float64 `json:"longitude" binding:"required,longitude"`
+	Latitude  float64 `json:"latitude" binding:"required,latitude"`
 }
 
 func (g *GetPointOfInterestBody) ToPointOfInterest() PointOfInterest {
