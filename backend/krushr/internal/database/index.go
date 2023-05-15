@@ -8,6 +8,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
+	"github.com/stanhoenson/krushr/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -57,7 +58,8 @@ func populateDatabase() {
 
 	}
 
-	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(env.AdminPassword), bcrypt.DefaultCost)
+	//We have to hash here because we hash on the client as well
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
 	Db.Save(&models.User{ID: 1, Email: "admin@admin.com", Password: string(passwordBytes), RoleID: 1})
 	if err != nil {
 
