@@ -1,12 +1,12 @@
 package app
 
 import (
+	"github.com/stanhoenson/krushr/internal/cors"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/handlers"
 	"github.com/stanhoenson/krushr/internal/middleware"
 	"github.com/stanhoenson/krushr/internal/validators"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,12 +14,8 @@ func Initialize() {
 	env.InitializeEnvironment()
 
 	// Returns an engine with a Logger and Recovery middleware already attached
-	// TODO fix cors things
 	r := gin.Default()
-	defaultCorsConfig := cors.DefaultConfig()
-	defaultCorsConfig.AllowCredentials = true
-	defaultCorsConfig.AllowOrigins = []string{"http://localhost:3000", "http://127.0.0.1:42305", "https://krushr.hoenson.xyz"}
-	r.Use(cors.New(defaultCorsConfig))
+	cors.InitializeCors(r)
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
 	handlers.RegisterHandlers(r)

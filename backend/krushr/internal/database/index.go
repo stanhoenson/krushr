@@ -6,7 +6,9 @@ import (
 	"path/filepath"
 
 	"github.com/stanhoenson/krushr/internal/constants"
+	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -46,11 +48,26 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 }
 
 func populateDatabase() {
-	Db.Create(&models.Role{Name: constants.AdminRoleName})
-	Db.Create(&models.Role{Name: constants.CreatorRoleName})
+	result := Db.Save(&models.Role{ID: 1, Name: constants.AdminRoleName})
+	if result.Error != nil {
+
+	}
+	result = Db.Save(&models.Role{ID: 2, Name: constants.CreatorRoleName})
+	if result.Error != nil {
+
+	}
+
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(env.AdminPassword), bcrypt.DefaultCost)
+	Db.Save(&models.User{ID: 1, Email: "admin@admin.com", Password: string(passwordBytes), RoleID: 1})
+	if err != nil {
+
+	}
 
 	// statuses
-	for _, statusName := range constants.Statuses {
-		Db.Create(&models.Status{Name: statusName})
+	for index, statusName := range constants.Statuses {
+		result = Db.Save(&models.Status{ID: uint(index + 1), Name: statusName})
+		if result.Error != nil {
+
+		}
 	}
 }

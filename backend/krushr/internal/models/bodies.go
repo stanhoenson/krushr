@@ -4,10 +4,10 @@ package models
 type PostRouteBody struct {
 	Name             string                    `json:"name" binding:"required"`
 	PointsOfInterest []PostPointOfInterestBody `json:"pointsOfInterest" binding:"required,min=2"`
-	ImageIDs         []uint                    `json:"imageIds"`
-	Details          []PostDetailBody          `json:"details"`
+	ImageIDs         []uint                    `json:"imageIds" binding:"required,min=1"`
+	Details          []PostDetailBody          `json:"details" binding:"required,min=1"`
 	Links            []PostLinkBody            `json:"links"`
-	Categories       []PostCategoryBody        `json:"categories"`
+	Categories       []PostCategoryBody        `json:"categories" binding:"required,min=1"`
 	StatusID         uint                      `json:"statusId" binding:"required"`
 }
 type PostRouteBodyOld struct {
@@ -24,7 +24,7 @@ type PutRouteBody struct {
 	PostRouteBody
 }
 
-// Image
+// Image, never used
 type PostImageBody struct {
 	Path string `json:"path" binding:"required"`
 }
@@ -42,7 +42,7 @@ type PutDetailBody struct {
 
 // Link
 type PostLinkBody struct {
-	URL string `json:"url" binding:"required"`
+	URL string `json:"url" binding:"required,url"`
 }
 type PutLinkBody struct {
 	PostLinkBody
@@ -68,8 +68,8 @@ type PutStatusBody struct {
 // PointOfInterest
 type PostPointOfInterestBody struct {
 	GetPointOfInterestBody
-	ImageIDs   []uint             `json:"imageIds"`
-	Details    []PostDetailBody   `json:"details"`
+	ImageIDs   []uint             `json:"imageIds" binding:"required,min=1"`
+	Details    []PostDetailBody   `json:"details" binding:"required,min=1"`
 	Links      []PostLinkBody     `json:"links"`
 	Categories []PostCategoryBody `json:"categories"`
 }
@@ -99,9 +99,9 @@ func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestB
 type PutPointOfInterestBody = PostPointOfInterestBody
 
 type PostUserBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	RoleID   uint   `json:"roleId"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	RoleID   uint   `json:"roleId" binding:"required"`
 }
 
 type PutUserBody struct {
