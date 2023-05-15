@@ -1,28 +1,12 @@
 package validators
 
 import (
-	"errors"
 	"regexp"
 
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
 func ValidateSignUp(user *models.User) error {
-	if user.Email == "" {
-		return errors.New("email is required")
-	}
-
-	if !isValidEmail(user.Email) {
-		return errors.New("invalid email format")
-	}
-
-	if user.Password == "" {
-		return errors.New("password is required")
-	}
-
-	if !isValidPassword(user.Password) {
-		return errors.New("invalid password format")
-	}
 
 	// add more validation rules here
 
@@ -30,17 +14,6 @@ func ValidateSignUp(user *models.User) error {
 }
 
 func ValidatePostUser(user *models.User) error {
-	if user.Email == "" {
-		return errors.New("email is required")
-	}
-
-	if !isValidEmail(user.Email) {
-		return errors.New("invalid email format")
-	}
-
-	if user.RoleID == 0 {
-		return errors.New("role_id is required")
-	}
 
 	// add more validation rules here
 
@@ -48,17 +21,6 @@ func ValidatePostUser(user *models.User) error {
 }
 
 func ValidatePutUser(user *models.User) error {
-	if user.Email == "" {
-		return errors.New("email is required")
-	}
-
-	if !isValidEmail(user.Email) {
-		return errors.New("invalid email format")
-	}
-
-	if user.RoleID == 0 {
-		return errors.New("role_id is required")
-	}
 
 	// add more validation rules here
 

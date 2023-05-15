@@ -1,15 +1,10 @@
 package validators
 
 import (
-	"errors"
-
 	"github.com/stanhoenson/krushr/internal/models"
 )
 
 func ValidatePostCategoryBody(postCategoryBody *models.PostCategoryBody) error {
-	if postCategoryBody.Name == "" {
-		return errors.New("category is required")
-	}
 
 	// add more validation rules here
 
@@ -17,9 +12,6 @@ func ValidatePostCategoryBody(postCategoryBody *models.PostCategoryBody) error {
 }
 
 func ValidatePutCategoryBody(putCategoryBody *models.PutCategoryBody) error {
-	if putCategoryBody.Name == "" {
-		return errors.New("category is required")
-	}
 
 	// add more validation rules here
 

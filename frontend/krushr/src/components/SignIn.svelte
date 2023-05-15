@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  import { sha256 } from "../utils/crypto";
   import { signIn } from "../requests/authentication";
   import { getMeUser } from "../requests/users";
   import Alert from "./Alert.svelte";
@@ -12,7 +13,7 @@
 
   async function handleSubmit(event: Event) {
     try {
-      let token = await signIn({ email, password });
+      let token = await signIn({ email, password: await sha256(password) });
       window.location.href = "/";
     } catch (e: any) {
       error = e.response.data.error;
@@ -50,11 +51,11 @@
   </section>
 </form>
 <div class="alerts half-width">
-{#if error}
-  <Alert
-    onClose={() => {
-      error = "";
-    }}>{error}</Alert
-  >
-{/if}
-        </div>
+  {#if error}
+    <Alert
+      onClose={() => {
+        error = "";
+      }}>{error}</Alert
+    >
+  {/if}
+</div>
