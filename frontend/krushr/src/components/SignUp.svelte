@@ -13,11 +13,15 @@
   let user: User | null;
 
   async function handleSubmit(event: Event) {
+    if (password === confirmPassword) {
     try {
       user = await signUp({ email, password });
       console.log({ user });
     } catch (e: any) {
       error = e.response.data.error;
+    }
+    } else {
+      error = "Passwords dont match";
     }
   }
 
