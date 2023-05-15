@@ -33,7 +33,7 @@ func InitializeEnvironment() {
 	ApiUrl = getEnvVariable("API_URL")
 	Domain = getEnvVariable("DOMAIN")
 	AdminPassword = getEnvVariable("ADMIN_PASSWORD")
-	AllowedOrigins = strings.Split(getEnvVariable("ALLOWED_ORIGINS"),",")
+	AllowedOrigins = strings.Split(getEnvVariable("ALLOWED_ORIGINS"), ",")
 
 	DefaultRoleID = getUintEnvVariable("DEFAULT_ROLE_ID")
 }
