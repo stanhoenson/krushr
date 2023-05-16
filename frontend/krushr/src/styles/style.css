@@ -32,11 +32,12 @@
 	--secondary-0: hsl(210, 20%, 20%);
 	--secondary-1: hsl(210, 20%, 40%);
 
-	--error-bg--1: hsl(350, 30%, 95%);
-	--error-bg-0: hsl(350, 30%, 89%);
-	--error-bg-1: hsl(350, 30%, 83%);
+	--error-bg--1: hsla(350, 30%, 91%, 0.3);
+	--error-bg-0: hsla(350, 30%, 85%, 0.4);
+	--error-bg-1: hsla(350, 30%, 79%, 0.4);
+	--error-bg-2: hsla(350, 30%, 73%, 0.4);
 
-	--error-fg-0: hsl(0, 80%, 45%);
+	--error-fg-0: hsl(350, 100%, 50%);
 	--error-fg-1: hsl(350, 30%, 55%);
 
 	--success-bg--1: hsl(120, 30%, 95%);
@@ -604,6 +605,19 @@ form section.card {
 	margin-bottom: var(--space-xs);
 }
 
+.multiple.links .flex.input:last-child {
+	margin-bottom: 0;
+}
+
+#url {
+	margin-bottom: 0;
+}
+
+.card.input-with-delete {
+	padding: var(--space-xs);
+	padding-top: var(--space-xl);
+}
+
 #categories {
 	margin-bottom: var(--space-3xs);
 }
@@ -698,6 +712,27 @@ label.invalid {
 	margin-bottom: var(--space-m);
 }
 
+.links .card {
+	background-color: var(--background-2);
+	border: 1px solid var(--background-3);
+}
+
+.links .card input {
+	border: 1px solid var(--background-3);
+}
+
+.links .card input:focus {
+	border: 1px solid var(--primary-0);
+}
+
+.links .card .icon.delete-icon {
+	background-color: var(--error-bg-1);
+}
+
+.links .card .icon.delete-icon:hover {
+	background-color: var(--error-bg-2);
+}
+
 input#last {
 	margin-bottom: 0;
 }
@@ -730,12 +765,11 @@ footer p {
     right: calc(.1rem + var(--space-3xs));
 }
 
-.delete-icon svg{
+.delete-icon svg {
     color: var(--error-fg-0);
 }
 
 .map-marker {
-
     color:red;
     background-color: white;
 }
@@ -747,7 +781,6 @@ footer p {
 .image-placeholder svg{
     width: 100%;
     height: 100%;
-    
 }
 
 .image-placeholder {
@@ -764,8 +797,7 @@ footer p {
     width: 100%;
 }
 
-.input-with-delete input{
-    width: 100%;
+.input-with-delete input {
     box-sizing: border-box;
 }
 

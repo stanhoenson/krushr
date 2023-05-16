@@ -227,21 +227,27 @@
         <label>Links</label>
         <div class="flex input">
           {#each pointOfInterest.links as link, i}
-            <div class="input-with-delete">
-              <input
-                required
-                bind:value={link.text}
-                type="text"
-                name="text"
-                disabled={viewOnly}
-              />
-              <input
-                required
-                bind:value={link.url}
-                type="text"
-                name="link"
-                disabled={viewOnly}
-              />
+            <div class="card input-with-delete">
+							<div class="flex input name">
+								<label>Text</label>
+								<input
+									required
+									bind:value={link.text}
+									type="text"
+									name="text"
+									disabled={viewOnly}
+								/>
+							</div>
+							<div id="url" class="flex input name">
+								<label>URL</label>
+								<input
+									bind:value={link.url}
+									type="text"
+									name="link"
+									required
+									disabled={viewOnly}
+								/>
+							</div>
               {#if pointOfInterest.links.length > 0 && !viewOnly}
                 <div
                   on:click={handleDeleteLink.bind(null, i)}

@@ -1,4 +1,7 @@
-be
-fe
-backend/krushr/krushr
+# Scripts
+client
+server
 deploy
+
+backend/krushr/krushr
+.env.deploy
