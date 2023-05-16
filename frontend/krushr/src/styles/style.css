@@ -823,6 +823,10 @@ footer p {
 		height: 16rem;
 	}
 
+	.images .grid .main img {
+		height: 16rem;
+	}
+
 	.images .grid img {
 		height: 16rem;
 }
