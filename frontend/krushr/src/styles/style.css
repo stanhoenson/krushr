@@ -36,6 +36,7 @@
 	--error-bg-0: hsla(350, 30%, 85%, 0.4);
 	--error-bg-1: hsla(350, 30%, 79%, 0.4);
 	--error-bg-2: hsla(350, 30%, 73%, 0.4);
+	--error-bg-x: hsla(350, 50%, 85%, 0.5);
 
 	--error-fg-0: hsl(350, 100%, 50%);
 	--error-fg-1: hsl(350, 30%, 55%);
@@ -790,6 +791,10 @@ footer p {
 .image-with-delete {
 	display: inherit;
 	position: relative;
+}
+
+.image-with-delete .icon.delete-icon:hover {
+	background-color: var(--error-bg-x);
 }
 
 .input-with-delete {
