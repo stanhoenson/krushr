@@ -42,6 +42,7 @@ type PutDetailBody struct {
 
 // Link
 type PostLinkBody struct {
+    Text string `json:"text" binding:"required"`
 	URL string `json:"url" binding:"required,url"`
 }
 type PutLinkBody struct {

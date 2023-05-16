@@ -8,7 +8,8 @@ import (
 
 func FirstOrCreateLink(postLinkBody *models.PostLinkBody, tx *gorm.DB) (*models.Link, error) {
 	link := models.Link{
-		URL: postLinkBody.URL,
+		Text: postLinkBody.Text,
+		URL:  postLinkBody.URL,
 	}
 
 	createdLink, err := repositories.FirstOrCreateEntity(&link, &link, tx)

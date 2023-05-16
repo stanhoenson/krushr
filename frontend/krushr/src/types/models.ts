@@ -29,6 +29,7 @@ export interface Detail {
 
 export interface Link {
   id: number;
+  text: string;
   url: string;
   routes: Route[];
   pointsOfInterest: PointOfInterest[];

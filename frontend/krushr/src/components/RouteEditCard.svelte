@@ -160,6 +160,13 @@
           {#each route.links as link, i}
             <div class="input-with-delete">
               <input
+                required
+                bind:value={link.text}
+                type="text"
+                name="text"
+                disabled={viewOnly}
+              />
+              <input
                 bind:value={link.url}
                 type="text"
                 name="link"

@@ -37,6 +37,7 @@ export interface PutDetailBody extends PostDetailBody {}
 
 // Link
 export interface PostLinkBody {
+  text: string;
   url: string;
 }
 

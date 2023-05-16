@@ -230,6 +230,13 @@
             <div class="input-with-delete">
               <input
                 required
+                bind:value={link.text}
+                type="text"
+                name="text"
+                disabled={viewOnly}
+              />
+              <input
+                required
                 bind:value={link.url}
                 type="text"
                 name="link"
