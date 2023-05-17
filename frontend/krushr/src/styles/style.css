@@ -169,6 +169,10 @@ button.button {
 	width: 100%;
 }
 
+nav button.button {
+	width: auto;
+}
+
 button.button,
 .button {
 	transition: background-color 200ms;
@@ -578,9 +582,21 @@ p.upper {
 	margin-bottom: var(--space-s);
 }
 
-.edit {
+.edit,
+.admin {
 	max-width: 1080px;
 	margin: auto;
+}
+
+.entity {
+	color: var(--foreground-4);
+	margin-bottom: var(--space-2xs);
+}
+
+.entity h2 {
+	font-size: var(--step-0);
+	color: var(--foreground-0);
+	text-transform: uppercase;
 }
 
 .explanation h2 {
@@ -732,6 +748,36 @@ label.invalid {
 
 .links .card .icon.delete-icon:hover {
 	background-color: var(--error-bg-2);
+}
+
+.table {
+	display: flex;
+	gap: var(--space-m);
+}
+
+.table .column {
+}
+
+.column .field {
+	font-weight: bold;
+	margin-bottom: var(--space-3xs);
+}
+
+.column > * {
+	margin-bottom: var(--space-2xs);
+}
+
+.column input[type="text"] {
+	min-width: 260px;
+}
+
+.column input[type="number"] {
+	max-width: 80px;
+	min-width: 40px;
+}
+
+.column > *:last-child {
+	margin-bottom: 0;
 }
 
 input#last {

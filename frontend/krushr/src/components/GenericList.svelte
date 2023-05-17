@@ -30,8 +30,10 @@
   });
 </script>
 
-<h2>{title}</h2>
-<p>{description}</p>
+<div class="entity">
+	<h2>{title}</h2>
+	<p>{description}</p>
+</div>
 <div style="width: 100%; overflow-x: scroll;">
   {#if items.length === 0}
     <div>No items</div>

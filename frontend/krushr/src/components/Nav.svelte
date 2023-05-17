@@ -22,7 +22,7 @@
 
 <nav class="flex">
   <div class="flex">
-    <a id="active" class="button" href="/">Routes</a>
+    <a class="button" href="/">Routes</a>
   </div>
   <div class="flex">
     {#if !user}
@@ -31,7 +31,7 @@
     {:else}
       <!-- TODO magic string not good -->
       {#if user.role.name === "Admin"}
-        <a class="button primary" href="/admin">Admin</a>
+        <a class="button" href="/admin">Admin</a>
       {/if}
       <button on:click={handleSignOut} class="button secondary">Sign out</button
       >
