@@ -76,8 +76,10 @@
       routingControl = L.Routing.control({
         waypoints,
       }).addTo(map);
+      routingControl.hide();
     } else {
       routingControl.setWaypoints(waypoints);
+      routingControl.hide();
     }
   }
 

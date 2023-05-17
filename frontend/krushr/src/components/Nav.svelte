@@ -29,6 +29,10 @@
       <!-- <a class="button" href="/sign-up">Sign up</a> -->
       <a class="button primary" href="/sign-in">Sign in</a>
     {:else}
+      <!-- TODO magic string not good -->
+      {#if user.role.name === "Admin"}
+        <a class="button primary" href="/admin">Admin</a>
+      {/if}
       <button on:click={handleSignOut} class="button secondary">Sign out</button
       >
     {/if}
