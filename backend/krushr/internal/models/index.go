@@ -166,6 +166,7 @@ type PointOfInterest struct {
 	Routes     []*Route    `gorm:"many2many:routes_points_of_interest;constraint:OnDelete:CASCADE" json:"routes"`
 	User       User        `json:"user"`
 	UserID     uint        `gorm:"not null" json:"userId"`
+	Support    bool        `gorm:"not null;default:false" json:"support"`
 }
 
 func (p PointOfInterest) ToLegacyPointOfInterest(orderInRoute uint) LegacyPointOfInterest {

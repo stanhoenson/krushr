@@ -42,8 +42,8 @@ type PutDetailBody struct {
 
 // Link
 type PostLinkBody struct {
-    Text string `json:"text" binding:"required"`
-	URL string `json:"url" binding:"required,url"`
+	Text string `json:"text" binding:"required"`
+	URL  string `json:"url" binding:"required,url"`
 }
 type PutLinkBody struct {
 	PostLinkBody
@@ -73,6 +73,7 @@ type PostPointOfInterestBody struct {
 	Details    []PostDetailBody   `json:"details" binding:"required,min=1"`
 	Links      []PostLinkBody     `json:"links"`
 	Categories []PostCategoryBody `json:"categories"`
+	Support    bool               `json:"support"`
 }
 
 type GetPointOfInterestBody struct {
