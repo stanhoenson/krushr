@@ -30,5 +30,5 @@ var Roles = []string{
 }
 
 var Statuses = []string{
-	PublishedStatusName, InactiveStatusName, UnpublishedStatusName,
+	PublishedStatusName, UnpublishedStatusName,
 }
