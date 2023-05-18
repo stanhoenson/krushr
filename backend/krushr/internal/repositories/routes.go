@@ -29,7 +29,6 @@ func GetRoutesWithAssociationsByUserID(userID uint, tx *gorm.DB) (*[]models.Rout
 	}
 
 	return &routes, nil
-
 }
 
 func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
@@ -42,12 +41,11 @@ func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
 	}
 
 	return &routes, nil
-
 }
 
 func GetRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, error) {
 	var route models.Route
-	result := tx.Where("id = ?", ID).Where("user_id = ?", userID).First(&route)
+	result := tx.Preload(clause.Associations).Where("id = ?", ID).Where("user_id = ?", userID).First(&route)
 
 	if result.Error != nil {
 		return nil, result.Error

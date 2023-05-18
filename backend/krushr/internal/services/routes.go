@@ -14,7 +14,6 @@ import (
 
 func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
 	route, err := repositories.GetEntityByIDWithAssociations[models.Route](ID, clause.Associations, database.Db)
-
 	if err != nil {
 		return nil, err
 	}
@@ -31,14 +30,11 @@ func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
 }
 
 func GetRoutesWithAssociationsByUserID(userID uint) (*[]models.Route, error) {
-
 	return repositories.GetRoutesWithAssociationsByUserID(userID, database.Db)
-
 }
+
 func GetPublishedRoutes() (*[]models.Route, error) {
-
-	return repositories.GetPublishedRoutes( database.Db)
-
+	return repositories.GetPublishedRoutes(database.Db)
 }
 
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
@@ -75,8 +71,8 @@ func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *
 	tx.Model(&route).Association("Links").Replace(route.Links)
 	route.Details = routeRelatedEntities.details
 	tx.Model(&route).Association("Details").Replace(route.Details)
+	tx.Model(&route).Association("Images").Delete(route.Images)
 	route.Images = routeRelatedEntities.images
-	tx.Model(&route).Association("Images").Replace(route.Images)
 	route.Categories = routeRelatedEntities.categories
 	tx.Model(&route).Association("Categories").Replace(route.Categories)
 

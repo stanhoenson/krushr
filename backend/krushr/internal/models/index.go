@@ -6,7 +6,28 @@ import (
 
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/env"
+	"gorm.io/gorm"
 )
+
+func checkAndDeleteRelatedEntity[T any, B any](tx *gorm.DB, whereStatement string, entityTwoID uint) error {
+	var entityOne T
+	var entityTwo B
+	// Check if the related entity (Entity2) has any other relationships
+	var count int64
+	if err := tx.Model(&entityOne).Where(whereStatement, entityTwoID).Count(&count).Error; err != nil {
+		return err
+	}
+	fmt.Println(count)
+
+	// If there are no other relationships, delete the related entity (Entity2)
+	if count == 0 {
+		if err := tx.Delete(&entityTwo, entityTwoID).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 type Route struct {
 	ID               uint               `gorm:"primaryKey" json:"id"`
@@ -21,6 +42,50 @@ type Route struct {
 	Distance         float64            `gorm:"not null" json:"distance"`
 	User             User               `json:"user"`
 	UserID           uint               `gorm:"not null" json:"userId"`
+}
+
+type RouteImage struct {
+	RouteID uint `gorm:"primaryKey"`
+	ImageID uint `gorm:"primaryKey"`
+}
+
+func (RouteImage) TableName() string {
+	return "routes_images"
+}
+
+func (e *RouteImage) AfterDelete(tx *gorm.DB) (err error) {
+	fmt.Println("in the function man")
+	fmt.Println(e)
+	fmt.Println(tx.Statement)
+	if err := checkAndDeleteRelatedEntity[RouteImage, Image](tx, "image_id = ?", e.ImageID); err != nil {
+		return err
+	}
+	return nil
+}
+
+type RouteDetail struct {
+	RouteID  uint `gorm:"primaryKey"`
+	DetailID uint `gorm:"primaryKey"`
+}
+
+type RouteLink struct {
+	RouteID uint `gorm:"primaryKey"`
+	LinkID  uint `gorm:"primaryKey"`
+}
+
+type RouteCategory struct {
+	RouteID    uint `gorm:"primaryKey"`
+	CategoryID uint `gorm:"primaryKey"`
+}
+
+type RoutesPointsOfInterest struct {
+	RouteID           uint `gorm:"primaryKey"`
+	PointOfInterestID uint `gorm:"primaryKey"`
+	Position          uint `gorm:"not null"`
+}
+
+func (RoutesPointsOfInterest) TableName() string {
+	return "routes_points_of_interest"
 }
 
 func (r Route) ToLegacyRoute(withPOIs bool) (*LegacyRoute, error) {
@@ -169,6 +234,26 @@ type PointOfInterest struct {
 	Support    bool        `gorm:"not null;default:false" json:"support"`
 }
 
+type PointOfInterestImage struct {
+	PointOfInterestID uint `gorm:"primaryKey"`
+	ImageID           uint `gorm:"primaryKey"`
+}
+
+type PointOfInterestDetail struct {
+	PointOfInterestID uint `gorm:"primaryKey"`
+	DetailID          uint `gorm:"primaryKey"`
+}
+
+type PointOfInterestLink struct {
+	PointOfInterestID uint `gorm:"primaryKey"`
+	LinkID            uint `gorm:"primaryKey"`
+}
+
+type PointOfInterestCategory struct {
+	PointOfInterestID uint `gorm:"primaryKey"`
+	CategoryID        uint `gorm:"primaryKey"`
+}
+
 func (p PointOfInterest) ToLegacyPointOfInterest(orderInRoute uint) LegacyPointOfInterest {
 	longitude := strconv.FormatFloat(p.Longitude, 'f', 2, 64)
 	latitude := strconv.FormatFloat(p.Latitude, 'f', 2, 64)
@@ -215,14 +300,4 @@ type User struct {
 type Role struct {
 	ID   uint   `gorm:"primaryKey" json:"id"`
 	Name string `gorm:"not null;unique" json:"name"`
-}
-
-type RoutesPointsOfInterest struct {
-	RouteID           uint `gorm:"primaryKey"`
-	PointOfInterestID uint `gorm:"primaryKey"`
-	Position          uint `gorm:"not null"`
-}
-
-func (RoutesPointsOfInterest) TableName() string {
-	return "routes_points_of_interest"
 }
