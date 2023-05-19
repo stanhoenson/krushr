@@ -63,3 +63,7 @@ func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link 
 func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entities *[]T) (*[]T, error) {
 	return repositories.UpdateEntities(entities, database.Db)
 }
+
+func UpdateColumn[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, column string, value any) (*T, error) {
+	return repositories.UpdateColumn(entity, column, value, database.Db)
+}

@@ -186,3 +186,14 @@ func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link 
 
 	return entities, nil
 }
+
+func UpdateColumn[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, column string, value any, tx *gorm.DB) (*T, error) {
+
+	result := tx.Model(&entity).Update(column, value)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return entity, nil
+}

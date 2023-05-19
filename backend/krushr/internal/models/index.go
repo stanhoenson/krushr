@@ -166,18 +166,18 @@ type Status struct {
 }
 
 type PointOfInterest struct {
-	ID         uint         `gorm:"primaryKey" json:"id"`
-	Name       string       `gorm:"not null;uniqueIndex:poiIndex" json:"name"`
-	Longitude  float64      `gorm:"not null;uniqueIndex:poiIndex" json:"longitude"`
-	Latitude   float64      `gorm:"not null;uniqueIndex:poiIndex" json:"latitude"`
-	Images     []*Image     `gorm:"many2many:points_of_interest_images;constraint:OnDelete:CASCADE" json:"images"`
-	Details    []*Detail    `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"details"`
-	Links      []*Link      `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"links"`
-	Categories []*Category  `gorm:"many2many:points_of_interest_categories;constraint:OnDelete:CASCADE" json:"categories"`
-	Routes     []*Route     `gorm:"many2many:routes_points_of_interest;constraint:OnDelete:CASCADE" json:"routes"`
-	User       User         `json:"user"`
-	UserID     uint         `gorm:"not null" json:"userId"`
-	Support    sql.NullBool `gorm:"not null;default:false" json:"support"`
+	ID         uint        `gorm:"primaryKey" json:"id"`
+	Name       string      `gorm:"not null;uniqueIndex:poiIndex" json:"name"`
+	Longitude  float64     `gorm:"not null;uniqueIndex:poiIndex" json:"longitude"`
+	Latitude   float64     `gorm:"not null;uniqueIndex:poiIndex" json:"latitude"`
+	Images     []*Image    `gorm:"many2many:points_of_interest_images;constraint:OnDelete:CASCADE" json:"images"`
+	Details    []*Detail   `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"details"`
+	Links      []*Link     `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"links"`
+	Categories []*Category `gorm:"many2many:points_of_interest_categories;constraint:OnDelete:CASCADE" json:"categories"`
+	Routes     []*Route    `gorm:"many2many:routes_points_of_interest;constraint:OnDelete:CASCADE" json:"routes"`
+	User       User        `json:"user"`
+	UserID     uint        `gorm:"not null" json:"userId"`
+	Support    bool        `gorm:"not null;default:false" json:"support"`
 }
 
 func (p PointOfInterest) ToLegacyPointOfInterest(orderInRoute uint) LegacyPointOfInterest {

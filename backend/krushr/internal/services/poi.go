@@ -1,7 +1,6 @@
 package services
 
 import (
-	"database/sql"
 	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
@@ -31,9 +30,7 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 		return nil, err
 	}
 
-	var nullBool sql.NullBool
-	nullBool.Scan(putPointOfInterestBody.Support)
-	retrievedPointOfInterest.Support = nullBool
+	retrievedPointOfInterest.Support = putPointOfInterestBody.Support
 	retrievedPointOfInterest.Name = putPointOfInterestBody.Name
 	retrievedPointOfInterest.Longitude = putPointOfInterestBody.Longitude
 	retrievedPointOfInterest.Latitude = putPointOfInterestBody.Latitude
@@ -45,12 +42,13 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 
 	replacePoiImageAssociations(retrievedPointOfInterest, &pointOfInterestRelatedEntries.images, tx)
 
-	updatePointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
+	updatedPointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
+	updatedPointOfInterest, err = repositories.UpdateColumn(updatedPointOfInterest, "support", putPointOfInterestBody.Support, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	return updatePointOfInterest, err
+	return updatedPointOfInterest, err
 }
 
 type pointOfInterestRelatedEntries struct {
@@ -123,10 +121,7 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 		return nil, err
 	}
 
-	var nullBool sql.NullBool
-	nullBool.Scan(postPointOfInterestBody.Support)
 	pointOfInterest := models.PointOfInterest{
-		Support:    nullBool,
 		Name:       postPointOfInterestBody.Name,
 		Longitude:  postPointOfInterestBody.Longitude,
 		Latitude:   postPointOfInterestBody.Latitude,
@@ -138,11 +133,12 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	}
 
 	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
+	updatedPointOfInterest, err := repositories.UpdateColumn(createdPointOfInterest, "support", postPointOfInterestBody.Support, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	return createdPointOfInterest, err
+	return updatedPointOfInterest, err
 }
 func replacePoiImageAssociations(poi *models.PointOfInterest, images *[]*models.Image, tx *gorm.DB) error {
 	var oldImages []models.Image
