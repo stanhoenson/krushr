@@ -1,6 +1,7 @@
 package services
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
@@ -30,17 +31,19 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 		return nil, err
 	}
 
+	var nullBool sql.NullBool
+	nullBool.Scan(putPointOfInterestBody.Support)
+	retrievedPointOfInterest.Support = nullBool
 	retrievedPointOfInterest.Name = putPointOfInterestBody.Name
 	retrievedPointOfInterest.Longitude = putPointOfInterestBody.Longitude
 	retrievedPointOfInterest.Latitude = putPointOfInterestBody.Latitude
 	retrievedPointOfInterest.Categories = pointOfInterestRelatedEntries.categories
 	tx.Model(&retrievedPointOfInterest).Association("Categories").Replace(retrievedPointOfInterest.Categories)
-	retrievedPointOfInterest.Details = pointOfInterestRelatedEntries.details
-	tx.Model(&retrievedPointOfInterest).Association("Details").Replace(retrievedPointOfInterest.Details)
-	retrievedPointOfInterest.Links = pointOfInterestRelatedEntries.links
-	tx.Model(&retrievedPointOfInterest).Association("Links").Replace(retrievedPointOfInterest.Links)
-	retrievedPointOfInterest.Images = pointOfInterestRelatedEntries.images
-	tx.Model(&retrievedPointOfInterest).Association("Images").Replace(retrievedPointOfInterest.Images)
+	replacePoiLinkAssociations(retrievedPointOfInterest, &pointOfInterestRelatedEntries.links, tx)
+
+	replacePoiDetailAssociations(retrievedPointOfInterest, &pointOfInterestRelatedEntries.details, tx)
+
+	replacePoiImageAssociations(retrievedPointOfInterest, &pointOfInterestRelatedEntries.images, tx)
 
 	updatePointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
 	if err != nil {
@@ -59,8 +62,12 @@ type pointOfInterestRelatedEntries struct {
 
 func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *models.PostPointOfInterestBody, tx *gorm.DB) (*pointOfInterestRelatedEntries, error) {
 	images, err := repositories.GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs, tx)
-	if err != nil {
-		return nil, fmt.Errorf("Error retrieving images" + err.Error())
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, fmt.Errorf("Error retrieving images")
+	}
+	if err == gorm.ErrRecordNotFound {
+		images = &[]models.Image{}
 	}
 
 	// find or create links
@@ -116,7 +123,10 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 		return nil, err
 	}
 
+	var nullBool sql.NullBool
+	nullBool.Scan(postPointOfInterestBody.Support)
 	pointOfInterest := models.PointOfInterest{
+		Support:    nullBool,
 		Name:       postPointOfInterestBody.Name,
 		Longitude:  postPointOfInterestBody.Longitude,
 		Latitude:   postPointOfInterestBody.Latitude,
@@ -133,6 +143,67 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	}
 
 	return createdPointOfInterest, err
+}
+func replacePoiImageAssociations(poi *models.PointOfInterest, images *[]*models.Image, tx *gorm.DB) error {
+	var oldImages []models.Image
+	for _, image := range poi.Images {
+		oldImages = append(oldImages, *image)
+	}
+	tx.Model(&poi).Association("Images").Delete(poi.Images)
+	tx.Model(&poi).Association("Images").Append(images)
+	for _, image := range oldImages {
+		var count int64
+		//TODO raw sql might just be better
+		tx.Raw("SELECT COUNT(*) FROM points_of_interest_images WHERE image_id = ?", image.ID).Scan(&count)
+		if count == 0 {
+			tx.Delete(image, image)
+		}
+
+	}
+	poi.Images = *images
+	return nil
+
+}
+func replacePoiLinkAssociations(poi *models.PointOfInterest, links *[]*models.Link, tx *gorm.DB) error {
+	var oldLinks []models.Link
+	for _, link := range poi.Links {
+		oldLinks = append(oldLinks, *link)
+	}
+	tx.Model(&poi).Association("Links").Delete(poi.Images)
+	tx.Model(&poi).Association("Links").Append(links)
+	for _, link := range oldLinks {
+		var count int64
+		//TODO raw sql might just be better
+		tx.Raw("SELECT COUNT(*) FROM points_of_interest_links WHERE link_id = ?", link.ID).Scan(&count)
+		if count == 0 {
+			tx.Delete(link, link)
+		}
+
+	}
+	poi.Links = *links
+	return nil
+
+}
+
+func replacePoiDetailAssociations(poi *models.PointOfInterest, details *[]*models.Detail, tx *gorm.DB) error {
+	var oldDetails []models.Detail
+	for _, detail := range poi.Details {
+		oldDetails = append(oldDetails, *detail)
+	}
+	tx.Model(&poi).Association("Details").Delete(poi.Details)
+	tx.Model(&poi).Association("Details").Append(details)
+	for _, detail := range oldDetails {
+		var count int64
+		//TODO raw sql might just be better
+		tx.Raw("SELECT COUNT(*) FROM points_of_interest_details WHERE detail_id = ?", detail.ID).Scan(&count)
+		if count == 0 {
+			tx.Delete(detail, detail)
+		}
+
+	}
+	poi.Details = *details
+	return nil
+
 }
 
 func FindOrCreateOrUpdatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBody, authenticatedUser *models.User, tx *gorm.DB) (*models.PointOfInterest, error) {

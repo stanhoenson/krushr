@@ -1,33 +1,13 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 	"strconv"
 
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/env"
-	"gorm.io/gorm"
 )
-
-func checkAndDeleteRelatedEntity[T any, B any](tx *gorm.DB, whereStatement string, entityTwoID uint) error {
-	var entityOne T
-	var entityTwo B
-	// Check if the related entity (Entity2) has any other relationships
-	var count int64
-	if err := tx.Model(&entityOne).Where(whereStatement, entityTwoID).Count(&count).Error; err != nil {
-		return err
-	}
-	fmt.Println(count)
-
-	// If there are no other relationships, delete the related entity (Entity2)
-	if count == 0 {
-		if err := tx.Delete(&entityTwo, entityTwoID).Error; err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
 
 type Route struct {
 	ID               uint               `gorm:"primaryKey" json:"id"`
@@ -42,40 +22,6 @@ type Route struct {
 	Distance         float64            `gorm:"not null" json:"distance"`
 	User             User               `json:"user"`
 	UserID           uint               `gorm:"not null" json:"userId"`
-}
-
-type RouteImage struct {
-	RouteID uint `gorm:"primaryKey"`
-	ImageID uint `gorm:"primaryKey"`
-}
-
-func (RouteImage) TableName() string {
-	return "routes_images"
-}
-
-func (e *RouteImage) AfterDelete(tx *gorm.DB) (err error) {
-	fmt.Println("in the function man")
-	fmt.Println(e)
-	fmt.Println(tx.Statement)
-	if err := checkAndDeleteRelatedEntity[RouteImage, Image](tx, "image_id = ?", e.ImageID); err != nil {
-		return err
-	}
-	return nil
-}
-
-type RouteDetail struct {
-	RouteID  uint `gorm:"primaryKey"`
-	DetailID uint `gorm:"primaryKey"`
-}
-
-type RouteLink struct {
-	RouteID uint `gorm:"primaryKey"`
-	LinkID  uint `gorm:"primaryKey"`
-}
-
-type RouteCategory struct {
-	RouteID    uint `gorm:"primaryKey"`
-	CategoryID uint `gorm:"primaryKey"`
 }
 
 type RoutesPointsOfInterest struct {
@@ -220,38 +166,18 @@ type Status struct {
 }
 
 type PointOfInterest struct {
-	ID         uint        `gorm:"primaryKey" json:"id"`
-	Name       string      `gorm:"not null;uniqueIndex:poiIndex" json:"name"`
-	Longitude  float64     `gorm:"not null;uniqueIndex:poiIndex" json:"longitude"`
-	Latitude   float64     `gorm:"not null;uniqueIndex:poiIndex" json:"latitude"`
-	Images     []*Image    `gorm:"many2many:points_of_interest_images;constraint:OnDelete:CASCADE" json:"images"`
-	Details    []*Detail   `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"details"`
-	Links      []*Link     `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"links"`
-	Categories []*Category `gorm:"many2many:points_of_interest_categories;constraint:OnDelete:CASCADE" json:"categories"`
-	Routes     []*Route    `gorm:"many2many:routes_points_of_interest;constraint:OnDelete:CASCADE" json:"routes"`
-	User       User        `json:"user"`
-	UserID     uint        `gorm:"not null" json:"userId"`
-	Support    bool        `gorm:"not null;default:false" json:"support"`
-}
-
-type PointOfInterestImage struct {
-	PointOfInterestID uint `gorm:"primaryKey"`
-	ImageID           uint `gorm:"primaryKey"`
-}
-
-type PointOfInterestDetail struct {
-	PointOfInterestID uint `gorm:"primaryKey"`
-	DetailID          uint `gorm:"primaryKey"`
-}
-
-type PointOfInterestLink struct {
-	PointOfInterestID uint `gorm:"primaryKey"`
-	LinkID            uint `gorm:"primaryKey"`
-}
-
-type PointOfInterestCategory struct {
-	PointOfInterestID uint `gorm:"primaryKey"`
-	CategoryID        uint `gorm:"primaryKey"`
+	ID         uint         `gorm:"primaryKey" json:"id"`
+	Name       string       `gorm:"not null;uniqueIndex:poiIndex" json:"name"`
+	Longitude  float64      `gorm:"not null;uniqueIndex:poiIndex" json:"longitude"`
+	Latitude   float64      `gorm:"not null;uniqueIndex:poiIndex" json:"latitude"`
+	Images     []*Image     `gorm:"many2many:points_of_interest_images;constraint:OnDelete:CASCADE" json:"images"`
+	Details    []*Detail    `gorm:"many2many:points_of_interest_details;constraint:OnDelete:CASCADE" json:"details"`
+	Links      []*Link      `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"links"`
+	Categories []*Category  `gorm:"many2many:points_of_interest_categories;constraint:OnDelete:CASCADE" json:"categories"`
+	Routes     []*Route     `gorm:"many2many:routes_points_of_interest;constraint:OnDelete:CASCADE" json:"routes"`
+	User       User         `json:"user"`
+	UserID     uint         `gorm:"not null" json:"userId"`
+	Support    sql.NullBool `gorm:"not null;default:false" json:"support"`
 }
 
 func (p PointOfInterest) ToLegacyPointOfInterest(orderInRoute uint) LegacyPointOfInterest {

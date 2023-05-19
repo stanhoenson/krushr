@@ -28,7 +28,7 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 		log.Fatal("failed to initialize database")
 	}
 	// TODO look at ways to do this nicely, only in development
-	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{}, &models.RouteImage{})
+	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
 
 	if err != nil {
 		log.Fatal("failed to auto migrate models")
@@ -39,16 +39,6 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 		log.Fatal("failed to setup join table")
 	}
 	err = db.SetupJoinTable(&models.PointOfInterest{}, "Routes", &models.RoutesPointsOfInterest{})
-	if err != nil {
-		log.Fatal("failed to setup join table")
-	}
-
-	err = db.SetupJoinTable(&models.Route{}, "Images", &models.RouteImage{})
-	if err != nil {
-		log.Fatal("failed to setup join table")
-	}
-
-	err = db.SetupJoinTable(&models.Image{}, "Routes", &models.RouteImage{})
 	if err != nil {
 		log.Fatal("failed to setup join table")
 	}

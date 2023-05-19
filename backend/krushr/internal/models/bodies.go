@@ -69,7 +69,7 @@ type PutStatusBody struct {
 // PointOfInterest
 type PostPointOfInterestBody struct {
 	GetPointOfInterestBody
-	ImageIDs   []uint             `json:"imageIds" binding:"required,min=1"`
+	ImageIDs   []uint             `json:"imageIds"`
 	Details    []PostDetailBody   `json:"details" binding:"required,min=1"`
 	Links      []PostLinkBody     `json:"links"`
 	Categories []PostCategoryBody `json:"categories"`
