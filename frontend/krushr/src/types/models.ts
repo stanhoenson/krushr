@@ -60,6 +60,7 @@ export interface PointOfInterest {
   routes: Route[];
   user: User;
   userId: number;
+    support:boolean;
 }
 
 export interface User {

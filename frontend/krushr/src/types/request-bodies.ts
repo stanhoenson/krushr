@@ -60,6 +60,7 @@ export interface PutStatusBody extends PostStatusBody {}
 
 // PointOfInterest
 export interface PostPointOfInterestBody extends GetPointOfInterestBody {
+  support: boolean;
   imageIds: number[];
   details: PostDetailBody[];
   links: PostLinkBody[];
