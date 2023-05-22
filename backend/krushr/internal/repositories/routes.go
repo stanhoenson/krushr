@@ -43,6 +43,30 @@ func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
 	return &routes, nil
 }
 
+func GetPublishedRouteByID(ID uint, tx *gorm.DB) (*models.Route, error) {
+	var route models.Route
+
+	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND id = ?", constants.PublishedStatusName, ID).First(&route)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &route, nil
+}
+
+func GetPublishedRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, error) {
+	var route models.Route
+
+	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND id = ? OR (id = ? AND user_id = ?)", constants.PublishedStatusName, ID, ID, userID).First(&route)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &route, nil
+}
+
 func GetRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, error) {
 	var route models.Route
 	result := tx.Preload(clause.Associations).Where("id = ?", ID).Where("user_id = ?", userID).First(&route)

@@ -12,6 +12,23 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+func GetPublishedRouteByIDAndUserID(ID, userID uint) (*models.Route, error) {
+	route, err := repositories.GetPublishedRouteByIDAndUserID(ID, userID, database.Db)
+	if err != nil {
+		return nil, err
+	}
+	pointsOfInterest, err := GetPointsOfInterestByRouteIDOrderedByPositionWithAssociations(route.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for index := range route.PointsOfInterest {
+		route.PointsOfInterest[index] = &(*pointsOfInterest)[index]
+	}
+
+	return route, nil
+}
+
 func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
 	route, err := repositories.GetEntityByIDWithAssociations[models.Route](ID, clause.Associations, database.Db)
 	if err != nil {
@@ -35,6 +52,25 @@ func GetRoutesWithAssociationsByUserID(userID uint) (*[]models.Route, error) {
 
 func GetPublishedRoutes() (*[]models.Route, error) {
 	return repositories.GetPublishedRoutes(database.Db)
+}
+
+// TODO not performant
+func GetPublishedRouteByID(ID uint) (*models.Route, error) {
+	route, err := repositories.GetPublishedRouteByID(ID, database.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	pointsOfInterest, err := GetPointsOfInterestByRouteIDOrderedByPositionWithAssociations(route.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for index := range route.PointsOfInterest {
+		route.PointsOfInterest[index] = &(*pointsOfInterest)[index]
+	}
+
+	return route, nil
 }
 
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
@@ -107,7 +143,7 @@ func replaceRouteImageAssociations(route *models.Route, images *[]*models.Image,
 	tx.Model(&route).Association("Images").Append(images)
 	for _, image := range oldImages {
 		var count int64
-		//TODO raw sql might just be better
+		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_images WHERE image_id = ?", image.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(image, image)
@@ -116,8 +152,8 @@ func replaceRouteImageAssociations(route *models.Route, images *[]*models.Image,
 	}
 	route.Images = *images
 	return nil
-
 }
+
 func replaceRouteLinkAssociations(route *models.Route, links *[]*models.Link, tx *gorm.DB) error {
 	var oldLinks []models.Link
 	for _, link := range route.Links {
@@ -127,7 +163,7 @@ func replaceRouteLinkAssociations(route *models.Route, links *[]*models.Link, tx
 	tx.Model(&route).Association("Links").Append(links)
 	for _, link := range oldLinks {
 		var count int64
-		//TODO raw sql might just be better
+		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_links WHERE link_id = ?", link.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(link, link)
@@ -136,7 +172,6 @@ func replaceRouteLinkAssociations(route *models.Route, links *[]*models.Link, tx
 	}
 	route.Links = *links
 	return nil
-
 }
 
 func replaceRouteDetailAssociations(route *models.Route, details *[]*models.Detail, tx *gorm.DB) error {
@@ -148,7 +183,7 @@ func replaceRouteDetailAssociations(route *models.Route, details *[]*models.Deta
 	tx.Model(&route).Association("Details").Append(details)
 	for _, detail := range oldDetails {
 		var count int64
-		//TODO raw sql might just be better
+		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_details WHERE detail_id = ?", detail.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(detail, detail)
@@ -157,7 +192,6 @@ func replaceRouteDetailAssociations(route *models.Route, details *[]*models.Deta
 	}
 	route.Details = *details
 	return nil
-
 }
 
 type routeRelatedEntities struct {

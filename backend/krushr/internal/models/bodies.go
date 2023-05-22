@@ -10,6 +10,7 @@ type PostRouteBody struct {
 	Categories       []PostCategoryBody        `json:"categories" binding:"required,min=1"`
 	StatusID         uint                      `json:"statusId" binding:"required"`
 }
+
 type PostRouteBodyOld struct {
 	Name               string `json:"name" binding:"required"`
 	PointOfInterestIDs []uint `json:"pointOfInterestIds"`
@@ -100,6 +101,7 @@ func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestB
 
 type PutPointOfInterestBody = PostPointOfInterestBody
 
+// TODO client side hash
 type PostUserBody struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`

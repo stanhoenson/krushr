@@ -19,7 +19,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		routes.GET("", func(c *gin.Context) {
 			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
 				user, err := utils.GetUserFromContext(c)
-
 				if err != nil {
 					return services.GetPublishedRoutes()
 				}
@@ -33,7 +32,16 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		})
 		routes.GET("/:id", func(ctx *gin.Context) {
 			GetByID(ctx, func(c *gin.Context, ID uint) (*models.Route, error) {
-				return services.GetRouteByIDWithAssociations(ID)
+				user, err := utils.GetUserFromContext(c)
+				if err != nil {
+					return services.GetPublishedRouteByID(ID)
+				}
+
+				if utils.HasRole(c, []string{constants.AdminRoleName}) {
+					return services.GetRouteByIDWithAssociations(ID)
+				}
+
+				return services.GetPublishedRouteByIDAndUserID(ID, user.ID)
 			})
 		})
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
