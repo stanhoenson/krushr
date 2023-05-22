@@ -91,7 +91,8 @@
   }
 
   function handleSupportChange(event: any) {
-    if (!pointOfInterest.name && event.target.checked) pointOfInterest.name = "support point";
+    if (!pointOfInterest.name && event.target.checked)
+      pointOfInterest.name = "support point";
     pointOfInterest = pointOfInterest;
   }
 </script>
