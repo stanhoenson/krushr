@@ -796,6 +796,11 @@ footer nav.flex {
 	margin-bottom: var(--space-2xl);
 }
 
+label.support {
+	display: block;
+	margin-bottom: var(--space-3xs);
+}
+
 footer p {
 	text-align: center;
 }

@@ -148,14 +148,14 @@
             href="#">Move to {position + 1}</button
           >
         </div>
-        <hr />
-        <label>support point</label>
-        <input
-          type="checkbox"
-          bind:checked={pointOfInterest.support}
-          on:change={handleSupportChange}
-        />
       </div>
+			<hr />
+			<label class="support">Support point</label>
+			<input
+					type="checkbox"
+												 bind:checked={pointOfInterest.support}
+					on:change={handleSupportChange}
+					/>
     </div>
   </div>
   {#if !pointOfInterest.support}
