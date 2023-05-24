@@ -22,7 +22,7 @@ func DeleteRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route,
 func GetRoutesWithAssociationsByUserID(userID uint, tx *gorm.DB) (*[]models.Route, error) {
 	var routes []models.Route
 
-	result := tx.Preload(clause.Associations).Joins("Status").Where("user_id = ? OR (user_id != ? AND status.name = ? )", userID, userID, constants.PublishedStatusName).Find(&routes)
+	result := tx.Preload(clause.Associations).Joins("Status").Where("routes.user_id = ? OR (routes.user_id != ? AND status.name = ? )", userID, userID, constants.PublishedStatusName).Find(&routes)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -58,7 +58,7 @@ func GetPublishedRouteByID(ID uint, tx *gorm.DB) (*models.Route, error) {
 func GetPublishedRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, error) {
 	var route models.Route
 
-	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND id = ? OR (id = ? AND user_id = ?)", constants.PublishedStatusName, ID, ID, userID).First(&route)
+	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND routes.id = ? OR (routes.id = ? AND routes.user_id = ?)", constants.PublishedStatusName, ID, ID, userID).First(&route)
 
 	if result.Error != nil {
 		return nil, result.Error

@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/database"
@@ -40,6 +39,12 @@ func TestRoutesRoutes(t *testing.T) {
 		t.Run("testAdminGetAllRoutes", func(t *testing.T) {
 			testAdminGetAllRoutes(t, r)
 		})
+		t.Run("testCreatorGetOwnUnpublishedRoute", func(t *testing.T) {
+			testCreatorGetOwnUnpublishedRoute(t, r)
+		})
+		t.Run("testCreatorGetOthersUnpublishedRoute", func(t *testing.T) {
+			testCreatorGetOthersUnpublishedRoute(t, r)
+		})
 	})
 
 	os.Remove("test/test.db")
@@ -57,40 +62,142 @@ func testGetAllRoutes(t *testing.T, r *gin.Engine) {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, 2, len(routes))
 }
 
 func testCreatorGetAllRoutes(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	expirationTime := time.Now().Add(constants.TokenValidityPeriod)
-	jwt, _ := services.GenerateJWTWithUser(user, expirationTime)
-
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/routes", nil)
-	req.Header.Add("Authorization", jwt)
-	r.ServeHTTP(w, req)
-
-	var routes []models.Route
-	err := json.Unmarshal(w.Body.Bytes(), &routes)
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, 200, w.Code)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var routes []models.Route
+	err = json.Unmarshal(w.Body.Bytes(), &routes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, route := range routes {
+		if route.Status.Name == constants.UnpublishedStatusName && route.UserID != user.ID {
+			t.Errorf("found unpublished route by someone else")
+		}
+	}
+
+	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, 3, len(routes))
 }
 
 func testAdminGetAllRoutes(t *testing.T, r *gin.Engine) {
-}
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-func testAdminGetOwnUnpublishedRoute(t *testing.T, r *gin.Engine) {
-}
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
 
-func testAdminGetOthersUnpublishedRoute(t *testing.T, r *gin.Engine) {
+	var routes []models.Route
+	err = json.Unmarshal(w.Body.Bytes(), &routes)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, 4, len(routes))
 }
 
 func testAdminGetRoute(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/route/1", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var route models.Route
+	err = json.Unmarshal(w.Body.Bytes(), &route)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "Example", route.Name)
+}
+
+func testCreatorGetOwnUnpublishedRoute(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes/4", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var route models.Route
+	err = json.Unmarshal(w.Body.Bytes(), &route)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, user.Email, route.User.Email)
+	assert.Equal(t, constants.UnpublishedStatusName, route.Status.Name)
+}
+
+func testCreatorGetOthersUnpublishedRoute(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/routes/2", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func populateDatabaseWithDummyData() {
