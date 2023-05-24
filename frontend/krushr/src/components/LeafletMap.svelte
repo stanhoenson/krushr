@@ -35,7 +35,7 @@
     // marker.setLatLng(e.latlng);
   }
 
-  //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it!
+  //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it! PROB rewrite this
   function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
     let waypoints: L.LatLng[] = [];
     console.log(position);
@@ -43,12 +43,13 @@
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         let options = layer.options as ExtendedMarkerOptions;
-        console.log("found", options.position);
         if (
           options.position !== null &&
           !poiIndexesFound.includes(options.position)
         ) {
-          console.log("updating", options.position);
+          if (options.position >= pois.length) {
+            layer.remove();
+          }
           let poi = pois[options.position];
           if (poi) {
             layer.setLatLng([poi.latitude, poi.longitude]);
