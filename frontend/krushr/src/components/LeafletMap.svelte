@@ -3,6 +3,7 @@
   import { onMount, afterUpdate, onDestroy } from "svelte";
   import { goudaCoordinates } from "../constants";
   import "leaflet-routing-machine";
+  import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
   import type {
     CoordinatesWithPosition,
     ExtendedMarkerOptions,
@@ -75,11 +76,17 @@
     if (!routingControl) {
       routingControl = L.Routing.control({
         waypoints,
+        plan: new L.Routing.Plan([], {
+          createMarker: () => {
+            return false;
+          },
+        }),
       }).addTo(map);
+
       routingControl.hide();
     } else {
+      routingControl;
       routingControl.setWaypoints(waypoints);
-      routingControl.hide();
     }
   }
 
