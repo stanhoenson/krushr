@@ -3,6 +3,7 @@
   import { onMount, afterUpdate, onDestroy } from "svelte";
   import { goudaCoordinates } from "../constants";
   import "leaflet-routing-machine";
+  import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
   import type {
     CoordinatesWithPosition,
     ExtendedMarkerOptions,
@@ -34,7 +35,7 @@
     // marker.setLatLng(e.latlng);
   }
 
-  //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it!
+  //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it! PROB rewrite this
   function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
     let waypoints: L.LatLng[] = [];
     console.log(position);
@@ -42,12 +43,13 @@
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         let options = layer.options as ExtendedMarkerOptions;
-        console.log("found", options.position);
         if (
           options.position !== null &&
           !poiIndexesFound.includes(options.position)
         ) {
-          console.log("updating", options.position);
+          if (options.position >= pois.length) {
+            layer.remove();
+          }
           let poi = pois[options.position];
           if (poi) {
             layer.setLatLng([poi.latitude, poi.longitude]);
@@ -75,11 +77,17 @@
     if (!routingControl) {
       routingControl = L.Routing.control({
         waypoints,
+        plan: new L.Routing.Plan([], {
+          createMarker: () => {
+            return false;
+          },
+        }),
       }).addTo(map);
+
       routingControl.hide();
     } else {
+      routingControl;
       routingControl.setWaypoints(waypoints);
-      routingControl.hide();
     }
   }
 
