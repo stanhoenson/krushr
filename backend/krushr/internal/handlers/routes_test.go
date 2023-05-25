@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -19,6 +20,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	adminUserID         uint = 1
+	creatorUserID       uint = 2
+	publishedStatusID   uint = 1
+	unpublishedStatusID uint = 2
 )
 
 // TODO prob some issues when .env variables are used somewhere?
@@ -44,6 +52,12 @@ func TestRoutesRoutes(t *testing.T) {
 		})
 		t.Run("testCreatorGetOthersUnpublishedRoute", func(t *testing.T) {
 			testCreatorGetOthersUnpublishedRoute(t, r)
+		})
+		t.Run("testCreatorDeleteOwnRoute", func(t *testing.T) {
+			testCreatorDeleteOwnRoute(t, r)
+		})
+		t.Run("testCreatorDeleteOthersRoute", func(t *testing.T) {
+			testCreatorDeleteOthersRoute(t, r)
 		})
 	})
 
@@ -200,35 +214,68 @@ func testCreatorGetOthersUnpublishedRoute(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
-func populateDatabaseWithDummyData() {
-	// Create roles
-	adminRole := models.Role{ID: 1, Name: constants.AdminRoleName}
-	result := database.Db.Save(&adminRole)
-	if result.Error != nil {
-		// Handle error
-	}
-
-	creatorRole := models.Role{ID: 2, Name: constants.CreatorRoleName}
-	result = database.Db.Save(&creatorRole)
-	if result.Error != nil {
-		// Handle error
-	}
-
-	// Create creator user
-	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
-	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
+func testCreatorDeleteOwnRoute(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
 	if err != nil {
+		t.Fatal(err)
 	}
 
-	// CREATE ADMIN PUBLISHED ROUTE
+	addRouteToDatabase(5, creatorUserID, publishedStatusID, "Boris")
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/5", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var count int
+	database.Db.Raw("SELECT COUNT(*) FROM routes WHERE id = 5").Scan(&count)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "5", w.Body.String())
+	assert.Equal(t, 0, count)
+}
+
+func testCreatorDeleteOthersRoute(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("DELETE", "/routes/1", nil)
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var count int
+	database.Db.Raw("SELECT COUNT(*) FROM routes WHERE id = 1").Scan(&count)
+	fmt.Println(count)
+
+	assert.Equal(t, 1, count)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func addRouteToDatabase(ID, userID, statusID uint, name string) {
 	route := models.Route{
-		ID:       1,
-		Name:     "Example Route",
+		ID:       ID,
+		Name:     name,
 		Distance: 10.5,
-		UserID:   1,
-		StatusID: 1,
+		UserID:   userID,
+		StatusID: statusID,
 	}
 
+	// TODO refactor IDs
 	// Create associations
 	image := models.Image{ID: 1, Path: "example/image.jpg"}
 	route.Images = []*models.Image{&image}
@@ -247,19 +294,19 @@ func populateDatabaseWithDummyData() {
 		Name:      "Example POI",
 		Longitude: 123.456,
 		Latitude:  78.90,
-		UserID:    1,
+		UserID:    userID,
 		Support:   false,
 	}
 	route.PointsOfInterest = []*models.PointOfInterest{&poi}
 
 	// Save route and associations
-	result = database.Db.Save(&route)
+	result := database.Db.Save(&route)
 	if result.Error != nil {
 		// Handle error
 	}
 
 	// Create many-to-many relationships
-	err = database.Db.Model(&route).Association("Images").Append(&image)
+	err := database.Db.Model(&route).Association("Images").Append(&image)
 	if err != nil {
 		// Handle error
 	}
@@ -304,259 +351,358 @@ func populateDatabaseWithDummyData() {
 	if err != nil {
 		// Handle error
 	}
+}
 
-	// CREATE ADMIN UNPUBLISHED ROUTE
-	route = models.Route{
-		ID:       2,
-		Name:     "Example Route 2",
-		Distance: 10.5,
-		UserID:   1,
-		StatusID: 2,
-	}
-
-	// Create associations
-	image = models.Image{ID: 2, Path: "example/image.jpg"}
-	route.Images = []*models.Image{&image}
-
-	detail = models.Detail{ID: 2, Text: "Example Detail"}
-	route.Details = []*models.Detail{&detail}
-
-	link = models.Link{ID: 2, Text: "Example Link", URL: "https://example.com"}
-	route.Links = []*models.Link{&link}
-
-	category = models.Category{ID: 2, Name: "Example Category", Position: 2}
-	route.Categories = []*models.Category{&category}
-
-	poi = models.PointOfInterest{
-		ID:        2,
-		Name:      "Example POI",
-		Longitude: 123.456,
-		Latitude:  78.90,
-		UserID:    1,
-		Support:   false,
-	}
-	route.PointsOfInterest = []*models.PointOfInterest{&poi}
-
-	// Save route and associations
-	result = database.Db.Save(&route)
-	if result.Error != nil {
-		// Handle error
-	}
-
-	// Create many-to-many relationships
-	err = database.Db.Model(&route).Association("Images").Append(&image)
+func populateDatabaseWithDummyData() {
+	// Create creator user
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
+	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
 	if err != nil {
-		// Handle error
 	}
 
-	err = database.Db.Model(&route).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	addRouteToDatabase(1, adminUserID, publishedStatusID, "Example Route 1")
+	addRouteToDatabase(2, adminUserID, unpublishedStatusID, "Example Route 2")
+	addRouteToDatabase(3, creatorUserID, publishedStatusID, "Example Route 3")
+	addRouteToDatabase(4, creatorUserID, unpublishedStatusID, "Example Route 4")
 
-	err = database.Db.Model(&route).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	// CREATE ADMIN PUBLISHED ROUTE
+	// 	route := models.Route{
+	// 		ID:       1,
+	// 		Name:     "Example Route",
+	// 		Distance: 10.5,
+	// 		UserID:   1,
+	// 		StatusID: 1,
+	// 	}
 
-	err = database.Db.Model(&route).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Create associations
+	// 	image := models.Image{ID: 1, Path: "example/image.jpg"}
+	// 	route.Images = []*models.Image{&image}
 
-	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
-	if err != nil {
-		// Handle error
-	}
+	// 	detail := models.Detail{ID: 1, Text: "Example Detail"}
+	// 	route.Details = []*models.Detail{&detail}
 
-	// Create many-to-many associations for points of interest
-	err = database.Db.Model(&poi).Association("Images").Append(&image)
-	if err != nil {
-		// Handle error
-	}
+	// 	link := models.Link{ID: 1, Text: "Example Link", URL: "https://example.com"}
+	// 	route.Links = []*models.Link{&link}
 
-	err = database.Db.Model(&poi).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	// 	category := models.Category{ID: 1, Name: "Example Category", Position: 1}
+	// 	route.Categories = []*models.Category{&category}
 
-	err = database.Db.Model(&poi).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	poi := models.PointOfInterest{
+	// 		ID:        1,
+	// 		Name:      "Example POI",
+	// 		Longitude: 123.456,
+	// 		Latitude:  78.90,
+	// 		UserID:    1,
+	// 		Support:   false,
+	// 	}
+	// 	route.PointsOfInterest = []*models.PointOfInterest{&poi}
 
-	err = database.Db.Model(&poi).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Save route and associations
+	// 	result = database.Db.Save(&route)
+	// 	if result.Error != nil {
+	// 		// Handle error
+	// 	}
 
-	// CREATE CREATOR PUBLISHED ROUTE
-	route = models.Route{
-		ID:       3,
-		Name:     "Example Route 3",
-		Distance: 10.5,
-		UserID:   2,
-		StatusID: 1,
-	}
+	// 	// Create many-to-many relationships
+	// 	err = database.Db.Model(&route).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Create associations
-	image = models.Image{ID: 3, Path: "example/image.jpg"}
-	route.Images = []*models.Image{&image}
+	// 	err = database.Db.Model(&route).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	detail = models.Detail{ID: 3, Text: "Example Detail"}
-	route.Details = []*models.Detail{&detail}
+	// 	err = database.Db.Model(&route).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	link = models.Link{ID: 3, Text: "Example Link", URL: "https://example.com"}
-	route.Links = []*models.Link{&link}
+	// 	err = database.Db.Model(&route).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	category = models.Category{ID: 3, Name: "Example Category", Position: 3}
-	route.Categories = []*models.Category{&category}
+	// 	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	poi = models.PointOfInterest{
-		ID:        3,
-		Name:      "Example POI",
-		Longitude: 123.456,
-		Latitude:  78.90,
-		UserID:    2,
-		Support:   false,
-	}
-	route.PointsOfInterest = []*models.PointOfInterest{&poi}
+	// 	// Create many-to-many associations for points of interest
+	// 	err = database.Db.Model(&poi).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Save route and associations
-	result = database.Db.Save(&route)
-	if result.Error != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Create many-to-many relationships
-	err = database.Db.Model(&route).Association("Images").Append(&image)
-	if err != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	err = database.Db.Model(&route).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	err = database.Db.Model(&route).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	// CREATE ADMIN UNPUBLISHED ROUTE
+	// 	route = models.Route{
+	// 		ID:       2,
+	// 		Name:     "Example Route 2",
+	// 		Distance: 10.5,
+	// 		UserID:   1,
+	// 		StatusID: 2,
+	// 	}
 
-	err = database.Db.Model(&route).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Create associations
+	// 	image = models.Image{ID: 2, Path: "example/image.jpg"}
+	// 	route.Images = []*models.Image{&image}
 
-	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
-	if err != nil {
-		// Handle error
-	}
+	// 	detail = models.Detail{ID: 2, Text: "Example Detail"}
+	// 	route.Details = []*models.Detail{&detail}
 
-	// Create many-to-many associations for points of interest
-	err = database.Db.Model(&poi).Association("Images").Append(&image)
-	if err != nil {
-		// Handle error
-	}
+	// 	link = models.Link{ID: 2, Text: "Example Link", URL: "https://example.com"}
+	// 	route.Links = []*models.Link{&link}
 
-	err = database.Db.Model(&poi).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	// 	category = models.Category{ID: 2, Name: "Example Category", Position: 2}
+	// 	route.Categories = []*models.Category{&category}
 
-	err = database.Db.Model(&poi).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	poi = models.PointOfInterest{
+	// 		ID:        2,
+	// 		Name:      "Example POI",
+	// 		Longitude: 123.456,
+	// 		Latitude:  78.90,
+	// 		UserID:    1,
+	// 		Support:   false,
+	// 	}
+	// 	route.PointsOfInterest = []*models.PointOfInterest{&poi}
 
-	err = database.Db.Model(&poi).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Save route and associations
+	// 	result = database.Db.Save(&route)
+	// 	if result.Error != nil {
+	// 		// Handle error
+	// 	}
 
-	// CREATE CREATOR UNPUBLISHED ROUTE
-	route = models.Route{
-		ID:       4,
-		Name:     "Example Route 4",
-		Distance: 10.5,
-		UserID:   2,
-		StatusID: 2,
-	}
+	// 	// Create many-to-many relationships
+	// 	err = database.Db.Model(&route).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Create associations
-	image = models.Image{ID: 4, Path: "example/image.jpg"}
-	route.Images = []*models.Image{&image}
+	// 	err = database.Db.Model(&route).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	detail = models.Detail{ID: 4, Text: "Example Detail"}
-	route.Details = []*models.Detail{&detail}
+	// 	err = database.Db.Model(&route).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	link = models.Link{ID: 4, Text: "Example Link", URL: "https://example.com"}
-	route.Links = []*models.Link{&link}
+	// 	err = database.Db.Model(&route).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	category = models.Category{ID: 4, Name: "Example Category", Position: 4}
-	route.Categories = []*models.Category{&category}
+	// 	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	poi = models.PointOfInterest{
-		ID:        4,
-		Name:      "Example POI",
-		Longitude: 123.456,
-		Latitude:  78.90,
-		UserID:    2,
-		Support:   false,
-	}
-	route.PointsOfInterest = []*models.PointOfInterest{&poi}
+	// 	// Create many-to-many associations for points of interest
+	// 	err = database.Db.Model(&poi).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Save route and associations
-	result = database.Db.Save(&route)
-	if result.Error != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	// Create many-to-many relationships
-	err = database.Db.Model(&route).Association("Images").Append(&image)
-	if err != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	err = database.Db.Model(&route).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	// 	err = database.Db.Model(&poi).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
 
-	err = database.Db.Model(&route).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	// CREATE CREATOR PUBLISHED ROUTE
+	// 	route = models.Route{
+	// 		ID:       3,
+	// 		Name:     "Example Route 3",
+	// 		Distance: 10.5,
+	// 		UserID:   2,
+	// 		StatusID: 1,
+	// 	}
 
-	err = database.Db.Model(&route).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Create associations
+	// 	image = models.Image{ID: 3, Path: "example/image.jpg"}
+	// 	route.Images = []*models.Image{&image}
 
-	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
-	if err != nil {
-		// Handle error
-	}
+	// 	detail = models.Detail{ID: 3, Text: "Example Detail"}
+	// 	route.Details = []*models.Detail{&detail}
 
-	// Create many-to-many associations for points of interest
-	err = database.Db.Model(&poi).Association("Images").Append(&image)
-	if err != nil {
-		// Handle error
-	}
+	// 	link = models.Link{ID: 3, Text: "Example Link", URL: "https://example.com"}
+	// 	route.Links = []*models.Link{&link}
 
-	err = database.Db.Model(&poi).Association("Details").Append(&detail)
-	if err != nil {
-		// Handle error
-	}
+	// 	category = models.Category{ID: 3, Name: "Example Category", Position: 3}
+	// 	route.Categories = []*models.Category{&category}
 
-	err = database.Db.Model(&poi).Association("Links").Append(&link)
-	if err != nil {
-		// Handle error
-	}
+	// 	poi = models.PointOfInterest{
+	// 		ID:        3,
+	// 		Name:      "Example POI",
+	// 		Longitude: 123.456,
+	// 		Latitude:  78.90,
+	// 		UserID:    2,
+	// 		Support:   false,
+	// 	}
+	// 	route.PointsOfInterest = []*models.PointOfInterest{&poi}
 
-	err = database.Db.Model(&poi).Association("Categories").Append(&category)
-	if err != nil {
-		// Handle error
-	}
+	// 	// Save route and associations
+	// 	result = database.Db.Save(&route)
+	// 	if result.Error != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	// Create many-to-many relationships
+	// 	err = database.Db.Model(&route).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	// Create many-to-many associations for points of interest
+	// 	err = database.Db.Model(&poi).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&poi).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&poi).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&poi).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	// CREATE CREATOR UNPUBLISHED ROUTE
+	// 	route = models.Route{
+	// 		ID:       4,
+	// 		Name:     "Example Route 4",
+	// 		Distance: 10.5,
+	// 		UserID:   2,
+	// 		StatusID: 2,
+	// 	}
+
+	// 	// Create associations
+	// 	image = models.Image{ID: 4, Path: "example/image.jpg"}
+	// 	route.Images = []*models.Image{&image}
+
+	// 	detail = models.Detail{ID: 4, Text: "Example Detail"}
+	// 	route.Details = []*models.Detail{&detail}
+
+	// 	link = models.Link{ID: 4, Text: "Example Link", URL: "https://example.com"}
+	// 	route.Links = []*models.Link{&link}
+
+	// 	category = models.Category{ID: 4, Name: "Example Category", Position: 4}
+	// 	route.Categories = []*models.Category{&category}
+
+	// 	poi = models.PointOfInterest{
+	// 		ID:        4,
+	// 		Name:      "Example POI",
+	// 		Longitude: 123.456,
+	// 		Latitude:  78.90,
+	// 		UserID:    2,
+	// 		Support:   false,
+	// 	}
+	// 	route.PointsOfInterest = []*models.PointOfInterest{&poi}
+
+	// 	// Save route and associations
+	// 	result = database.Db.Save(&route)
+	// 	if result.Error != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	// Create many-to-many relationships
+	// 	err = database.Db.Model(&route).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("Categories").Append(&category)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	// Create many-to-many associations for points of interest
+	// 	err = database.Db.Model(&poi).Association("Images").Append(&image)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&poi).Association("Details").Append(&detail)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// 	err = database.Db.Model(&poi).Association("Links").Append(&link)
+	// 	if err != nil {
+	// 		// Handle error
+	// 	}
+
+	// err = database.Db.Model(&poi).Association("Categories").Append(&category)
+	//
+	//	if err != nil {
+	//		// Handle error
+	//	}
 }

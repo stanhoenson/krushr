@@ -32,7 +32,7 @@ func DeleteByID[EntityType any](c *gin.Context, deleteFunction func(c *gin.Conte
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, deletedEntity)
+	c.IndentedJSON(http.StatusOK, ID)
 }
 
 func GetAllDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {

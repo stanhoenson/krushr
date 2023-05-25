@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/stanhoenson/krushr/internal/models"
 
 	"gorm.io/gorm"
@@ -58,6 +60,10 @@ func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | 
 		return nil, result.Error
 	}
 
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no rows affected by delete operation")
+	}
+
 	return entity, nil
 }
 
@@ -78,6 +84,10 @@ func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Lin
 
 	if result.Error != nil {
 		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no rows affected by delete operation")
 	}
 
 	return &entity, nil
@@ -174,6 +184,10 @@ func DeleteEntities[T models.Route | models.Image | models.Detail | models.Link 
 		return nil, result.Error
 	}
 
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no rows affected by delete operation")
+	}
+
 	return entities, nil
 }
 
@@ -188,7 +202,6 @@ func UpdateEntities[T models.Route | models.Image | models.Detail | models.Link 
 }
 
 func UpdateColumn[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, column string, value any, tx *gorm.DB) (*T, error) {
-
 	result := tx.Model(&entity).Update(column, value)
 
 	if result.Error != nil {

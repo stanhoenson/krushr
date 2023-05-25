@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"
 	"gorm.io/gorm"
@@ -11,9 +14,14 @@ func DeleteRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route,
 	var route models.Route
 
 	result := tx.Where("id = ?", ID).Where("user_id = ?", userID).Delete(&route)
+	fmt.Println(result)
 
 	if result.Error != nil {
 		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no route found for the given ID and userID")
 	}
 
 	return &route, nil
