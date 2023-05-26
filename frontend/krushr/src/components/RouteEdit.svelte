@@ -48,8 +48,9 @@
       latitude: goudaCoordinates.latitude,
       imageIds: [],
       details: [{ text: "" }],
-      links: [{ url: "" }],
+      links: [{ url: "", text: "" }],
       categories: [],
+          support:false,
     };
     route.pointsOfInterest.push(newPointOfInterest);
     route = route;
@@ -137,7 +138,7 @@
         name: "",
         imageIds: [],
         details: [{ text: "" }],
-        links: [{ url: "" }],
+        links: [{ url: "",text:"" }],
         categories: [],
         statusId: defaultStatusId,
         pointsOfInterest: [],
@@ -150,10 +151,9 @@
     }
 
     //TODO magic string not good, some undefined checks as well :(
-    viewOnly = !(
-      existingRoute.userId === (user ? user.id : -1) ||
-      user ? user.role.name === "Admin" : false
-    );
+    viewOnly = !(existingRoute.userId === (user ? user.id : -1) || user
+      ? user.role.name === "Admin"
+      : false);
 
     // getRouteById(queryParams);
   });
