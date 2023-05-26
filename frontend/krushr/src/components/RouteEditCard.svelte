@@ -35,7 +35,7 @@
   }
 
   function handleNewLink() {
-    route.links.push({ url: "" });
+    route.links.push({ url: "", text: "" });
     route = route;
   }
 
@@ -100,13 +100,13 @@
           </div>
         {/each}
       </div>
-			<button
-				disabled={viewOnly}
-				type="button"
-				on:click={handleNewImage}
-				class="button block secondary"
-				href="#">New image</button
-			>
+      <button
+        disabled={viewOnly}
+        type="button"
+        on:click={handleNewImage}
+        class="button block secondary"
+        href="#">New image</button
+      >
     </div>
     <div class="info">
       <div class="flex input name">
@@ -157,26 +157,26 @@
         <div class="flex input">
           {#each route.links as link, i}
             <div class="card input-with-delete">
-							<div class="flex input name">
-								<label>Text</label>
-								<input
-									required
-									bind:value={link.text}
-									type="text"
-									name="text"
-									disabled={viewOnly}
-								/>
-							</div>
-							<div id="url" class="flex input name">
-								<label>URL</label>
-								<input
-									bind:value={link.url}
-									type="text"
-									name="link"
-									required
-									disabled={viewOnly}
-								/>
-							</div>
+              <div class="flex input name">
+                <label>Text</label>
+                <input
+                  required
+                  bind:value={link.text}
+                  type="text"
+                  name="text"
+                  disabled={viewOnly}
+                />
+              </div>
+              <div id="url" class="flex input name">
+                <label>URL</label>
+                <input
+                  bind:value={link.url}
+                  type="text"
+                  name="link"
+                  required
+                  disabled={viewOnly}
+                />
+              </div>
               {#if route.links.length > 0 && !viewOnly}
                 <div
                   on:click={handleDeleteLink.bind(null, i)}
