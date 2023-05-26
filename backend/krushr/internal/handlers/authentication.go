@@ -7,6 +7,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/env"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
+	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -57,6 +58,6 @@ func RegisterAuthenticationRoutes(r *gin.Engine) {
 	{
 		routes.POST("/sign-in", signIn)
 		routes.GET("/sign-out", signOut)
-		routes.POST("/sign-up", signUp)
+		routes.POST("/sign-up", wrappers.RoleWrapper([]string{constants.AdminRoleName}, signUp))
 	}
 }
