@@ -3,11 +3,11 @@ package models
 // Route
 type PostRouteBody struct {
 	Name             string                    `json:"name" binding:"required"`
-	PointsOfInterest []PostPointOfInterestBody `json:"pointsOfInterest" binding:"required,min=2"`
+	PointsOfInterest []PostPointOfInterestBody `json:"pointsOfInterest" binding:"required,dive,min=2"`
 	ImageIDs         []uint                    `json:"imageIds" binding:"required,min=1"`
-	Details          []PostDetailBody          `json:"details" binding:"required,min=1"`
-	Links            []PostLinkBody            `json:"links"`
-	Categories       []PostCategoryBody        `json:"categories" binding:"required,min=1"`
+	Details          []PostDetailBody          `json:"details" binding:"required,dive,min=1"`
+	Links            []PostLinkBody            `json:"links" binding:"dive"`
+	Categories       []PostCategoryBody        `json:"categories" binding:"required,dive,min=1"`
 	StatusID         uint                      `json:"statusId" binding:"required"`
 }
 
@@ -71,9 +71,9 @@ type PutStatusBody struct {
 type PostPointOfInterestBody struct {
 	GetPointOfInterestBody
 	ImageIDs   []uint             `json:"imageIds"`
-	Details    []PostDetailBody   `json:"details" binding:"required,min=1"`
-	Links      []PostLinkBody     `json:"links"`
-	Categories []PostCategoryBody `json:"categories"`
+	Details    []PostDetailBody   `json:"details" binding:"required,dive,min=1"`
+	Links      []PostLinkBody     `json:"links" binding:"dive"`
+	Categories []PostCategoryBody `json:"categories" binding:"dive"`
 	Support    bool               `json:"support"`
 }
 
