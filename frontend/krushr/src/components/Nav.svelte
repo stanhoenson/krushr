@@ -32,6 +32,7 @@
       <!-- TODO magic string not good -->
       {#if user.role.name === "Admin"}
         <a class="button" href="/admin">Admin</a>
+        <a class="button" href="/users">Users</a>
       {/if}
       <button on:click={handleSignOut} class="button secondary">Sign out</button
       >

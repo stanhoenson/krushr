@@ -6,7 +6,8 @@ import { BASE_URL } from "./endpoints";
 export async function signUp(signUpBody: SignUpBody): Promise<User> {
   const response = await axios.post<User>(
     `${BASE_URL}/authentication/sign-up`,
-    signUpBody
+    signUpBody,
+    { withCredentials: true }
   );
   return response.data;
 }
