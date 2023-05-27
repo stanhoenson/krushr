@@ -121,7 +121,7 @@
   onMount(async () => {
     const beforeUnloadHandler = (e) => {
       e.preventDefault();
-      e.returnValue = 'Are you sure you want to leave? All changes will be lost'; // This line is required for some browsers
+      return  (e.returnValue = 'Are you sure you want to leave? All changes will be lost'); // This line is required for some browsers
     };
 
     window.addEventListener('beforeunload', beforeUnloadHandler);
