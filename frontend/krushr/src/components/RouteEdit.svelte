@@ -119,6 +119,13 @@
   }
 
   onMount(async () => {
+    const beforeUnloadHandler = (e) => {
+      e.preventDefault();
+      e.returnValue = 'Are you sure you want to leave? All changes will be lost'; // This line is required for some browsers
+    };
+
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
     try {
       user = await getMeUser();
     } catch (e: any) {}
@@ -156,7 +163,11 @@
       : false);
 
     // getRouteById(queryParams);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+    };
   });
+
 
   afterUpdate(async () => {
     //scroll if necessary
