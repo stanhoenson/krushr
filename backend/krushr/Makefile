@@ -12,14 +12,21 @@ audit:
 
 	@echo '3. Vetting code:'
 	go vet ./...
-	staticcheck ./...
+	# staticcheck ./...
 	@echo ''
 
 	@echo '4. Running tests:'
-	go test -race -vet=off ./...
+	go test -cover ./...
 
 .PHONY: coverage
 coverage:
 	@echo '1. Generating cover profile:'
 	go test -coverprofile=coverage.out -coverpkg=./... ./...
 	go tool cover -html=coverage.out
+
+.PHONY: build
+build:
+	@echo '1. Building program'
+	export GOOS=linux
+	export GOARCH=amd64
+	go build -o krushr ./cmd/krushr

@@ -7,7 +7,6 @@ import (
 )
 
 func ValidatePutRoute(route *models.PutRouteBody) error {
-
 	for _, poi := range route.PointsOfInterest {
 		if !poi.Support && len(poi.ImageIDs) == 0 {
 			return fmt.Errorf("point of interest has no image")
@@ -18,7 +17,6 @@ func ValidatePutRoute(route *models.PutRouteBody) error {
 }
 
 func ValidatePostRouteBody(route *models.PostRouteBody) error {
-
 	for _, poi := range route.PointsOfInterest {
 		if !poi.Support && len(poi.ImageIDs) == 0 {
 			return fmt.Errorf("point of interest has no image")

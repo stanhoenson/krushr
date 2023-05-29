@@ -1,4 +1,4 @@
-<script lang="ts">
+c<script lang="ts">
   import XMark from "./icons/XMark.svelte";
 
   export let onClose: null | (() => any) = null;

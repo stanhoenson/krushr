@@ -7,21 +7,18 @@ import (
 )
 
 func ValidateSignUp(user *models.User) error {
-
 	// add more validation rules here
 
 	return nil
 }
 
 func ValidatePostUser(user *models.User) error {
-
 	// add more validation rules here
 
 	return nil
 }
 
 func ValidatePutUser(user *models.User) error {
-
 	// add more validation rules here
 
 	return nil

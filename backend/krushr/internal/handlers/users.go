@@ -49,7 +49,6 @@ func RegisterUserRoutes(r *gin.Engine) {
 		}))
 		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, func(ctx *gin.Context) {
 			DeleteByID(ctx, func(c *gin.Context, ID uint) (*models.User, error) {
-
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
 					return nil, err
@@ -57,13 +56,10 @@ func RegisterUserRoutes(r *gin.Engine) {
 
 				if ID == user.ID {
 					return nil, fmt.Errorf("you cannot delete yourself")
-
 				}
 
 				return services.DeleteEntityByID[models.User](ID)
-
 			})
-
 		}))
 	}
 }

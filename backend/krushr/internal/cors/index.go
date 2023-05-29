@@ -7,7 +7,6 @@ import (
 )
 
 func InitializeCors(r *gin.Engine) {
-
 	defaultCorsConfig := cors.DefaultConfig()
 	defaultCorsConfig.AllowCredentials = true
 	defaultCorsConfig.AllowOrigins = env.AllowedOrigins
