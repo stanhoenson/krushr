@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -34,6 +35,9 @@ func TestAuthenticationRoutes(t *testing.T) {
 		})
 		t.Run("testSignInWrongPassword", func(t *testing.T) {
 			testSignInWrongPassword(t, r)
+		})
+		t.Run("testSignInFaultyBody", func(t *testing.T) {
+			testSignInFaultyBody(t, r)
 		})
 	})
 
@@ -77,6 +81,7 @@ func testSignIn(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, true, jwtCookieFound)
 }
+
 func testSignInWrongPassword(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256("wrong!!!")}
@@ -98,4 +103,24 @@ func testSignInWrongPassword(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 	assert.Equal(t, false, jwtCookieFound)
+}
+func testSignInFaultyBody(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: "this is not sha"}
+
+	signInBodyJson, _ := json.Marshal(signInBody)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPost, "/authentication/sign-in", bytes.NewBuffer(signInBodyJson))
+	r.ServeHTTP(w, req)
+
+	var errorMsg map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &errorMsg)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Key: 'SignInBody.Password' Error:Field validation for 'Password' failed on the 'sha256' tag", errorMsg["error"])
 }
