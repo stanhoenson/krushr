@@ -22,8 +22,8 @@ var (
 	AllowedOrigins    []string
 )
 
-func InitializeEnvironment() {
-	loadEnv()
+func InitializeEnvironment(path string) {
+	loadEnv(path)
 
 	JWTSecret = getEnvVariable("JWT_SECRET")
 	DatabaseName = getEnvVariable("DATABASE_NAME")
@@ -38,8 +38,8 @@ func InitializeEnvironment() {
 	DefaultRoleID = getUintEnvVariable("DEFAULT_ROLE_ID")
 }
 
-func loadEnv() {
-	err := godotenv.Load()
+func loadEnv(path string) {
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}

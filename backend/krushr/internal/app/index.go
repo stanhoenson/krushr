@@ -13,7 +13,7 @@ import (
 )
 
 func Initialize() {
-	env.InitializeEnvironment()
+	env.InitializeEnvironment("./.env")
 
 	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
