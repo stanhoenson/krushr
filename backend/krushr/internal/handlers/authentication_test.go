@@ -3,7 +3,6 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -104,6 +103,7 @@ func testSignInWrongPassword(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 	assert.Equal(t, false, jwtCookieFound)
 }
+
 func testSignInFaultyBody(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{Email: user.Email, Password: "this is not sha"}
@@ -116,7 +116,6 @@ func testSignInFaultyBody(t *testing.T, r *gin.Engine) {
 
 	var errorMsg map[string]string
 	err := json.Unmarshal(w.Body.Bytes(), &errorMsg)
-
 	if err != nil {
 		t.Error(err)
 	}

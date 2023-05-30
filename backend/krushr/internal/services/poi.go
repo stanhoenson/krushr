@@ -43,6 +43,9 @@ func UpdatePointOfInterest(ID uint, putPointOfInterestBody *models.PutPointOfInt
 	replacePoiImageAssociations(retrievedPointOfInterest, &pointOfInterestRelatedEntries.images, tx)
 
 	updatedPointOfInterest, err := repositories.UpdateEntity(retrievedPointOfInterest, tx)
+	if err != nil {
+		return nil, err
+	}
 	updatedPointOfInterest, err = repositories.UpdateColumn(updatedPointOfInterest, "support", putPointOfInterestBody.Support, tx)
 	if err != nil {
 		return nil, err
@@ -62,7 +65,7 @@ func CreateOrUpdatePointOfInterestRelatedEntities(postPointOfInterestBody *model
 	images, err := repositories.GetEntitiesByIDs[models.Image](&postPointOfInterestBody.ImageIDs, tx)
 
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, fmt.Errorf("Error retrieving images")
+		return nil, fmt.Errorf("error retrieving images")
 	}
 	if err == gorm.ErrRecordNotFound {
 		images = &[]models.Image{}
@@ -133,6 +136,9 @@ func CreatePointOfInterest(postPointOfInterestBody *models.PostPointOfInterestBo
 	}
 
 	createdPointOfInterest, err := repositories.CreateEntity(&pointOfInterest, tx)
+	if err != nil {
+		return nil, err
+	}
 	updatedPointOfInterest, err := repositories.UpdateColumn(createdPointOfInterest, "support", postPointOfInterestBody.Support, tx)
 	if err != nil {
 		return nil, err

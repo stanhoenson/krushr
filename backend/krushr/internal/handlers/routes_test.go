@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -305,6 +306,9 @@ func testCreatorPostRoute(t *testing.T, r *gin.Engine) {
 	route := initializeRoute(5, creatorUserID, publishedStatusID, "Jantje")
 	postRouteBody := toPostRouteBody(route)
 	postRouteBodyJSON, err := json.Marshal(postRouteBody)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodPost, "/routes", bytes.NewBuffer(postRouteBodyJSON))
@@ -343,6 +347,9 @@ func testCreatorPutOwnRoute(t *testing.T, r *gin.Engine) {
 	route := initializeRoute(4, creatorUserID, publishedStatusID, "Brego")
 	postRouteBody := toPostRouteBody(route)
 	postRouteBodyJSON, err := json.Marshal(postRouteBody)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodPut, "/routes/4", bytes.NewBuffer(postRouteBodyJSON))
@@ -470,6 +477,7 @@ func addRouteToDatabase(route models.Route) {
 	// TODO handle errors
 	result := database.Db.Save(&route)
 	if result.Error != nil {
+		log.Fatal(result.Error)
 	}
 
 	image := route.Images[0]
@@ -480,39 +488,48 @@ func addRouteToDatabase(route models.Route) {
 
 	err := database.Db.Model(&route).Association("Images").Append(&image)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&route).Association("Details").Append(&detail)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&route).Association("Links").Append(&link)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&route).Association("Categories").Append(&category)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&route).Association("PointsOfInterest").Append(&poi)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	// Create many-to-many associations for points of interest
 	err = database.Db.Model(&poi).Association("Images").Append(&image)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&poi).Association("Details").Append(&detail)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&poi).Association("Links").Append(&link)
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	err = database.Db.Model(&poi).Association("Categories").Append(&category)
 	if err != nil {
+		log.Fatal(err)
 	}
 }
 
@@ -520,6 +537,7 @@ func populateDatabaseWithDummyData() {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
 	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	route := initializeRoute(1, adminUserID, publishedStatusID, "Example Route 1")
