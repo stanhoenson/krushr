@@ -132,14 +132,14 @@ func testSignInFaultyBody(t *testing.T, r *gin.Engine) {
 	req, _ := http.NewRequest(http.MethodPost, "/authentication/sign-in", bytes.NewBuffer(signInBodyJson))
 	r.ServeHTTP(w, req)
 
-	var errorMsg map[string]string
-	err := json.Unmarshal(w.Body.Bytes(), &errorMsg)
+	var response map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &response)
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "Key: 'SignInBody.Password' Error:Field validation for 'Password' failed on the 'sha256' tag", errorMsg["error"])
+	assert.Equal(t, "Key: 'SignInBody.Password' Error:Field validation for 'Password' failed on the 'sha256' tag", response["error"])
 }
 
 func testSignUpUnauthorized(t *testing.T, r *gin.Engine) {
@@ -223,14 +223,14 @@ func testSignUpFaultyBody(t *testing.T, r *gin.Engine) {
 	req.AddCookie(cookie)
 	r.ServeHTTP(w, req)
 
-	var errorMsg map[string]string
-	err = json.Unmarshal(w.Body.Bytes(), &errorMsg)
+	var response map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &response)
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "Key: 'SignUpBody.Email' Error:Field validation for 'Email' failed on the 'email' tag", errorMsg["error"])
+	assert.Equal(t, "Key: 'SignUpBody.Email' Error:Field validation for 'Email' failed on the 'email' tag", response["error"])
 }
 
 func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
@@ -258,14 +258,14 @@ func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
 	req.AddCookie(cookie)
 	r.ServeHTTP(w, req)
 
-	var errorMsg map[string]string
-	err = json.Unmarshal(w.Body.Bytes(), &errorMsg)
+	var response map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &response)
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "Error signing up", errorMsg["error"])
+	assert.Equal(t, "Error signing up", response["error"])
 }
 
 func testSignOut(t *testing.T, r *gin.Engine) {

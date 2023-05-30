@@ -21,7 +21,7 @@ func RegisterCategoryRoutes(r *gin.Engine) {
 				return services.CreateCategory(requestBody)
 			})
 		}))
-		routes.PUT("", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
+        routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutCategoryBody) error {
 				return validators.ValidatePutCategoryBody(requestBody)
 			}, func(c *gin.Context, ID uint, requestBody *models.PutCategoryBody) (*models.Category, error) {
