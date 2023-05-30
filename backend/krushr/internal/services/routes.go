@@ -74,7 +74,7 @@ func GetPublishedRouteByID(ID uint) (*models.Route, error) {
 }
 
 // TODO different role catching
-func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (*models.Route, error) {
+func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (uint, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.Route](ID, database.Db)
 	}

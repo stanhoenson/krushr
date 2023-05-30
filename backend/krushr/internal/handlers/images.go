@@ -58,7 +58,11 @@ func RegisterImageRoutes(r *gin.Engine) {
 	routes := r.Group("/images")
 	{
 		routes.GET("/:id", GetByIDDefault[models.Image])
-		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, DeleteByIDDefault[models.Image]))
+		routes.DELETE("/:id", wrappers.RoleWrapper([]string{constants.AdminRoleName}, func(ctx *gin.Context) {
+			DeleteByID(ctx, func(c *gin.Context, ID uint) (uint, error) {
+				return services.DeleteImage(ID)
+			})
+		}))
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, postImage))
 	}
 }

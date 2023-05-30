@@ -77,20 +77,20 @@ func FirstOrCreateEntity[T models.Route | models.Image | models.Detail | models.
 	return entity, nil
 }
 
-func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (*T, error) {
+func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, tx *gorm.DB) (uint, error) {
 	var entity T
 
 	result := tx.Delete(&entity, ID)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return 0, result.Error
 	}
 
 	if result.RowsAffected == 0 {
-		return nil, errors.New("no rows affected by delete operation")
+		return 0, errors.New("no rows affected by delete operation")
 	}
 
-	return &entity, nil
+	return ID, nil
 }
 
 func UpdateEntity[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](entity *T, tx *gorm.DB) (*T, error) {

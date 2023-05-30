@@ -23,7 +23,7 @@ func DeleteEntity[T models.Route | models.Image | models.Detail | models.Link | 
 	return repositories.DeleteEntity(entity, database.Db)
 }
 
-func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint) (*T, error) {
+func DeleteEntityByID[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint) (uint, error) {
 	return repositories.DeleteEntityByID[T](ID, database.Db)
 }
 

@@ -72,10 +72,10 @@ func RegisterRouteRoutes(r *gin.Engine) {
 			})
 		}))
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
-			DeleteByID(ctx, func(c *gin.Context, ID uint) (*models.Route, error) {
+			DeleteByID(ctx, func(c *gin.Context, ID uint) (uint, error) {
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
-					return nil, err
+					return 0, err
 				}
 
 				return services.DeleteRouteByIDAndAuthenticatedUser(ID, user)

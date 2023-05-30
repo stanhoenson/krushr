@@ -18,10 +18,10 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 		routes.GET("", GetAllDefault[models.PointOfInterest])
 		routes.GET("/:id", GetByIDDefault[models.PointOfInterest])
 		routes.DELETE("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
-			DeleteByID[models.PointOfInterest](ctx, func(c *gin.Context, ID uint) (*models.PointOfInterest, error) {
+			DeleteByID(ctx, func(c *gin.Context, ID uint) (uint, error) {
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
-					return nil, err
+					return 0, err
 				}
 
 				return services.DeletePointOfInterestByIDAndAuthentictedUser(ID, user)

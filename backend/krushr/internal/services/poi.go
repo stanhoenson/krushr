@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *models.User) (*models.PointOfInterest, error) {
+func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, authenticatedUser *models.User) (uint, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.PointOfInterest](ID, database.Db)
 	}

@@ -11,12 +11,12 @@ import (
 )
 
 func DeleteByIDDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
-	DeleteByID(c, func(c *gin.Context, ID uint) (*EntityType, error) {
+	DeleteByID(c, func(c *gin.Context, ID uint) (uint, error) {
 		return services.DeleteEntityByID[EntityType](ID)
 	})
 }
 
-func DeleteByID[EntityType any](c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (*EntityType, error)) {
+func DeleteByID(c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (uint, error)) {
 	id := c.Param("id")
 
 	u64, err := strconv.ParseUint(id, 10, 64)
@@ -26,13 +26,13 @@ func DeleteByID[EntityType any](c *gin.Context, deleteFunction func(c *gin.Conte
 	}
 	ID := uint(u64)
 
-	deletedEntity, err := deleteFunction(c, ID)
+	deletedEntityID, err := deleteFunction(c, ID)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting " + utils.GetTypeString(deletedEntity)})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error deleting entity"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, ID)
+	c.IndentedJSON(http.StatusOK, deletedEntityID)
 }
 
 func GetAllDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {

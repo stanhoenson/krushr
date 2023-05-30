@@ -10,21 +10,21 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func DeleteRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.Route, error) {
+func DeleteRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (uint, error) {
 	var route models.Route
 
 	result := tx.Where("id = ?", ID).Where("user_id = ?", userID).Delete(&route)
 	fmt.Println(result)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return 0, result.Error
 	}
 
 	if result.RowsAffected == 0 {
-		return nil, errors.New("no route found for the given ID and userID")
+		return 0, errors.New("no route found for the given ID and userID")
 	}
 
-	return &route, nil
+	return ID, nil
 }
 
 func GetRoutesWithAssociationsByUserID(userID uint, tx *gorm.DB) (*[]models.Route, error) {

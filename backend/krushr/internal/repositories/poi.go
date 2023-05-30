@@ -6,16 +6,16 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, userID uint, tx *gorm.DB) (*models.PointOfInterest, error) {
+func DeletePointOfInterestByIDAndAuthentictedUser(ID uint, userID uint, tx *gorm.DB) (uint, error) {
 	var pointOfInterest models.PointOfInterest
 
 	result := tx.Where("id = ?", ID).Where("user_id = ?", userID).Delete(&pointOfInterest)
 
 	if result.Error != nil {
-		return nil, result.Error
+		return 0, result.Error
 	}
 
-	return &pointOfInterest, nil
+	return ID, nil
 }
 
 func GetPointOfInterestByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (*models.PointOfInterest, error) {
