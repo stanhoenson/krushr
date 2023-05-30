@@ -1,6 +1,8 @@
 package app
 
 import (
+	"flag"
+
 	"github.com/stanhoenson/krushr/internal/cors"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
@@ -13,7 +15,14 @@ import (
 func Initialize() {
 	env.InitializeEnvironment()
 
-	// Returns an engine with a Logger and Recovery middleware already attached
+	debug := flag.Bool("debug", false, "Enable debug mode")
+	flag.Parse()
+
+	if !*debug {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		gin.SetMode(gin.DebugMode)
+	} // Returns an engine with a Logger and Recovery middleware already attached
 	r := gin.Default()
 	cors.InitializeCors(r)
 	validators.InitializeValidators()
