@@ -47,6 +47,9 @@ func TestRoutesRoutes(t *testing.T) {
 		t.Run("testAdminGetAllRoutes", func(t *testing.T) {
 			testAdminGetAllRoutes(t, r)
 		})
+		t.Run("testAdminGetRoute", func(t *testing.T) {
+			testAdminGetRoute(t, r)
+		})
 		t.Run("testCreatorGetOwnUnpublishedRoute", func(t *testing.T) {
 			testCreatorGetOwnUnpublishedRoute(t, r)
 		})
@@ -91,7 +94,9 @@ func testGetAllRoutes(t *testing.T, r *gin.Engine) {
 
 func testCreatorGetAllRoutes(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -123,7 +128,9 @@ func testCreatorGetAllRoutes(t *testing.T, r *gin.Engine) {
 
 func testAdminGetAllRoutes(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -150,14 +157,16 @@ func testAdminGetAllRoutes(t *testing.T, r *gin.Engine) {
 
 func testAdminGetRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/route/1", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/routes/1", nil)
 	cookie := &http.Cookie{
 		Name:  "jwt",
 		Value: token,
@@ -172,12 +181,14 @@ func testAdminGetRoute(t *testing.T, r *gin.Engine) {
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Example", route.Name)
+	assert.Equal(t, "Example Route 1", route.Name)
 }
 
 func testCreatorGetOwnUnpublishedRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -205,7 +216,9 @@ func testCreatorGetOwnUnpublishedRoute(t *testing.T, r *gin.Engine) {
 
 func testCreatorGetOthersUnpublishedRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -225,7 +238,9 @@ func testCreatorGetOthersUnpublishedRoute(t *testing.T, r *gin.Engine) {
 
 func testCreatorDeleteOwnRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -253,7 +268,9 @@ func testCreatorDeleteOwnRoute(t *testing.T, r *gin.Engine) {
 
 func testCreatorDeleteOthersRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -277,7 +294,9 @@ func testCreatorDeleteOthersRoute(t *testing.T, r *gin.Engine) {
 
 func testCreatorPostRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)
@@ -313,7 +332,9 @@ func testVisitorPostRoute(t *testing.T, r *gin.Engine) {
 
 func testCreatorPutOwnRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
 		t.Fatal(err)

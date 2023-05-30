@@ -12,7 +12,7 @@ audit:
 
 	@echo '3. Vetting code:'
 	go vet ./...
-	# staticcheck ./...
+	staticcheck ./...
 	@echo ''
 
 	@echo '4. Running tests:'
@@ -27,6 +27,4 @@ coverage:
 .PHONY: build
 build:
 	@echo '1. Building program'
-	export GOOS=linux
-	export GOARCH=amd64
 	go build -o krushr ./cmd/krushr

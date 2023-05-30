@@ -51,15 +51,18 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 func populateDatabase() {
 	result := Db.Save(&models.Role{ID: 1, Name: constants.AdminRoleName})
 	if result.Error != nil {
+		log.Fatal(result.Error)
 	}
 	result = Db.Save(&models.Role{ID: 2, Name: constants.CreatorRoleName})
 	if result.Error != nil {
+		log.Fatal(result.Error)
 	}
 
 	// We have to hash here because we hash on the client as well
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
 	Db.Save(&models.User{ID: 1, Email: "admin@admin.com", Password: string(passwordBytes), RoleID: 1})
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	// TODO hmmmmm, should be better
@@ -67,6 +70,7 @@ func populateDatabase() {
 	for index, category := range categories {
 		result = Db.Save(&models.Category{ID: uint(index + 1), Name: category})
 		if result.Error != nil {
+			log.Fatal(result.Error)
 		}
 	}
 
@@ -74,6 +78,7 @@ func populateDatabase() {
 	for index, statusName := range constants.Statuses {
 		result = Db.Save(&models.Status{ID: uint(index + 1), Name: statusName})
 		if result.Error != nil {
+			log.Fatal(result.Error)
 		}
 	}
 }
