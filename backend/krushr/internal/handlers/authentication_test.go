@@ -50,6 +50,12 @@ func TestAuthenticationRoutes(t *testing.T) {
 		t.Run("testSignOutUnauthenticated", func(t *testing.T) {
 			testSignOutUnauthenticated(t, r)
 		})
+		t.Run("testSignUpFaultyBody", func(t *testing.T) {
+			testSignUpFaultyBody(t, r)
+		})
+		t.Run("testSignUpDuplicateEmail", func(t *testing.T) {
+			testSignUpDuplicateEmail(t, r)
+		})
 	})
 
 	os.Remove("test/test.db")
@@ -190,6 +196,76 @@ func testSignUp(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, email, createdUser.Email)
+}
+
+func testSignUpFaultyBody(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+
+	email := "admin"
+	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword)}
+
+	signUpBodyJson, _ := json.Marshal(signUpBody)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPost, "/authentication/sign-up", bytes.NewBuffer(signUpBodyJson))
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var errorMsg map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &errorMsg)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Key: 'SignUpBody.Email' Error:Field validation for 'Email' failed on the 'email' tag", errorMsg["error"])
+}
+
+func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+	}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+
+	email := "admin@admin.com"
+	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword)}
+
+	signUpBodyJson, _ := json.Marshal(signUpBody)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPost, "/authentication/sign-up", bytes.NewBuffer(signUpBodyJson))
+	req.AddCookie(cookie)
+	r.ServeHTTP(w, req)
+
+	var errorMsg map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &errorMsg)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Error signing up", errorMsg["error"])
 }
 
 func testSignOut(t *testing.T, r *gin.Engine) {
