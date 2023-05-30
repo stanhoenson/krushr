@@ -32,6 +32,9 @@ func TestAuthenticationRoutes(t *testing.T) {
 		t.Run("testSignIn", func(t *testing.T) {
 			testSignIn(t, r)
 		})
+		t.Run("testSignInWrongPassword", func(t *testing.T) {
+			testSignInWrongPassword(t, r)
+		})
 	})
 
 	os.Remove("test/test.db")
@@ -73,4 +76,26 @@ func testSignIn(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, true, jwtCookieFound)
+}
+func testSignInWrongPassword(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("admin@admin.com")
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256("wrong!!!")}
+
+	signInBodyJson, _ := json.Marshal(signInBody)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPost, "/authentication/sign-in", bytes.NewBuffer(signInBodyJson))
+	r.ServeHTTP(w, req)
+
+	responseCookies := w.Result().Cookies()
+
+	jwtCookieFound := false
+	for _, cookie := range responseCookies {
+		if cookie.Name == "jwt" {
+			jwtCookieFound = true
+		}
+	}
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	assert.Equal(t, false, jwtCookieFound)
 }
