@@ -3,6 +3,7 @@ package filemanager
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -85,14 +86,13 @@ func GenerateFilename(originalFilename string) string {
 // Helper function to check if the uploaded file is an image
 func IsImage(file multipart.File) (bool, error) {
 	// Read the first 512 bytes of the file
-	buffer := make([]byte, 512)
-	_, err := io.ReadAtLeast(file, buffer, 512)
+	fileContent, err := ioutil.ReadAll(file)
 	if err != nil {
 		return false, err
 	}
 
 	// Detect the file type based on its content
-	filetype := http.DetectContentType(buffer)
+	filetype := http.DetectContentType(fileContent)
 
 	// reset thing
 	file.Seek(0, io.SeekStart)

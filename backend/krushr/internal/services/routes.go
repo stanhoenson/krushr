@@ -94,7 +94,6 @@ func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *
 
 	route, err := repositories.GetRouteByIDAndUserID(ID, authenticatedUser.ID, tx)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 

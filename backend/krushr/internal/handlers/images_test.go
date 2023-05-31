@@ -2,14 +2,20 @@ package handlers_test
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
+
+	"image"
+	"image/color"
+	"image/png"
+	"io/ioutil"
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
@@ -33,22 +39,35 @@ func TestImagesRoutes(t *testing.T) {
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("images", func(t *testing.T) {
+		//this order matters
 		t.Run("testPostImage", func(t *testing.T) {
 			testPostImage(t, r)
 		})
-		// t.Run("testDeleteImage", func(t *testing.T) {
-		// 	testDeleteImage(t, r)
-		// })
-		// t.Run("testGetImage", func(t *testing.T) {
-		// 	testGetImage(t, r)
-		// })
-		// t.Run("testGetImageData", func(t *testing.T) {
-		// 	testGetImageData(t, r)
-		// })
+		t.Run("testGetImage", func(t *testing.T) {
+			testGetImage(t, r)
+		})
+		t.Run("testGetImageData", func(t *testing.T) {
+			testGetImageData(t, r)
+		})
+		t.Run("testGetImageDataFaultyID", func(t *testing.T) {
+			testGetImageDataFaultyID(t, r)
+		})
+		t.Run("testGetImageDataNoRecord", func(t *testing.T) {
+			testGetImageDataNoRecord(t, r)
+		})
+		t.Run("testDeleteImage", func(t *testing.T) {
+			testDeleteImage(t, r)
+		})
+		t.Run("testPostImageFaultyImageFile", func(t *testing.T) {
+			testPostImageFaultyImageFile(t, r)
+		})
+		t.Run("testPostImageNoMultiparForm", func(t *testing.T) {
+			testPostImageNoMultiparForm(t, r)
+		})
 	})
 
-	os.Remove("test/test.db")
-	os.Remove("test")
+	os.RemoveAll("test")
+	os.RemoveAll("data")
 }
 
 func testPostImage(t *testing.T, r *gin.Engine) {
@@ -63,9 +82,17 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 		t.Fatal(err)
 	}
 
-	pngData := "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+	filePath, err := generateTempPNGWithPixel(color.Black, 1, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	imageBytes, err := base64.StdEncoding.DecodeString(pngData)
+	imageFile, err := os.Open(filePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	imageBytes, err := ioutil.ReadAll(imageFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -95,6 +122,8 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
+	fmt.Println(w.Body.String())
+
 	var image models.Image
 	err = json.Unmarshal(w.Body.Bytes(), &image)
 
@@ -103,42 +132,141 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Contains(t, image.Path, imageFileName)
+	assert.Contains(t, image.Path, strings.Split(imageFileName, ".png")[0])
+}
+func testPostImageFaultyImageFile(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+
+	signInBody := models.SignInBody{
+		Email:    user.Email,
+		Password: utils.Sha256(env.AdminPassword),
+	}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	imageFileName := "testImage.png"
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("file", imageFileName)
+	_, err = part.Write([]byte{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	writer.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/images", body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	var response map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Error creating image", response["error"])
+}
+func testPostImageNoMultiparForm(t *testing.T, r *gin.Engine) {
+	user, _ := repositories.GetUserByEmail("creator@creator.com")
+
+	signInBody := models.SignInBody{
+		Email:    user.Email,
+		Password: utils.Sha256(env.AdminPassword),
+	}
+	token, err := services.Authenticate(&signInBody)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/images", bytes.NewBufferString("not a MultipartForm"))
+
+	cookie := &http.Cookie{
+		Name:  "jwt",
+		Value: token,
+	}
+	req.AddCookie(cookie)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	var response map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Error parsing MultipartForm", response["error"])
 }
 
 func testGetImage(t *testing.T, r *gin.Engine) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/details", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/images/1", nil)
 	r.ServeHTTP(w, req)
 
-	var details []models.Detail
-	err := json.Unmarshal(w.Body.Bytes(), &details)
+	var image models.Image
+	err := json.Unmarshal(w.Body.Bytes(), &image)
 
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, 2, len(details))
+	assert.Equal(t, uint(1), image.ID)
+
+}
+func testGetImageDataFaultyID(t *testing.T, r *gin.Engine) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "/imagedata/-10", nil)
+	r.ServeHTTP(w, req)
+
+	var response map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Invalid ID parameter", response["error"])
 
 }
 
-func testGetImageData(t *testing.T, r *gin.Engine) {
+func testGetImageDataNoRecord(t *testing.T, r *gin.Engine) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/details", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/imagedata/10", nil)
 	r.ServeHTTP(w, req)
 
-	var details []models.Detail
-	err := json.Unmarshal(w.Body.Bytes(), &details)
-
+	var response map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &response)
 	if err != nil {
 		t.Error(err)
 	}
 
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "Error retrieving image", response["error"])
+
+}
+func testGetImageData(t *testing.T, r *gin.Engine) {
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "/imagedata/1", nil)
+	r.ServeHTTP(w, req)
+
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, 2, len(details))
+	assert.NotEmpty(t, w.Body.Bytes())
 
 }
 
@@ -152,13 +280,11 @@ func testDeleteImage(t *testing.T, r *gin.Engine) {
 		t.Fatal(err)
 	}
 
-	addDetailToDatabase(models.Detail{ID: 3, Text: "some text"})
-
 	var countBefore int
-	database.Db.Raw("SELECT COUNT(*) FROM details WHERE id = 3").Scan(&countBefore)
+	database.Db.Raw("SELECT COUNT(*) FROM images ").Scan(&countBefore)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodDelete, "/details/3", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "/images/1", nil)
 	cookie := &http.Cookie{
 		Name:  "jwt",
 		Value: token,
@@ -167,10 +293,10 @@ func testDeleteImage(t *testing.T, r *gin.Engine) {
 	r.ServeHTTP(w, req)
 
 	var count int
-	database.Db.Raw("SELECT COUNT(*) FROM categories WHERE id = 3").Scan(&count)
+	database.Db.Raw("SELECT COUNT(*) FROM images").Scan(&count)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "3", w.Body.String())
+	assert.Equal(t, "1", w.Body.String())
 	assert.Equal(t, 0, count)
 	assert.NotEqual(t, countBefore, count)
 }
@@ -182,9 +308,6 @@ func populateDatabaseWithDummyImageData() {
 		log.Fatal(err)
 	}
 
-	addImageToDatabase(models.Detail{ID: 1, Text: "Very interesting"})
-	addImageToDatabase(models.Detail{ID: 2, Text: "Hmmmmm"})
-
 }
 
 func addImageToDatabase(detail models.Detail) {
@@ -193,4 +316,33 @@ func addImageToDatabase(detail models.Detail) {
 		log.Fatal(result.Error)
 	}
 
+}
+
+func generateTempPNGWithPixel(color color.Color, width, height int) (string, error) {
+	// Create a new RGBA image with the specified dimensions
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+
+	// Set the pixel color for the entire image
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			img.Set(x, y, color)
+		}
+	}
+
+	// Create a temporary file with a .png extension
+	file, err := ioutil.TempFile("", "image-*.png")
+	if err != nil {
+		return "", err
+	}
+
+	// Save the image as PNG
+	err = png.Encode(file, img)
+	if err != nil {
+		return "", err
+	}
+
+	// Get the temporary file path
+	filePath := file.Name()
+
+	return filePath, nil
 }
