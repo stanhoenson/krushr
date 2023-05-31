@@ -36,7 +36,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
 	database.InitializeDatabase("test.db", "test/")
-	populateDatabaseWithDummyData()
+	populateDatabaseWithDummyRoutesData()
 
 	t.Run("routes", func(t *testing.T) {
 		t.Run("testGetAllRoutes", func(t *testing.T) {
@@ -533,7 +533,7 @@ func addRouteToDatabase(route models.Route) {
 	}
 }
 
-func populateDatabaseWithDummyData() {
+func populateDatabaseWithDummyRoutesData() {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
 	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
 	if err != nil {
