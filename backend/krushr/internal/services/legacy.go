@@ -42,7 +42,6 @@ func GetLegacyRoutes() (*[]models.LegacyRoute, error) {
 	var legacyRoutes []models.LegacyRoute
 	for _, v := range *routes {
 
-		fmt.Printf("%+v", v)
 		legacyRoute, err := v.ToLegacyRoute(false)
 		if err != nil {
 			return nil, err

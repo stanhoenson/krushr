@@ -226,7 +226,6 @@ func CreateOrUpdateRouteRelatedEntities(postRouteBody *models.PostRouteBody, aut
 	}
 
 	images, err := GetEntitiesByIDs[models.Image](&postRouteBody.ImageIDs)
-	fmt.Println(images)
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving images")
 	}

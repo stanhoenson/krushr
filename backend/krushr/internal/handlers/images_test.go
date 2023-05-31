@@ -122,8 +122,6 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	fmt.Println(w.Body.String())
-
 	var image models.Image
 	err = json.Unmarshal(w.Body.Bytes(), &image)
 

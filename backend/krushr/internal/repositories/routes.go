@@ -14,7 +14,6 @@ func DeleteRouteByIDAndUserID(ID uint, userID uint, tx *gorm.DB) (uint, error) {
 	var route models.Route
 
 	result := tx.Where("id = ?", ID).Where("user_id = ?", userID).Delete(&route)
-	fmt.Println(result)
 
 	if result.Error != nil {
 		return 0, result.Error
