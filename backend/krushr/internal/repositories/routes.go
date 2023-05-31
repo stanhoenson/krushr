@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/models"

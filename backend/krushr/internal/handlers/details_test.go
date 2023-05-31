@@ -43,21 +43,18 @@ func TestDetailsRoutes(t *testing.T) {
 }
 
 func testGetAllDetails(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/details", nil)
 	r.ServeHTTP(w, req)
 
 	var details []models.Detail
 	err := json.Unmarshal(w.Body.Bytes(), &details)
-
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, 2, len(details))
-
 }
 
 func testDeleteDetail(t *testing.T, r *gin.Engine) {
@@ -102,7 +99,6 @@ func populateDatabaseWithDummyDetailData() {
 
 	addDetailToDatabase(models.Detail{ID: 1, Text: "Very interesting"})
 	addDetailToDatabase(models.Detail{ID: 2, Text: "Hmmmmm"})
-
 }
 
 func addDetailToDatabase(detail models.Detail) {
@@ -110,5 +106,4 @@ func addDetailToDatabase(detail models.Detail) {
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-
 }

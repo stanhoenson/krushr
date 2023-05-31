@@ -62,22 +62,19 @@ func TestCategoriesRoutes(t *testing.T) {
 }
 
 func testGetAllCategories(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/categories", nil)
 	r.ServeHTTP(w, req)
 
 	var categories []models.Category
 	err := json.Unmarshal(w.Body.Bytes(), &categories)
-
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	//3 because the normal populateDatabase function also adds a category
+	// 3 because the normal populateDatabase function also adds a category
 	assert.Equal(t, 3, len(categories))
-
 }
 
 func testDeleteCategory(t *testing.T, r *gin.Engine) {
@@ -143,7 +140,6 @@ func testDeleteCategoryInvalidID(t *testing.T, r *gin.Engine) {
 }
 
 func testPostCategory(t *testing.T, r *gin.Engine) {
-
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
 		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
@@ -179,7 +175,6 @@ func testPostCategory(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, 1, count)
 	assert.NotEmpty(t, createCategory.ID)
-
 }
 
 func testPutCategory(t *testing.T, r *gin.Engine) {
@@ -228,8 +223,8 @@ func testPutCategory(t *testing.T, r *gin.Engine) {
 	assert.NotEmpty(t, updatedCategory.ID)
 	assert.Equal(t, uint(4), updatedCategory.ID)
 	assert.Equal(t, nameAfter, updatedCategory.Name)
-
 }
+
 func testPutCategoryNoRecord(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
@@ -265,8 +260,8 @@ func testPutCategoryNoRecord(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "Error updating Categoryrecord not found", response["error"])
-
 }
+
 func testPostCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
@@ -298,8 +293,8 @@ func testPostCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "Error creating CategoryUNIQUE constraint failed: categories.name", response["error"])
-
 }
+
 func testPutCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
@@ -343,8 +338,8 @@ func testPutCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, nameBefore, nameAfter)
 	assert.Equal(t, "Error updating CategoryUNIQUE constraint failed: categories.name", response["error"])
-
 }
+
 func populateDatabaseWithDummyCategoryData() {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
 	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
@@ -354,7 +349,6 @@ func populateDatabaseWithDummyCategoryData() {
 
 	addCategoryToDatabase(models.Category{ID: 2, Name: "Nature", Position: 1})
 	addCategoryToDatabase(models.Category{ID: 3, Name: "Food", Position: 2})
-
 }
 
 func addCategoryToDatabase(category models.Category) {
@@ -362,5 +356,4 @@ func addCategoryToDatabase(category models.Category) {
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-
 }

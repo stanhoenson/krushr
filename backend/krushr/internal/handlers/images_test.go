@@ -3,19 +3,16 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"log"
+	"image"
+	"image/color"
+	"image/png"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
-
-	"image"
-	"image/color"
-	"image/png"
-	"io/ioutil"
 
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
@@ -27,7 +24,6 @@ import (
 	"github.com/stanhoenson/krushr/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func TestImagesRoutes(t *testing.T) {
@@ -39,7 +35,7 @@ func TestImagesRoutes(t *testing.T) {
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("images", func(t *testing.T) {
-		//this order matters
+		// this order matters
 		t.Run("testPostImage", func(t *testing.T) {
 			testPostImage(t, r)
 		})
@@ -92,7 +88,7 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 		t.Fatal(err)
 	}
 
-	imageBytes, err := ioutil.ReadAll(imageFile)
+	imageBytes, err := io.ReadAll(imageFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -132,6 +128,7 @@ func testPostImage(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Contains(t, image.Path, strings.Split(imageFileName, ".png")[0])
 }
+
 func testPostImageFaultyImageFile(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
 
@@ -149,6 +146,9 @@ func testPostImageFaultyImageFile(t *testing.T, r *gin.Engine) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("file", imageFileName)
+	if err != nil {
+		t.Fatal(err)
+	}
 	_, err = part.Write([]byte{})
 	if err != nil {
 		t.Fatal(err)
@@ -175,6 +175,7 @@ func testPostImageFaultyImageFile(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "Error creating image", response["error"])
 }
+
 func testPostImageNoMultiparForm(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("creator@creator.com")
 
@@ -208,24 +209,21 @@ func testPostImageNoMultiparForm(t *testing.T, r *gin.Engine) {
 }
 
 func testGetImage(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/images/1", nil)
 	r.ServeHTTP(w, req)
 
 	var image models.Image
 	err := json.Unmarshal(w.Body.Bytes(), &image)
-
 	if err != nil {
 		t.Error(err)
 	}
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, uint(1), image.ID)
-
 }
-func testGetImageDataFaultyID(t *testing.T, r *gin.Engine) {
 
+func testGetImageDataFaultyID(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/imagedata/-10", nil)
 	r.ServeHTTP(w, req)
@@ -238,11 +236,9 @@ func testGetImageDataFaultyID(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "Invalid ID parameter", response["error"])
-
 }
 
 func testGetImageDataNoRecord(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/imagedata/10", nil)
 	r.ServeHTTP(w, req)
@@ -255,17 +251,15 @@ func testGetImageDataNoRecord(t *testing.T, r *gin.Engine) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, "Error retrieving image", response["error"])
-
 }
-func testGetImageData(t *testing.T, r *gin.Engine) {
 
+func testGetImageData(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/imagedata/1", nil)
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.NotEmpty(t, w.Body.Bytes())
-
 }
 
 func testDeleteImage(t *testing.T, r *gin.Engine) {
@@ -299,22 +293,20 @@ func testDeleteImage(t *testing.T, r *gin.Engine) {
 	assert.NotEqual(t, countBefore, count)
 }
 
-func populateDatabaseWithDummyImageData() {
-	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
-	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
-	if err != nil {
-		log.Fatal(err)
-	}
+// func populateDatabaseWithDummyImageData() {
+// 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
+// 	database.Db.Save(&models.User{ID: 2, Email: "creator@creator.com", Password: string(passwordBytes), RoleID: 2})
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
 
-}
-
-func addImageToDatabase(detail models.Detail) {
-	result := database.Db.Save(&detail)
-	if result.Error != nil {
-		log.Fatal(result.Error)
-	}
-
-}
+// func addImageToDatabase(detail models.Detail) {
+// 	result := database.Db.Save(&detail)
+// 	if result.Error != nil {
+// 		log.Fatal(result.Error)
+// 	}
+// }
 
 func generateTempPNGWithPixel(color color.Color, width, height int) (string, error) {
 	// Create a new RGBA image with the specified dimensions
@@ -328,7 +320,7 @@ func generateTempPNGWithPixel(color color.Color, width, height int) (string, err
 	}
 
 	// Create a temporary file with a .png extension
-	file, err := ioutil.TempFile("", "image-*.png")
+	file, err := os.CreateTemp("", "image-*.png")
 	if err != nil {
 		return "", err
 	}

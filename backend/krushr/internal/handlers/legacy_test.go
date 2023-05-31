@@ -57,7 +57,6 @@ func testGetAllLegacyRoutes(t *testing.T, r *gin.Engine) {
 
 // TODO maybe check if conversion went right?
 func testGetLegacyRoute(t *testing.T, r *gin.Engine) {
-
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/legacy/route/1", nil)
 	r.ServeHTTP(w, req)
@@ -71,8 +70,8 @@ func testGetLegacyRoute(t *testing.T, r *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "Example Route 1", legacyRoute.RouteName)
 }
-func testGetLegacyMenu(t *testing.T, r *gin.Engine) {
 
+func testGetLegacyMenu(t *testing.T, r *gin.Engine) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/legacy/menu", nil)
 	r.ServeHTTP(w, req)

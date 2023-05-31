@@ -1,16 +1,17 @@
 package services
 
 import (
+	"fmt"
+	"mime/multipart"
+
 	"github.com/stanhoenson/krushr/internal/filemanager"
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/repositories"
-	"fmt"
+
 	"gorm.io/gorm"
-	"mime/multipart"
 )
 
 func CreateImage(fileHeader *multipart.FileHeader, tx *gorm.DB) (*models.Image, error) {
-
 	filePath, err := filemanager.StoreMulitpartImage(fileHeader)
 	if err != nil {
 		return nil, err

@@ -154,7 +154,6 @@ func testSignUpUnauthorized(t *testing.T, r *gin.Engine) {
 
 	var createdUser models.User
 	err := json.Unmarshal(w.Body.Bytes(), &createdUser)
-
 	if err != nil {
 		t.Error(err)
 	}
