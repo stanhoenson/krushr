@@ -7,7 +7,7 @@ type PostRouteBody struct {
 	ImageIDs         []uint                    `json:"imageIds" binding:"required,min=1"`
 	Details          []PostDetailBody          `json:"details" binding:"required,dive,min=1"`
 	Links            []PostLinkBody            `json:"links" binding:"dive"`
-	Categories       []PostCategoryBody        `json:"categories" binding:"required,dive,min=1"`
+	Categories       []PostCategoryBody        `json:"categories" binding:"dive"`
 	StatusID         uint                      `json:"statusId" binding:"required"`
 }
 
@@ -53,7 +53,7 @@ type PutLinkBody struct {
 // Category
 type PostCategoryBody struct {
 	Name     string `json:"name" binding:"required"`
-	Position uint   `json:"position" binding:"required"`
+	Position uint   `json:"position"`
 }
 type PutCategoryBody struct {
 	PostCategoryBody
