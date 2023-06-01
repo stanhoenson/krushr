@@ -1,14 +1,17 @@
 import axios from "axios";
 import type { Link } from "../types/models";
-import { BASE_URL } from "./endpoints";
+import {
+  DELETE_LINK_BY_ID_ENDPOINT,
+  GET_ALL_LINKS_ENDPOINT,
+} from "./endpoints";
 
 // Get all links
 export async function getAllLinks(): Promise<Link[]> {
-  const response = await axios.get<Link[]>(`${BASE_URL}/links`);
+  const response = await axios.get<Link[]>(GET_ALL_LINKS_ENDPOINT);
   return response.data;
 }
 
 // Delete a link by ID
 export async function deleteLinkById(id: number): Promise<void> {
-  await axios.delete(`${BASE_URL}/links/${id}`, { withCredentials: true });
+  await axios.delete(DELETE_LINK_BY_ID_ENDPOINT(id), { withCredentials: true });
 }
