@@ -61,6 +61,15 @@
         type="password"
         required
       />
+      <InputLabel
+        bind:value={confirmPassword}
+        label={"Confirm password"}
+        error={""}
+        name="confirmPassword"
+        type="password"
+        required
+      />
+
       <hr />
       <button class="button block primary">Create user</button>
     </section>
