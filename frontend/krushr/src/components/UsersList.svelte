@@ -34,41 +34,29 @@
   });
 </script>
 
-<div class="entity">
-  <h2>Users</h2>
-  <p>All existing users</p>
-</div>
-<div class="table card">
-  <div class="column">
-    <p class="field">ID</p>
+<div>
+  <div class="card">
+    <div class="entity">
+      <h2>Users</h2>
+      <p>All existing users</p>
+    </div>
+
     {#each users as user}
-      <input type="number" value={user.id} disabled />
+      <div class="user">
+        <input type="email" value={user.email} disabled />
+        <button class="button error">Delete</button>
+      </div>
     {/each}
-  </div>
-  <div class="column">
-    <p class="field">Email</p>
-    {#each users as user}
-      <input type="email" value={user.email} disabled />
-    {/each}
-  </div>
-  <div class="column">
-    <p class="field">Action</p>
-    {#each users as innerUser}
-      <button
-        on:click={handleDelete.bind(null, innerUser.id)}
-        disabled={user.id === innerUser.id}
-        class="button primary">Delete</button
+
+    {#if error}
+      <Alert
+        type="error"
+        onClose={() => {
+          error = "";
+        }}
       >
-    {/each}
+        {error}
+      </Alert>
+    {/if}
   </div>
 </div>
-{#if error}
-  <Alert
-    type="error"
-    onClose={() => {
-      error = "";
-    }}
-  >
-    {error}
-  </Alert>
-{/if}

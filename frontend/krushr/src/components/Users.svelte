@@ -42,55 +42,48 @@
   });
 </script>
 
-<form class="sign-up" on:submit|preventDefault={handleSubmit}>
-  <section class="card">
-    <InputLabel
-      bind:value={email}
-      label={"Email"}
-      error={""}
-      type="email"
-      required
-      autofocus={true}
-    />
-    <InputLabel
-      bind:value={password}
-      label={"Password"}
-      error={""}
-      name="password"
-      type="password"
-      required
-    />
-    <InputLabel
-      bind:value={confirmPassword}
-      label={"Confirm password"}
-      error={""}
-      name="confirmPassword"
-      type="password"
-      required
-    />
-    <hr />
-    <button class="button block primary">Create user</button>
-  </section>
-</form>
-<div class="alerts half-width">
-  {#if error}
-    <Alert
-      type="error"
-      onClose={() => {
-        error = "";
-      }}
-    >
-      {error}
-    </Alert>
-  {/if}
-  {#if createdUser}
-    <Alert
-      onClose={() => {
-        createdUser = null;
-      }}
-      type="success">Succesfully created user!</Alert
-    >
-  {/if}
+<div class="grid">
+  <form class="sign-up" on:submit|preventDefault={handleSubmit}>
+    <section class="card">
+      <InputLabel
+        bind:value={email}
+        label={"Email"}
+        error={""}
+        type="email"
+        required
+        autofocus={true}
+      />
+      <InputLabel
+        bind:value={password}
+        label={"Password"}
+        error={""}
+        name="password"
+        type="password"
+        required
+      />
+      <hr />
+      <button class="button block primary">Create user</button>
+    </section>
+    <div class="alerts half-width">
+      {#if error}
+        <Alert
+          type="error"
+          onClose={() => {
+            error = "";
+          }}
+        >
+          {error}
+        </Alert>
+      {/if}
+      {#if createdUser}
+        <Alert
+          onClose={() => {
+            createdUser = null;
+          }}
+          type="success">Succesfully created user!</Alert
+        >
+      {/if}
+    </div>
+  </form>
+  <UsersList bind:refresh />
 </div>
-<hr class="soft" />
-<UsersList bind:refresh />

@@ -149,13 +149,13 @@
           >
         </div>
       </div>
-			<hr />
-			<label class="support">Support point</label>
-			<input
-					type="checkbox"
-												 bind:checked={pointOfInterest.support}
-					on:change={handleSupportChange}
-					/>
+      <hr />
+      <label class="support">Support point</label>
+      <input
+        type="checkbox"
+        bind:checked={pointOfInterest.support}
+        on:change={handleSupportChange}
+      />
     </div>
   </div>
   {#if !pointOfInterest.support}
