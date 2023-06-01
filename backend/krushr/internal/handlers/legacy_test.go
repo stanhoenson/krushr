@@ -15,7 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TODO prob some issues when .env variables are used somewhere?
 func TestLegacyRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())

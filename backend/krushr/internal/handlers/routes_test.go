@@ -30,7 +30,6 @@ var (
 	unpublishedStatusID uint = 2
 )
 
-// TODO prob some issues when .env variables are used somewhere?
 func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
