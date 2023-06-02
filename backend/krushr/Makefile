@@ -1,3 +1,12 @@
+.PHONY: run/api
+run/api:
+	go run ./cmd/api
+
+.PHONY: build/api
+build/api:
+	go build -ldflags='-s' -o=./bin/api ./cmd/api
+	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=./bin/linux_amd64/api ./cmd/api
+
 .PHONY: audit
 audit:
 	@echo '1. Tidying and verifying module dependencies:'
@@ -20,12 +29,5 @@ audit:
 
 .PHONY: coverage
 coverage:
-	@echo '1. Generating cover profile:'
 	go test -coverprofile=coverage.out -coverpkg=./... ./...
 	go tool cover -html=coverage.out
-
-.PHONY: build/api
-build/api:
-	@echo 'Building cmd/api...'
-	go build -ldflags='-s' -o=./bin/api ./cmd/api
-	GOOS=linux GOARCH=amd64 go build -ldflags='-s' -o=./bin/linux_amd64/api ./cmd/api
