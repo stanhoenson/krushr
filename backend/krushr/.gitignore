@@ -1,4 +1,4 @@
 .env
-.env.prod
+bin/
 data
 **/coverage.out
