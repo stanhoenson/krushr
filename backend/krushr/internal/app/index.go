@@ -17,12 +17,12 @@ func Initialize() {
 
 	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
-
 	if !*debug {
 		gin.SetMode(gin.ReleaseMode)
 	} else {
 		gin.SetMode(gin.DebugMode)
-	} // Returns an engine with a Logger and Recovery middleware already attached
+	}
+
 	r := gin.Default()
 	cors.InitializeCors(r)
 	validators.InitializeValidators()

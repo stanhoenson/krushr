@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO rename "Routes" to "Endpoints"
 func RegisterHandlers(r *gin.Engine) {
 	RegisterLinkRoutes(r)
 	RegisterDetailRoutes(r)
