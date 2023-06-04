@@ -23,10 +23,14 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 		log.Fatal("failed to create directory")
 	}
 
+	// dsn := "host=localhost user=postgres password=postgres dbname=krushr port=5432 sslmode=disable TimeZone=UTC"
+	// db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	db, err := gorm.Open(sqlite.Open(filepath.Join(folderName, databaseName)))
 	if err != nil {
 		log.Fatal("failed to initialize database")
 	}
+	// sqlDB, err := db.DB()
+	// sqlDB.SetMaxOpenConns(100)
 	// TODO look at ways to do this nicely, only in development
 	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
 

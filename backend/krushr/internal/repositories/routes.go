@@ -40,8 +40,14 @@ func GetRoutesWithAssociationsByUserID(userID uint, tx *gorm.DB) (*[]models.Rout
 func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
 	var routes []models.Route
 
-	result := tx.Preload(clause.Associations).Joins("Status").Where(" status.name = ? ", constants.PublishedStatusName).Find(&routes)
-
+	result := tx.
+		Preload("Images").
+		Preload("Details").
+		Preload("Links").
+		Preload("Categories").
+		Joins("LEFT JOIN statuses ON routes.status_id = statuses.id").
+		Where("statuses.name = ?", constants.PublishedStatusName).
+		Find(&routes)
 	if result.Error != nil {
 		return nil, result.Error
 	}
