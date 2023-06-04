@@ -8,7 +8,7 @@ import (
 )
 
 func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
-	route, err := GetEntityByIDWithAssociations[models.Route](ID, clause.Associations)
+	route, err := GetEntityByIDWithAssociations[models.Route](ID, []string{clause.Associations})
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func GetLegacyRouteByID(ID uint) (*models.LegacyRoute, error) {
 }
 
 func GetLegacyRoutes() (*[]models.LegacyRoute, error) {
-	routes, err := GetEntitiesWithAssociations[models.Route](clause.Associations)
+	routes, err := GetEntitiesWithAssociations[models.Route]([]string{"Images", "Status", "Details", "Links", "Categories"})
 	if err != nil {
 		return nil, err
 	}

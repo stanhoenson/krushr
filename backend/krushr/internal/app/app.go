@@ -3,7 +3,6 @@ package app
 import (
 	"flag"
 
-	"github.com/stanhoenson/krushr/internal/cache"
 	"github.com/stanhoenson/krushr/internal/cors"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/env"
@@ -24,7 +23,6 @@ func Initialize() {
 		gin.SetMode(gin.DebugMode)
 	}
 
-	cache.InitializeCache()
 	r := gin.Default()
 	cors.InitializeCors(r)
 	validators.InitializeValidators()

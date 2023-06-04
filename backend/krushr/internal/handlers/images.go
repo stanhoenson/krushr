@@ -53,7 +53,7 @@ func postImage(c *gin.Context) {
 
 	}
 
-	c.IndentedJSON(http.StatusOK, createdFile)
+	c.JSON(http.StatusOK, createdFile)
 }
 
 func RegisterImageRoutes(r *gin.Engine) {

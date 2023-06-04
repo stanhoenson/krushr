@@ -19,13 +19,13 @@ func GetMe(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(&models.User{})})
 	}
-	entity, err := services.GetEntityByIDWithAssociations[models.User](user.ID, clause.Associations)
+	entity, err := services.GetEntityByIDWithAssociations[models.User](user.ID, []string{clause.Associations})
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entity)})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, entity)
+	c.JSON(http.StatusOK, entity)
 }
 
 func RegisterUserRoutes(r *gin.Engine) {

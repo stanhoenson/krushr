@@ -11,7 +11,7 @@ func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link |
 	return repositories.GetEntityByID[T](ID, database.Db)
 }
 
-func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations string) (*T, error) {
+func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations []string) (*T, error) {
 	return repositories.GetEntityByIDWithAssociations[T](ID, associations, database.Db)
 }
 
@@ -36,7 +36,7 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 	return repositories.GetEntities[T](database.Db)
 }
 
-func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations string) (*[]T, error) {
+func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations []string) (*[]T, error) {
 	return repositories.GetEntitiesWithAssociations[T](associations, database.Db)
 }
 

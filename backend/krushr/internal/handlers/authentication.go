@@ -25,7 +25,7 @@ func signUp(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, createdUser)
+	c.JSON(http.StatusOK, createdUser)
 }
 
 func signIn(c *gin.Context) {

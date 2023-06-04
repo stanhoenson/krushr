@@ -32,7 +32,7 @@ func DeleteByID(c *gin.Context, deleteFunction func(c *gin.Context, ID uint) (ui
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, deletedEntityID)
+	c.JSON(http.StatusOK, deletedEntityID)
 }
 
 func GetAllDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
@@ -44,11 +44,11 @@ func GetAllDefault[EntityType models.Route | models.Image | models.Detail | mode
 func GetAll[EntityType any](c *gin.Context, getFunction func(c *gin.Context) (*[]EntityType, error)) {
 	entities, err := getFunction(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entities)})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Error retrieving " + utils.GetTypeString(entities) + err.Error()})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, entities)
+	c.JSON(http.StatusOK, entities)
 }
 
 func GetByIDDefault[EntityType models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](c *gin.Context) {
@@ -73,7 +73,7 @@ func GetByID[EntityType any](c *gin.Context, getByIDFunction func(c *gin.Context
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, entity)
+	c.JSON(http.StatusOK, entity)
 }
 
 func Post[EntityType any, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, createFunction func(c *gin.Context, requestBody *RequestBodyType) (*EntityType, error)) {
@@ -95,7 +95,7 @@ func Post[EntityType any, RequestBodyType any](c *gin.Context, validationFunctio
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, createdEntity)
+	c.JSON(http.StatusOK, createdEntity)
 }
 
 func Put[EntityType any, RequestBodyType any](c *gin.Context, validationFunction func(c *gin.Context, requestBody *RequestBodyType) error, updateFunction func(c *gin.Context, ID uint, requestBody *RequestBodyType) (*EntityType, error)) {
@@ -126,5 +126,5 @@ func Put[EntityType any, RequestBodyType any](c *gin.Context, validationFunction
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, updatedEntity)
+	c.JSON(http.StatusOK, updatedEntity)
 }

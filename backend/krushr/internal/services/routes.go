@@ -2,9 +2,7 @@ package services
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/stanhoenson/krushr/internal/cache"
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
@@ -32,7 +30,7 @@ func GetPublishedRouteByIDAndUserID(ID, userID uint) (*models.Route, error) {
 }
 
 func GetRouteByIDWithAssociations(ID uint) (*models.Route, error) {
-	route, err := repositories.GetEntityByIDWithAssociations[models.Route](ID, clause.Associations, database.Db)
+	route, err := repositories.GetEntityByIDWithAssociations[models.Route](ID, []string{clause.Associations}, database.Db)
 	if err != nil {
 		return nil, err
 	}
@@ -52,41 +50,8 @@ func GetRoutesWithAssociationsByUserID(userID uint) (*[]models.Route, error) {
 	return repositories.GetRoutesWithAssociationsByUserID(userID, database.Db)
 }
 
-var publishedRoutes *[]models.Route
-
 func GetPublishedRoutes() (*[]models.Route, error) {
 	return repositories.GetPublishedRoutes(database.Db)
-
-}
-
-func GetPublishedRoutesInMem() (*[]models.Route, error) {
-	if publishedRoutes != nil {
-		return publishedRoutes, nil
-	}
-	routes, err := repositories.GetPublishedRoutes(database.Db)
-	if err != nil {
-		return nil, err
-	}
-	publishedRoutes = routes
-
-	return routes, nil
-}
-func GetPublishedRoutesGoCache() (*[]models.Route, error) {
-	cachedRoutes, found := cache.Cache.Get("publishedRoutes")
-	if found {
-		cachedRoutes := cachedRoutes.([]models.Route)
-		return &cachedRoutes, nil
-	}
-	routes, err := repositories.GetPublishedRoutes(database.Db)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cache.Cache.Add("publishedRoutes", *routes, time.Hour)
-	if err != nil {
-		fmt.Errorf("error caching routes")
-	}
-	return routes, nil
 }
 
 // TODO not performant

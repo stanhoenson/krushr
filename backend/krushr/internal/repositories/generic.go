@@ -21,10 +21,15 @@ func GetEntityByID[T models.Route | models.Image | models.Detail | models.Link |
 	return &entity, nil
 }
 
-func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations string, tx *gorm.DB) (*T, error) {
+func GetEntityByIDWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](ID uint, associations []string, tx *gorm.DB) (*T, error) {
 	var entity T
 
-	result := tx.Preload(associations).First(&entity, ID)
+	var transaction *gorm.DB = tx
+
+	for _, association := range associations {
+		transaction = transaction.Preload(association)
+	}
+	result := transaction.First(&entity, ID)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -116,10 +121,15 @@ func GetEntities[T models.Route | models.Image | models.Detail | models.Link | m
 	return &entities, nil
 }
 
-func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations string, tx *gorm.DB) (*[]T, error) {
+func GetEntitiesWithAssociations[T models.Route | models.Image | models.Detail | models.Link | models.Category | models.Status | models.PointOfInterest | models.User | models.Role | models.RoutesPointsOfInterest](associations []string, tx *gorm.DB) (*[]T, error) {
 	var entities []T
 
-	result := tx.Preload(associations).Find(&entities)
+	var transaction *gorm.DB = tx
+
+	for _, association := range associations {
+		transaction = transaction.Preload(association)
+	}
+	result := transaction.Find(&entities)
 
 	if result.Error != nil {
 		return nil, result.Error
