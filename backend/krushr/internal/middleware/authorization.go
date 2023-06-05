@@ -21,7 +21,6 @@ func Authorization() gin.HandlerFunc {
 		} else {
 			user, err := services.GetUserFromJWT(jwt.Value)
 			if err != nil {
-				// TODO maybe StatusBadRequest
 				c.SetCookie("jwt", "", 0, "/", env.Domain, true, true)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 				return

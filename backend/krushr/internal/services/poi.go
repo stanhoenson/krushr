@@ -176,7 +176,6 @@ func replacePoiLinkAssociations(poi *models.PointOfInterest, links *[]*models.Li
 	tx.Model(&poi).Association("Links").Append(links)
 	for _, link := range oldLinks {
 		var count int64
-		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM points_of_interest_links WHERE link_id = ?", link.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(link, link)
@@ -196,7 +195,6 @@ func replacePoiDetailAssociations(poi *models.PointOfInterest, details *[]*model
 	tx.Model(&poi).Association("Details").Append(details)
 	for _, detail := range oldDetails {
 		var count int64
-		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM points_of_interest_details WHERE detail_id = ?", detail.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(detail, detail)

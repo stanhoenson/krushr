@@ -101,10 +101,9 @@ func (p *PostPointOfInterestBody) ToGetPointOfInterestBody() GetPointOfInterestB
 
 type PutPointOfInterestBody = PostPointOfInterestBody
 
-// TODO client side hash
 type PostUserBody struct {
 	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,sha256"`
 	RoleID   uint   `json:"roleId" binding:"required"`
 }
 

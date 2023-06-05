@@ -54,7 +54,6 @@ func GetPublishedRoutes() (*[]models.Route, error) {
 	return repositories.GetPublishedRoutes(database.Db)
 }
 
-// TODO not performant
 func GetPublishedRouteByID(ID uint) (*models.Route, error) {
 	route, err := repositories.GetPublishedRouteByID(ID, database.Db)
 	if err != nil {
@@ -73,7 +72,6 @@ func GetPublishedRouteByID(ID uint) (*models.Route, error) {
 	return route, nil
 }
 
-// TODO different role catching
 func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User) (uint, error) {
 	if authenticatedUser.Role.Name == constants.AdminRoleName {
 		return repositories.DeleteEntityByID[models.Route](ID, database.Db)
@@ -143,7 +141,6 @@ func replaceRouteImageAssociations(route *models.Route, images *[]*models.Image,
 	tx.Model(&route).Association("Images").Append(images)
 	for _, image := range oldImages {
 		var count int64
-		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_images WHERE image_id = ?", image.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(image, image)
@@ -163,7 +160,6 @@ func replaceRouteLinkAssociations(route *models.Route, links *[]*models.Link, tx
 	tx.Model(&route).Association("Links").Append(links)
 	for _, link := range oldLinks {
 		var count int64
-		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_links WHERE link_id = ?", link.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(link, link)
@@ -183,7 +179,6 @@ func replaceRouteDetailAssociations(route *models.Route, details *[]*models.Deta
 	tx.Model(&route).Association("Details").Append(details)
 	for _, detail := range oldDetails {
 		var count int64
-		// TODO raw sql might just be better
 		tx.Raw("SELECT COUNT(*) FROM routes_details WHERE detail_id = ?", detail.ID).Scan(&count)
 		if count == 0 {
 			tx.Delete(detail, detail)
