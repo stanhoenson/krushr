@@ -15,7 +15,7 @@ COPY cmd ./cmd
 COPY internal ./internal
 
 # Build
-RUN go build -o krushr ./cmd/krushr
+RUN go build -o krushr ./cmd/api
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
