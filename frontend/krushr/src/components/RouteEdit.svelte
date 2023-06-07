@@ -28,6 +28,7 @@
   let viewOnly: boolean = false;
 
   let statuses: Status[];
+  let didSomething: boolean = false;
 
   //values
   let name: string = "";
@@ -86,6 +87,10 @@
         url.searchParams.set("id", updatedRoute.id.toString());
         const newUrl = url.toString();
         window.history.pushState({ path: newUrl }, "", newUrl);
+        if (didSomething) {
+          window.removeEventListener("beforeunload", beforeUnloadHandler);
+          didSomething = false;
+        }
       }
     } catch (e: any) {
       console.log(e);
@@ -111,7 +116,15 @@
     try {
       if (id) {
         let deletedRoute = await deleteRouteById(parseInt(id));
-        window.location.href = "/";
+        const confirmed = window.confirm(
+          "Are you sure you want to delete this route?"
+        );
+
+        if (confirmed) {
+          if (didSomething)
+            window.removeEventListener("beforeunload", beforeUnloadHandler);
+          window.location.href = "/";
+        }
       }
     } catch (e: any) {
       error = e.response.data.error;
@@ -119,14 +132,6 @@
   }
 
   onMount(async () => {
-    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      return (e.returnValue =
-        "Are you sure you want to leave? All changes will be lost"); // This line is required for some browsers
-    };
-
-    window.addEventListener("beforeunload", beforeUnloadHandler);
-
     try {
       user = await getMeUser();
     } catch (e: any) {}
@@ -165,11 +170,16 @@
 
     // getRouteById(queryParams);
     return () => {
-      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      if (didSomething)
+        window.removeEventListener("beforeunload", beforeUnloadHandler);
     };
   });
 
   afterUpdate(async () => {
+    if (!didSomething) {
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      didSomething = true;
+    }
     //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
       let element = document.getElementById(`poi-${poiToScrollToAfterUpdate}`);
@@ -178,6 +188,12 @@
       poiToScrollToAfterUpdate = -1;
     }
   });
+
+  const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    return (e.returnValue =
+      "Are you sure you want to leave? All changes will be lost"); // This line is required for some browsers
+  };
 </script>
 
 <div class="edit">
