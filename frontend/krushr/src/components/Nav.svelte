@@ -1,16 +1,23 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import { signOut } from "../requests/authentication";
-  import { authenticatedUser } from "../stores/user";
+  import {
+    applicationState,
+    initializeApplicationState,
+    resetApplicationState,
+  } from "../stores/application-state";
   import type { User } from "../types/models";
 
   let user: User | null;
 
-  let unsubscribe = authenticatedUser.subscribe((value) => (user = value));
+  let unsubscribe = applicationState.subscribe((value) => {
+    user = value.authenticatedUser;
+  });
 
   async function handleSignOut() {
     try {
       await signOut();
+      await resetApplicationState();
       window.location.href = "/";
     } catch (e: any) {}
   }

@@ -881,6 +881,14 @@ footer p {
     box-sizing: border-box;
 }
 
+.filter {
+    margin-bottom: var(--space-3xs);
+    display: block;
+}
+.filter-input {
+    margin-bottom: var(--space-m);
+}
+
 /* Responsive */
 @media(max-width: 50rem) {
 	section.routes .grid,

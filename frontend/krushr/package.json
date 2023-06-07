@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@astrojs/svelte": "^2.1.0",
@@ -15,8 +17,14 @@
     "@types/leaflet-routing-machine": "^3.2.4",
     "astro": "^2.1.8",
     "axios": "^1.4.0",
+    "fuse.js": "^6.6.2",
     "leaflet": "^1.9.3",
     "leaflet-routing-machine": "^3.2.12",
+    "msw": "^1.2.1",
     "svelte": "^3.57.0"
+  },
+  "devDependencies": {
+    "@testing-library/svelte": "^3.2.2",
+    "vitest": "^0.31.1"
   }
 }

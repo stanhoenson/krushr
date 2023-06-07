@@ -50,7 +50,7 @@
       details: [{ text: "" }],
       links: [{ url: "", text: "" }],
       categories: [],
-          support:false,
+      support: false,
     };
     route.pointsOfInterest.push(newPointOfInterest);
     route = route;
@@ -119,12 +119,13 @@
   }
 
   onMount(async () => {
-    const beforeUnloadHandler = (e) => {
+    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      return  (e.returnValue = 'Are you sure you want to leave? All changes will be lost'); // This line is required for some browsers
+      return (e.returnValue =
+        "Are you sure you want to leave? All changes will be lost"); // This line is required for some browsers
     };
 
-    window.addEventListener('beforeunload', beforeUnloadHandler);
+    window.addEventListener("beforeunload", beforeUnloadHandler);
 
     try {
       user = await getMeUser();
@@ -145,7 +146,7 @@
         name: "",
         imageIds: [],
         details: [{ text: "" }],
-        links: [{ url: "",text:"" }],
+        links: [{ url: "", text: "" }],
         categories: [],
         statusId: defaultStatusId,
         pointsOfInterest: [],
@@ -164,10 +165,9 @@
 
     // getRouteById(queryParams);
     return () => {
-      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
     };
   });
-
 
   afterUpdate(async () => {
     //scroll if necessary
