@@ -1,6 +1,7 @@
 .PHONY: run/api
 run/api:
-	go run ./cmd/api -debug
+	go run ./cmd/api -debug -automigrate
+
 
 .PHONY: build/api
 build/api:

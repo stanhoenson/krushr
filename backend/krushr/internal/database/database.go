@@ -30,9 +30,9 @@ func InitializeDatabase(databaseName, folderName string, automigrate bool) *gorm
 
 	if automigrate {
 		err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
-	}
-	if err != nil {
-		log.Fatal("failed to auto migrate models")
+		if err != nil {
+			log.Fatal("failed to auto migrate models")
+		}
 	}
 	// declare some custom things
 	err = db.SetupJoinTable(&models.Route{}, "PointsOfInterest", &models.RoutesPointsOfInterest{})
