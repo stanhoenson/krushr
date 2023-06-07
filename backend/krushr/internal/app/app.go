@@ -16,6 +16,7 @@ func Initialize() {
 	env.InitializeEnvironment("./.env")
 
 	debug := flag.Bool("debug", false, "Enable debug mode")
+	automigrate := flag.Bool("automigrate", false, "Enable automatic migration of the database")
 	flag.Parse()
 	if !*debug {
 		gin.SetMode(gin.ReleaseMode)
@@ -28,7 +29,7 @@ func Initialize() {
 	validators.InitializeValidators()
 	r.Use(middleware.Authorization())
 	handlers.RegisterHandlers(r)
-	database.InitializeDatabase(env.DatabaseName, env.DataFolder)
+	database.InitializeDatabase(env.DatabaseName, env.DataFolder, *automigrate)
 
 	r.Run(env.Address)
 }

@@ -16,7 +16,7 @@ import (
 
 var Db *gorm.DB
 
-func InitializeDatabase(databaseName, folderName string) *gorm.DB {
+func InitializeDatabase(databaseName, folderName string, automigrate bool) *gorm.DB {
 	// Create the directory if it doesn't exist
 	err := os.MkdirAll(folderName, os.ModePerm)
 	if err != nil {
@@ -27,11 +27,10 @@ func InitializeDatabase(databaseName, folderName string) *gorm.DB {
 	if err != nil {
 		log.Fatal("failed to initialize database")
 	}
-	// sqlDB, err := db.DB()
-	// sqlDB.SetMaxOpenConns(100)
-	// TODO look at ways to do this nicely, only in development
-	err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
 
+	if automigrate {
+		err = db.AutoMigrate(&models.Route{}, &models.Image{}, &models.Detail{}, &models.Link{}, &models.Category{}, &models.Status{}, &models.PointOfInterest{}, &models.User{}, &models.Role{}, &models.RoutesPointsOfInterest{})
+	}
 	if err != nil {
 		log.Fatal("failed to auto migrate models")
 	}

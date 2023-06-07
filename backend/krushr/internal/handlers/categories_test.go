@@ -27,7 +27,7 @@ func TestCategoriesRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterCategoryRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 	populateDatabaseWithDummyCategoryData()
 
 	t.Run("catgeories", func(t *testing.T) {

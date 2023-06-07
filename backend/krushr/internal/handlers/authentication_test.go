@@ -26,7 +26,7 @@ func TestAuthenticationRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterAuthenticationRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 
 	t.Run("authentication", func(t *testing.T) {
 		t.Run("testSignIn", func(t *testing.T) {

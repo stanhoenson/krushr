@@ -31,7 +31,7 @@ func TestImagesRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterImageRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("images", func(t *testing.T) {

@@ -26,7 +26,7 @@ func TestDetailsRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterDetailRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("details", func(t *testing.T) {

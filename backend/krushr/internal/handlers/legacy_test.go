@@ -19,7 +19,7 @@ func TestLegacyRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
 	handlers.RegisterLegacyRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 	populateDatabaseWithDummyRoutesData()
 
 	t.Run("legacy", func(t *testing.T) {

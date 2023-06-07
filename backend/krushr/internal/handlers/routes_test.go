@@ -34,7 +34,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
-	database.InitializeDatabase("test.db", "test/")
+	database.InitializeDatabase("test.db", "test/", true)
 	populateDatabaseWithDummyRoutesData()
 
 	t.Run("routes", func(t *testing.T) {
