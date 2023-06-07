@@ -2,17 +2,22 @@
   //TODO CLEAN THIS UP THIS IS DOODOO
   import { afterUpdate, onMount } from "svelte";
   import { deleteUser, getAllUsers, getMeUser } from "../requests/users";
+  import { applicationState } from "../stores/application-state";
   import type { User } from "../types/models";
   import Alert from "./Alert.svelte";
   export let refresh: boolean = false;
 
   let users: User[] = [];
   let error: string = "";
-  let user: User;
+  let authenticatedUser: User | null;
+
+  let unsubscribe = applicationState.subscribe((value) => {
+    authenticatedUser = value.authenticatedUser;
+  });
 
   async function handleDelete(id: number) {
     try {
-      let resposne = await deleteUser(id);
+      let response = await deleteUser(id);
       users = await getAllUsers();
     } catch (e: any) {
       error = e.response.data.error;
@@ -21,9 +26,12 @@
 
   onMount(async () => {
     try {
-      user = await getMeUser();
       users = await getAllUsers();
     } catch (e: any) {}
+
+    return () => {
+      unsubscribe();
+    };
   });
 
   afterUpdate(async () => {
@@ -44,7 +52,11 @@
     {#each users as user}
       <div class="user">
         <input type="email" value={user.email} disabled />
-        <button class="button error">Delete</button>
+        <button
+          on:click={handleDelete.bind(null, user.id)}
+          class="button error"
+          disabled={user.id === authenticatedUser?.id}>Delete</button
+        >
       </div>
     {/each}
 

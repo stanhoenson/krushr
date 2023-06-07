@@ -27,9 +27,9 @@
     keys: [
       "name",
       "categories.name",
-      "links.text",
-      "links.url",
-      "details.text",
+      // "links.text",
+      // "links.url",
+      // "details.text",
     ],
     shouldSort: true,
   });

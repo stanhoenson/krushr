@@ -115,12 +115,12 @@
   async function handleDeleteRoute() {
     try {
       if (id) {
-        let deletedRoute = await deleteRouteById(parseInt(id));
         const confirmed = window.confirm(
           "Are you sure you want to delete this route?"
         );
 
         if (confirmed) {
+          let deletedRoute = await deleteRouteById(parseInt(id));
           if (didSomething)
             window.removeEventListener("beforeunload", beforeUnloadHandler);
           window.location.href = "/";
@@ -160,7 +160,11 @@
       newPointOfInterest();
     } else {
       //get existing route
-      await existingRouteToEditableRoute(parseInt(id));
+      try {
+        await existingRouteToEditableRoute(parseInt(id));
+      } catch (e: any) {
+        window.location.href = "/404";
+      }
     }
 
     //TODO magic string not good, some undefined checks as well :(
