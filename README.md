@@ -12,6 +12,8 @@ built with [Astro](https://astro.build/) and [Svelte](https://svelte.dev/).
 
 There is no central instance, so we encourage you to run your own instance for your area.
 
+However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
+
 ## Requirements
 
 - Go 1.20, or above
@@ -19,21 +21,6 @@ There is no central instance, so we encourage you to run your own instance for y
 - GNU Make 3.81, or above
 
 ## Installation
-
-### Prerequisites
-
-- [Install Go](https://go.dev/doc/install)
-  - Or install it via your package manager
-- [Install `gofumpt`](https://github.com/mvdan/gofumpt) (the formatter we use)
-- [Install `staticcheck`](https://github.com/dominikh/go-tools) (the linter we use)
-- [Install Node](https://nodejs.org/en)
-  - But preferably install it via [`fnm`](https://github.com/Schniz/fnm) or [`nvm`](https://github.com/nvm-sh/nvm)
-
-### Application
-
-- Fork the repository to your preferred localtion
-- Run `install.sh` (but always read scripts before running them)
-  - This will install all dependencies for the backend and frontend
 
 ### Server
 
@@ -43,6 +30,19 @@ We recommend following [this guide](https://landchad.net/).
 Apart from that, you'll also need to have [Docker](https://www.docker.com/) installed.
 
 Further instructions on how to host your instance are below.
+
+### Prerequisites
+
+- [Install Go](https://go.dev/doc/install)
+  - Or install it via your package manager
+- [Install Node](https://nodejs.org/en)
+  - But preferably install it via [`fnm`](https://github.com/Schniz/fnm) or [`nvm`](https://github.com/nvm-sh/nvm)
+
+### Application
+
+- Clone the repository to your preferred location
+- Run `install.sh` (but always read scripts before running them)
+  - This will install all dependencies for the backend and frontend
 
 ## Examples
 
