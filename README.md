@@ -14,6 +14,95 @@ There is no central instance, so we encourage you to run your own instance for y
 
 However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
 
+## Temporary
+
+1. Requirements
+2. Installation
+  - Backend
+    - Install dependencies
+    - Configure .env
+    - Options:
+      - Use without building
+      - Building from sources
+      - Docker
+  - Frontend
+    - Install dependencies
+    - Configure .env
+    - Build
+3. Usage
+  - Backend
+    - Options:
+      - Use without building
+      - Building from sources
+      - Docker
+  - Frontend
+    - Serve files
+4. Contributing
+
+## Backend
+      
+### Use without building
+
+If you don't want to build the binary or use Docker, you can just run the application.
+
+Make sure to configure your `.env` file and that it is in `./backend/krushr`.
+
+```
+cd ./backend/krushr
+go get github.com/stanhoenson/krushr
+cp .env.example .env
+go run ./cmd/api
+```
+      
+### Building from sources
+
+// TODO fix grammar
+If you want to build the binary and run it, you can optionally deploy this binary to a preffered location.
+
+Make sure to configure the `.env` file and that it's in the same directory as your binary.
+
+```
+cd ./backend/krushr
+go get github.com/stanhoenson/krushr
+cp .env.example .env
+go build -o krushr ./cmd/api
+./krushr
+```
+      
+### Docker
+
+You can also use our Docker image, just make sure you're using the corresponding backend and frontend versions.
+Also make sure to configure your `.env` file.
+
+```
+cd ./backend/krushr
+git pull stanofsteel/krushr
+cp .env.example .env
+docker run -p 8080:8080 -v "/data:/data" --env-file=.env -d stanofsteel/krushr
+```
+
+## Frontend
+
+### Building
+
+Make sure to install dependencies and to configure the `.env` file.
+
+```
+cd ./frontend/krushr
+npm install
+cp .env.example .env
+npm run build # creates a dist folder containing the bundled application
+```
+
+Change the newly created `.env` file to your needs.
+
+### Serving
+
+Now serve the `dist` folder with your preffered file serving tool.
+This is commonly done to `/var/www/html` with something like [Apache]() or [NGINX]().
+
+---
+
 ## Requirements
 
 - Go 1.20, or above
@@ -24,10 +113,9 @@ However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
 
 ### Server
 
-There are a few things you need to have installed on your server before being able to run an instance.
-We recommend following [this guide](https://landchad.net/).
+We recommend following [this guide](https://landchad.net/) for setting up your server.
 
-Apart from that, you'll also need to have [Docker](https://www.docker.com/) installed.
+Optionally, you can use [Docker](https://www.docker.com/) to run the backend.
 
 Further instructions on how to host your instance are below.
 
@@ -43,6 +131,8 @@ Further instructions on how to host your instance are below.
 - Clone the repository to your preferred location
 - Run `install.sh` (but always read scripts before running them)
   - This will install all dependencies for the backend and frontend
+- Configure both the frontend and backend `.env` files
+  - (You could copy the `.env.example` files)
 
 ## Examples
 
