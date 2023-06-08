@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
+  import { applicationState } from "../stores/application-state";
 
-  import { statusesStore } from "../stores/statuses";
   import type { Status } from "../types/models";
 
   export let disabled: boolean = false;
@@ -9,8 +9,8 @@
 
   let statuses: Status[] = [];
 
-  let unsubscribe = statusesStore.subscribe((value) => {
-    statuses = value;
+  let unsubscribe = applicationState.subscribe((value) => {
+    statuses = value.statuses;
   });
 
   onDestroy(() => {

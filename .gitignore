@@ -4,6 +4,7 @@ bin/
 data/
 dist/
 node_modules
+coverage
 .astro/
 
 # Files

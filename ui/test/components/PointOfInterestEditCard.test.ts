@@ -15,13 +15,34 @@ import {
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { getAllCategories } from "../../src/requests/categories";
-import { GET_ALL_CATEGORIES_ENDPOINT } from "../../src/requests/endpoints";
-import type { Category } from "../../src/types/models";
+import {
+  GET_ALL_CATEGORIES_ENDPOINT,
+  GET_ALL_STATUSES_ENDPOINT,
+  GET_ME_USER_ENDPOINT,
+} from "../../src/requests/endpoints";
+import type { Category, Status, User } from "../../src/types/models";
 const server = setupServer(
   rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {
-    console.log(GET_ALL_CATEGORIES_ENDPOINT);
     return res(
       ctx.json([{ id: 1, name: "Default", position: 1 }] as Category[])
+    );
+  }),
+  rest.get(GET_ME_USER_ENDPOINT, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        id: 1,
+        email: "test@test.com",
+        role: { id: 1, name: "creator" },
+        roleId: 1,
+      } as User)
+    );
+  }),
+  rest.get(GET_ALL_STATUSES_ENDPOINT, (req, res, ctx) => {
+    return res(
+      ctx.json([
+        { id: 1, name: "Unpublished" },
+        { id: 2, name: "Published" },
+      ] as Status[])
     );
   })
 );
@@ -83,7 +104,10 @@ afterEach(() => {
 afterAll(() => server.close());
 
 import PointOfInterestEditCard from "../../src/components/PointOfInterestEditCard.svelte";
-import type { PostRouteBody } from "../../src/types/request-bodies";
+import type {
+  PostLinkBody,
+  PostRouteBody,
+} from "../../src/types/request-bodies";
 
 test("should delete link when delete link button is clicked", async () => {
   const deleteLinkButton = container.querySelector(
@@ -180,6 +204,62 @@ test("should delete detail when delete detail button is clicked", async () => {
 
   expect(detailCountAfter).lessThan(detailCountBefore);
 });
-test("should change name when name input is changed", async () => {});
-test("should change detail text when detail text input is changed", async () => {});
-test("should change link url and text when link url and text input are changed", async () => {});
+test("should change name when name input is changed", async () => {
+  let nameInputElement =
+    container.querySelector<HTMLInputElement>('[name="name"]');
+  if (!nameInputElement) throw new Error("name input element not found");
+
+  let nameToSet = "test";
+  let nameBefore = route.pointsOfInterest[0].name;
+
+  await fireEvent.input(nameInputElement, { target: { value: nameToSet } });
+  let nameAfter = route.pointsOfInterest[0].name;
+
+  expect(nameAfter).toBe(nameToSet);
+  expect(nameAfter).not.toBe(nameBefore);
+});
+test("should change detail text when detail text input is changed", async () => {
+  let detailsTextArea =
+    container.querySelector<HTMLTextAreaElement>('[name="details"]');
+  if (!detailsTextArea) throw new Error("details text area element not found");
+
+  let detailsValueToSet = "test";
+  let detailsTextBefore = route.pointsOfInterest[0].details[0].text;
+
+  await fireEvent.input(detailsTextArea, {
+    target: { value: detailsValueToSet },
+  });
+  let detailsTextAfter = route.pointsOfInterest[0].details[0].text;
+
+  expect(detailsTextAfter).toBe(detailsValueToSet);
+  expect(detailsTextAfter).not.toBe(detailsTextBefore);
+});
+test("should change link url and text when link url and text input are changed", async () => {
+  let linkTextInput =
+    container.querySelector<HTMLInputElement>('[name="text"]');
+  if (!linkTextInput) throw new Error("link text input element not found");
+  let linkUrlInput = container.querySelector<HTMLInputElement>('[name="url"]');
+  if (!linkUrlInput) throw new Error("link url input element not found");
+
+  let linkBefore = {
+    text: route.pointsOfInterest[0].links[0].text,
+    url: route.pointsOfInterest[0].links[0].url,
+  } as PostLinkBody;
+
+  let textToSet = "testtext";
+  let urlToSet = "www.test.com";
+
+  await fireEvent.input(linkTextInput, {
+    target: { value: textToSet },
+  });
+  await fireEvent.input(linkUrlInput, {
+    target: { value: urlToSet },
+  });
+  let linkAfter = route.pointsOfInterest[0].links[0];
+
+  expect(linkBefore).not.toBe(linkAfter);
+  expect(linkAfter).toStrictEqual({
+    text: textToSet,
+    url: urlToSet,
+  } as PostLinkBody);
+});

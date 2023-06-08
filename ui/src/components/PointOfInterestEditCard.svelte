@@ -257,7 +257,7 @@
                   <input
                     bind:value={link.url}
                     type="text"
-                    name="link"
+                    name="url"
                     required
                     disabled={viewOnly}
                   />
