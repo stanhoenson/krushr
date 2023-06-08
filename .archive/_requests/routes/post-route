@@ -1,2 +1,0 @@
-#!/bin/sh
-curl --header @headers.txt --cookie cookies.txt --json @post-route-body.json https://krushr.hoenson.xyz/api/routes

@@ -1,2 +1,0 @@
-#!/bin/sh
-curl  --json @sign-in-body.json http://localhost:8080/authentication/sign-up
