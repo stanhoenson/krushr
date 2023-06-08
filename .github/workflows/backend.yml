@@ -17,7 +17,6 @@ jobs:
 
       - name: Test
         run: |
-          cd backend/krushr
           cp .env.example .env
           go test -v ./...
 
