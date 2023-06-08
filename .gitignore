@@ -1,6 +1,15 @@
-# Scripts
-client
-server
-deploy
+# Directories
+deploy/
+bin/
+data/
+dist/
+node_modules
+.astro/
 
-backend/krushr/krushr
+# Files
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

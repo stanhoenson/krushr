@@ -1,4 +1,0 @@
-.env
-bin/
-data
-**/coverage.out
