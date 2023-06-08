@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { categories as categoriesStore } from "../stores/categories";
+  import { applicationState } from "../stores/application-state";
   import type { Category } from "../types/models";
   import type { PostCategoryBody } from "../types/request-bodies";
 
-  export let disabled: boolean=false;
+  export let disabled: boolean = false;
   export let selectedCategories: PostCategoryBody[] = [];
   export let handleCategoryToggle: (category: Category) => any;
   let selectedCategoriesStringOnly: string[];
@@ -14,8 +14,8 @@
 
   let categories: Category[] = [];
 
-  let unsubscribe = categoriesStore.subscribe((value) => {
-    categories = value;
+  let unsubscribe = applicationState.subscribe((value) => {
+    categories = value.categories;
   });
 
   onDestroy(() => {

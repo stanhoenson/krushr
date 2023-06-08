@@ -68,7 +68,7 @@
       console.log("creating", index);
       marker = L.marker([poi.latitude, poi.longitude], {
         icon: L.divIcon({
-          html: `<div>${index}</div>`,
+          html: `<div>${parseInt(index) + 1}</div>`,
           className: "map-marker",
         }),
         position: parseInt(index),
@@ -77,6 +77,12 @@
     if (!routingControl) {
       routingControl = L.Routing.control({
         waypoints,
+        router: import.meta.env.PUBLIC_OSRM_URL
+          ? L.routing.osrmv1({
+              serviceUrl: "https://osrm.hoenson.xyz/route/v1",
+              profile: "walking",
+            })
+          : undefined,
         plan: new L.Routing.Plan([], {
           createMarker: () => {
             return false;
@@ -101,11 +107,12 @@
     map.on("click", onMapClick);
     marker = L.marker(initialLatLng, {
       icon: L.divIcon({
-        html: `<div>${position}</div>`,
+        html: `<div>${position + 1}</div>`,
         className: "map-marker",
       }),
       position,
     } as ExtendedMarkerOptions).addTo(map);
+    handlePoisUpdate(map, allPointsOfInterest);
   });
 
   afterUpdate(() => {
@@ -120,4 +127,4 @@
   crossorigin=""
 />
 
-<div class="map  main" id={`map${position}`} bind:this={element} />
+<div class="map main" id={`map${position}`} bind:this={element} />

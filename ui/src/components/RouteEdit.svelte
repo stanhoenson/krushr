@@ -11,7 +11,6 @@
   } from "../requests/routes";
   import { getAllStatuses } from "../requests/statuses";
   import { getMeUser } from "../requests/users";
-  import { authenticatedUser } from "../stores/user";
   import type { PointOfInterest, Route, Status, User } from "../types/models";
   import type {
     PostPointOfInterestBody,

@@ -53,7 +53,6 @@ async function loadAuthenticatedUserAction() {
 
 async function loadStateFromLocalStorage() {
   try {
-    console.log(localStorage);
     let storedApplicationStateJSON = localStorage.getItem("applicationState");
     if (!storedApplicationStateJSON) {
       return;
