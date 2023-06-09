@@ -80,7 +80,7 @@ func DeleteRouteByIDAndAuthenticatedUser(ID uint, authenticatedUser *models.User
 }
 
 func UpdateRoute(ID uint, putRouteBody *models.PutRouteBody, authenticatedUser *models.User, tx *gorm.DB) (*models.Route, error) {
-	routeRelatedEntities, err := CreateOrUpdateRouteRelatedEntities(&putRouteBody.PostRouteBody, authenticatedUser, tx)
+	routeRelatedEntities, err := CreateOrUpdateRouteRelatedEntities(putRouteBody, authenticatedUser, tx)
 	if err != nil {
 		return nil, err
 	}

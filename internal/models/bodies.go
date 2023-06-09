@@ -21,9 +21,7 @@ type PostRouteBodyOld struct {
 	StatusID           uint   `json:"statusId" binding:"required"`
 }
 
-type PutRouteBody struct {
-	PostRouteBody
-}
+type PutRouteBody = PostRouteBody
 
 // Image, never used
 type PostImageBody struct {
@@ -71,9 +69,9 @@ type PutStatusBody struct {
 type PostPointOfInterestBody struct {
 	GetPointOfInterestBody
 	ImageIDs   []uint             `json:"imageIds"`
-	Details    []PostDetailBody   `json:"details" binding:"required,dive,min=1"`
-	Links      []PostLinkBody     `json:"links" binding:"dive"`
-	Categories []PostCategoryBody `json:"categories" binding:"dive"`
+	Details    []PostDetailBody   `json:"details" `
+	Links      []PostLinkBody     `json:"links" `
+	Categories []PostCategoryBody `json:"categories" `
 	Support    bool               `json:"support"`
 }
 

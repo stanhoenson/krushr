@@ -6,6 +6,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/models"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/stanhoenson/krushr/internal/wrappers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -28,7 +29,7 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 		}))
 		routes.PUT("/:id", wrappers.RoleWrapper(constants.Roles, func(ctx *gin.Context) {
 			Put(ctx, func(c *gin.Context, requestBody *models.PutPointOfInterestBody) error {
-				return nil
+				return validators.ValidatePostPointOfInterestBody(requestBody)
 			},
 				func(c *gin.Context, ID uint, requestBody *models.PutPointOfInterestBody) (*models.PointOfInterest, error) {
 					user, err := utils.GetUserFromContext(c)
@@ -42,7 +43,7 @@ func RegisterPointOfInterestRoutes(r *gin.Engine) {
 		}))
 		routes.POST("", wrappers.RoleWrapper(constants.Roles, func(c *gin.Context) {
 			Post(c, func(c *gin.Context, requestBody *models.PostPointOfInterestBody) error {
-				return nil
+				return validators.ValidatePostPointOfInterestBody(requestBody)
 			}, func(c *gin.Context, requestBody *models.PostPointOfInterestBody) (*models.PointOfInterest, error) {
 				user, err := utils.GetUserFromContext(c)
 				if err != nil {
