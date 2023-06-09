@@ -14,31 +14,6 @@ There is no central instance, so we encourage you to run your own instance for y
 
 However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
 
-## Temporary
-
-1. Requirements
-2. Installation
-  - Backend
-    - Install dependencies
-    - Configure .env
-    - Options:
-      - Use without building
-      - Building from sources
-      - Docker
-  - Frontend
-    - Install dependencies
-    - Configure .env
-    - Build
-3. Usage
-  - Backend
-    - Options:
-      - Use without building
-      - Building from sources
-      - Docker
-  - Frontend
-    - Serve files
-4. Contributing
-
 ## API
       
 ### Use without building
@@ -54,7 +29,7 @@ go run ./cmd/api
       
 ### Building from sources
 
-// TODO fix grammar
+// **TODO** fix grammar.
 If you want to build the binary and run it, you can optionally deploy this binary to a preffered location.
 
 Make sure to configure the `.env` file and that it's in the same directory as your binary.
