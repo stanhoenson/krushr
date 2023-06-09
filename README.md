@@ -2,7 +2,7 @@ This project is [FOSS](https://en.wikipedia.org/wiki/Free_and_open-source_softwa
 
 # Krushr
 
-Host and manage routes in your area.
+Host and manage routes (sightseeing trails) in your area.
 
 ## Description
 
