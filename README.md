@@ -81,7 +81,9 @@ This is commonly done to `/var/www/html` with something like [Apache]() or [NGIN
 
 ## Configuration
 
--
+The `.env` files in both the root directory and the `./ui` directory contain comments explaining the variables.
+
+Refer to them to configure your application.
 
 ## Contributing
 

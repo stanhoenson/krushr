@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/stanhoenson/krushr/internal/constants"
 	"github.com/stanhoenson/krushr/internal/database"
 	"github.com/stanhoenson/krushr/internal/models"
@@ -18,6 +20,7 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		routes.GET("", func(c *gin.Context) {
 			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
 				user, err := utils.GetUserFromContext(c)
+				fmt.Println(c.Request)
 				if err != nil {
 					return services.GetPublishedRoutes()
 				}
