@@ -22,6 +22,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -32,6 +33,7 @@ func TestImagesRoutes(t *testing.T) {
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterImageRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("images", func(t *testing.T) {

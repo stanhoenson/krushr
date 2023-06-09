@@ -11,6 +11,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/handlers"
 	"github.com/stanhoenson/krushr/internal/middleware"
 	"github.com/stanhoenson/krushr/internal/models"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -20,6 +21,7 @@ func TestLegacyRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	handlers.RegisterLegacyRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 	populateDatabaseWithDummyRoutesData()
 
 	t.Run("legacy", func(t *testing.T) {

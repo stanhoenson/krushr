@@ -56,3 +56,21 @@ func GetTypeString(entity interface{}) string {
 
 	return entityType.Name()
 }
+func FindDuplicates(arr []string) []string {
+	duplicates := []string{}
+	frequency := make(map[string]int)
+
+	// Count the frequency of each string
+	for _, str := range arr {
+		frequency[str]++
+	}
+
+	// Check for duplicates
+	for str, count := range frequency {
+		if count > 1 {
+			duplicates = append(duplicates, str)
+		}
+	}
+
+	return duplicates
+}

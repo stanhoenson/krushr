@@ -17,6 +17,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
@@ -28,6 +29,7 @@ func TestCategoriesRoutes(t *testing.T) {
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterCategoryRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 	populateDatabaseWithDummyCategoryData()
 
 	t.Run("catgeories", func(t *testing.T) {

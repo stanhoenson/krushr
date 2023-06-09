@@ -116,7 +116,7 @@ func (d Detail) ToLegacyInfo() LegacyInfo {
 type Link struct {
 	ID               uint               `gorm:"primaryKey" json:"id"`
 	Text             string             `gorm:"not null" json:"text"`
-	URL              string             `gorm:"not null;unique" json:"url"`
+	URL              string             `gorm:"not null" json:"url"`
 	Routes           []*Route           `gorm:"many2many:routes_links;constraint:OnDelete:CASCADE" json:"routes"`
 	PointsOfInterest []*PointOfInterest `gorm:"many2many:points_of_interest_links;constraint:OnDelete:CASCADE" json:"pointsOfInterest"`
 }

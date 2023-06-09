@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -18,6 +19,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
@@ -35,6 +37,7 @@ func TestRoutesRoutes(t *testing.T) {
 	r.Use(middleware.Authorization())
 	handlers.RegisterRouteRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 	populateDatabaseWithDummyRoutesData()
 
 	t.Run("routes", func(t *testing.T) {
@@ -62,7 +65,7 @@ func TestRoutesRoutes(t *testing.T) {
 		t.Run("testCreatorDeleteOthersRoute", func(t *testing.T) {
 			testCreatorDeleteOthersRoute(t, r)
 		})
-		t.Run("testCreatorDeleteOthersRoute", func(t *testing.T) {
+		t.Run("testCreatorPostRoute", func(t *testing.T) {
 			testCreatorPostRoute(t, r)
 		})
 		t.Run("testVisitorPostRoute", func(t *testing.T) {
@@ -320,6 +323,7 @@ func testCreatorPostRoute(t *testing.T, r *gin.Engine) {
 
 	var count int
 	database.Db.Raw("SELECT COUNT(*) FROM routes WHERE id = 5").Scan(&count)
+	fmt.Println(w.Body.String())
 
 	assert.Equal(t, 1, count)
 	assert.Equal(t, http.StatusOK, w.Code)
@@ -384,7 +388,7 @@ func initializeRoute(ID, userID, statusID uint, name string) (route models.Route
 	category := models.Category{ID: 1, Name: "Example Category", Position: 1}
 	route.Categories = []*models.Category{&category}
 
-	poi := models.PointOfInterest{
+	poi1 := models.PointOfInterest{
 		ID:        1,
 		Name:      "Example POI 1",
 		Longitude: 123.456,
@@ -392,10 +396,10 @@ func initializeRoute(ID, userID, statusID uint, name string) (route models.Route
 		UserID:    userID,
 		Support:   false,
 	}
-	poi.Images = []*models.Image{&image}
-	poi.Details = []*models.Detail{&detail}
-	route.PointsOfInterest = []*models.PointOfInterest{&poi}
-	poi = models.PointOfInterest{
+	poi1.Images = []*models.Image{&image}
+	poi1.Details = []*models.Detail{&detail}
+	route.PointsOfInterest = []*models.PointOfInterest{&poi1}
+	poi2 := models.PointOfInterest{
 		ID:        2,
 		Name:      "Example POI 2",
 		Longitude: 123.456,
@@ -403,10 +407,9 @@ func initializeRoute(ID, userID, statusID uint, name string) (route models.Route
 		UserID:    userID,
 		Support:   false,
 	}
-	poi.Images = []*models.Image{&image}
-	poi.Details = []*models.Detail{&detail}
-	route.PointsOfInterest = []*models.PointOfInterest{&poi}
-	route.PointsOfInterest = append(route.PointsOfInterest, &poi)
+	poi2.Images = []*models.Image{&image}
+	poi2.Details = []*models.Detail{&detail}
+	route.PointsOfInterest = append(route.PointsOfInterest, &poi2)
 
 	return route
 }
