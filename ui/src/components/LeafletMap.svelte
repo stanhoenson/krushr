@@ -4,11 +4,14 @@
   import { goudaCoordinates } from "../constants";
   import "leaflet-routing-machine";
   import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+  import "leaflet.fullscreen/Control.FullScreen.js";
+  import "leaflet.fullscreen/Control.FullScreen.css";
   import type {
     CoordinatesWithPosition,
     ExtendedMarkerOptions,
   } from "../types/misc";
   import type { PutPointOfInterestBody } from "../types/request-bodies";
+  import Alert from "./Alert.svelte";
   let element: any;
 
   export let disabled: boolean;
@@ -19,6 +22,7 @@
   let map: L.Map;
   let marker: L.Marker;
   let routingControl: L.Routing.Control;
+  let error: string = "";
 
   const initialLatLng: LatLngTuple = [
     Number(goudaCoordinates.latitude.toFixed(6)),
@@ -76,6 +80,7 @@
     }
     if (!routingControl) {
       routingControl = L.Routing.control({
+        fitSelectedRoutes: false,
         waypoints,
         router: import.meta.env.PUBLIC_OSRM_URL
           ? L.routing.osrmv1({
@@ -98,9 +103,9 @@
   }
 
   onMount(() => {
+    console.log("mouunt??");
     map = L.map(element).setView(initialLatLng, initialZoom);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
@@ -112,11 +117,32 @@
       }),
       position,
     } as ExtendedMarkerOptions).addTo(map);
-    handlePoisUpdate(map, allPointsOfInterest);
+    L.control
+      .fullscreen({
+        position: "topleft", // change the position of the button can be topleft, topright, bottomright or bottomleft, default topleft
+        title: "Show me the fullscreen !", // change the title of the button, default Full Screen
+        titleCancel: "Exit fullscreen mode", // change the title of the button when fullscreen is on, default Exit Full Screen
+        content: undefined, // change the content of the button, can be HTML, default null
+        forceSeparateButton: true, // force separate button to detach from zoom buttons, default false
+        forcePseudoFullscreen: true, // force use of pseudo full screen even if full screen API is available, default false
+        fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
+      })
+      .addTo(map);
+    try {
+      handlePoisUpdate(map, allPointsOfInterest);
+      error = "";
+    } catch (e: any) {
+      error = e;
+    }
   });
 
   afterUpdate(() => {
-    handlePoisUpdate(map, allPointsOfInterest);
+    try {
+      handlePoisUpdate(map, allPointsOfInterest);
+      error = "";
+    } catch (e: any) {
+      error = e;
+    }
   });
 </script>
 
@@ -126,5 +152,10 @@
   integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
   crossorigin=""
 />
+<div>
+  <div class="map main" id={`map${position}`} bind:this={element} />
 
-<div class="map main" id={`map${position}`} bind:this={element} />
+  {#if error}
+    <Alert>{error}</Alert>
+  {/if}
+</div>

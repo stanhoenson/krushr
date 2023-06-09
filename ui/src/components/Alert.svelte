@@ -6,7 +6,7 @@
   console.log(onClose !== null);
 </script>
 
-<div class={`alert block ${type} soft`}>
+<div class={`alert block ${type} soft`} {...$$restProps}>
   <span class="message"><slot /></span>
   {#if onClose !== null}
     <div class="icon" on:click={onClose}><XMark /></div>
