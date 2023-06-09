@@ -109,16 +109,6 @@
       bind:longitude={pointOfInterest.longitude}
     />
     <div>
-      <div class="flex input">
-        <label>Longitude</label>
-        <input
-          disabled={viewOnly}
-          required
-          bind:value={pointOfInterest.longitude}
-          type="text"
-          name="longitude"
-        />
-      </div>
       <div class="flex input name">
         <label>Latitude</label>
         <input
@@ -127,6 +117,16 @@
           bind:value={pointOfInterest.latitude}
           type="text"
           name="latitude"
+        />
+      </div>
+      <div class="flex input">
+        <label>Longitude</label>
+        <input
+          disabled={viewOnly}
+          required
+          bind:value={pointOfInterest.longitude}
+          type="text"
+          name="longitude"
         />
       </div>
       <hr />

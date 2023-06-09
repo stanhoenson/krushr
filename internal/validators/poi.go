@@ -7,7 +7,6 @@ import (
 )
 
 func ValidatePostPointOfInterestBody(postPointOfInterestBody *models.PostPointOfInterestBody) error {
-
 	if !postPointOfInterestBody.Support {
 		if len(postPointOfInterestBody.Details) < 1 {
 			return errors.New("point of interest doesn't have a Detail")
@@ -38,5 +37,4 @@ func ValidatePostPointOfInterestBody(postPointOfInterestBody *models.PostPointOf
 	}
 
 	return nil
-
 }

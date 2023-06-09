@@ -8,7 +8,6 @@ import (
 )
 
 func ValidatePostRouteBody(postRouteBody *models.PostRouteBody) error {
-
 	var poiNames []string
 
 	for _, poi := range postRouteBody.PointsOfInterest {
@@ -26,5 +25,4 @@ func ValidatePostRouteBody(postRouteBody *models.PostRouteBody) error {
 	}
 
 	return nil
-
 }
