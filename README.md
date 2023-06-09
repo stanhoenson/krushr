@@ -20,9 +20,11 @@ However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
 - Node 18.16.0, or above
 - GNU Make 3.81, or above
 
-## API
+## Usage
+
+### API
       
-### Use without building
+#### Use without building
 
 If you don't want to build the binary or use Docker, you can just run the application.
 
@@ -33,7 +35,7 @@ cp .env.example .env
 go run ./cmd/api
 ```
       
-### Building from source
+#### Building from source
 
 // **TODO** fix grammar.
 If you want to build the binary and run it, you can optionally deploy this binary to a preffered location.
@@ -46,7 +48,7 @@ go build -o krushr ./cmd/api
 ./krushr
 ```
       
-### Docker
+#### Docker
 
 You can also use our Docker image, just make sure you're using the corresponding backend and frontend versions.
 Also make sure to configure your `.env` file.
@@ -57,9 +59,9 @@ git pull stanofsteel/krushr
 docker run -p 8080:8080 -v "/data:/data" --env-file=.env -d stanofsteel/krushr
 ```
 
-## Web interface
+### Web interface
 
-### Building
+#### Building
 
 Make sure to install dependencies and to configure the `.env` file.
 
@@ -72,12 +74,27 @@ npm run build # creates a dist folder containing the bundled application
 
 Change the newly created `.env` file to your needs.
 
-### Serving
+#### Serving
 
 Now serve the `dist` folder with your preffered file serving tool.
 This is commonly done to `/var/www/html` with something like [Apache]() or [NGINX]().
 
----
+## Updating
+
+### API
+
+If you're using Docker you can pull the latest Docker image, otherwise just pull the repository and directly run the application or build again from source.
+
+#### Database migration
+
+You can run the API with the `-automigrate` flag which will migrate the new changes to your database.
+This however doesn't always work properly: https://gorm.io/docs/migration.html.
+
+So be sure back up your database and migrate the database yourself.
+
+### Web interface
+
+Pull the repository for the latest changes, build it and serve it like you've done before.
 
 ## Configuration
 
@@ -87,7 +104,7 @@ Refer to them to configure your application.
 
 ## Contributing
 
--
+Feel free to send any pull requests.
 
 ## Testing
 
@@ -96,7 +113,9 @@ Refer to them to configure your application.
 Go provides us with great built-in testing capabilities and tooling.
 We've used a Makefile to simplify it even further.
 
-- `make audit`
+```sh
+make audit
+```
 
 (Note: for this command to work, you need to have [`gofumpt`](https://github.com/mvdan/gofumpt) and [`staticcheck`](https://github.com/dominikh/go-tools) installed.
 Also, you need to be in `./backend/krushr` to run this command.)
@@ -109,7 +128,9 @@ Only when all the problems are solved, will the tests be run.
 When the tests fail, you should see the expected value and the actual value.
 Also, you'll see the test coverage.
 
-- `make coverage`
+```sh
+make coverage
+```
 
 This command will test your code, create a coverage profile and open said profile in your browser.
 
@@ -117,7 +138,19 @@ This shows you very precisely which parts of your code are covered and which are
 
 ### Web interface
 
--
+To run the tests for the web interface:
+
+```sh
+cd ./ui
+npm run test
+```
+
+To run the tests and generate coverage:
+
+```sh
+cd ./ui
+npm run coverage
+```
 
 ## Licensing
 
