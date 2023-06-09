@@ -18,6 +18,7 @@
     targetPoiIndex: number
   ) => any;
   export let position: number;
+  let uiPosition: number = position + 1;
   export let pointOfInterest: PostPointOfInterestBody;
   export let route: PostRouteBody;
 
@@ -137,15 +138,16 @@
             on:click={handlePositionChange.bind(null, position - 1)}
             type="button"
             class={`button block secondary ${position === 0 ? "disabled" : ""}`}
-            href="#">Move to {position - 1}</button
+            >Move to {uiPosition - 1}</button
           >
-          <span>{position}</span>
+          <span>{uiPosition}</span>
           <button
             disabled={viewOnly}
             on:click={handlePositionChange.bind(null, position + 1)}
             type="button"
-            class="button block secondary"
-            href="#">Move to {position + 1}</button
+            class={`button block secondary ${
+              position === route.pointsOfInterest.length - 1 ? "disabled" : ""
+            }`}>Move to {uiPosition + 1}</button
           >
         </div>
       </div>

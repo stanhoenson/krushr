@@ -17,12 +17,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd frontend/krushr
+          cd ui
           npm i
 
       - name: Build
         run: |
-          cd frontend/krushr
+          cd ui
           PUBLIC_API_BASE_URL=${{ vars.PUBLIC_API_BASE_URL }} npm run build
 
       - name: Configure SSH
@@ -34,5 +34,5 @@ jobs:
 
       - name: Deploy
         run: |
-          cd frontend/krushr
+          cd ui
           rsync -avz --delete dist/ thrain@hoenson.xyz:/home/krushr/frontend
