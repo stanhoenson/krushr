@@ -39,17 +39,15 @@ However, we do run a ["demo" instance](https://krushr.hoenson.xyz).
     - Serve files
 4. Contributing
 
-## Backend
+## API
       
 ### Use without building
 
 If you don't want to build the binary or use Docker, you can just run the application.
 
-Make sure to configure your `.env` file and that it is in `./backend/krushr`.
+Make sure to configure your `.env` file and that it's in the root directory.
 
-```
-cd ./backend/krushr
-go get github.com/stanhoenson/krushr
+```sh
 cp .env.example .env
 go run ./cmd/api
 ```
@@ -61,9 +59,7 @@ If you want to build the binary and run it, you can optionally deploy this binar
 
 Make sure to configure the `.env` file and that it's in the same directory as your binary.
 
-```
-cd ./backend/krushr
-go get github.com/stanhoenson/krushr
+```sh
 cp .env.example .env
 go build -o krushr ./cmd/api
 ./krushr
@@ -74,21 +70,20 @@ go build -o krushr ./cmd/api
 You can also use our Docker image, just make sure you're using the corresponding backend and frontend versions.
 Also make sure to configure your `.env` file.
 
-```
-cd ./backend/krushr
-git pull stanofsteel/krushr
+```sh
 cp .env.example .env
+git pull stanofsteel/krushr
 docker run -p 8080:8080 -v "/data:/data" --env-file=.env -d stanofsteel/krushr
 ```
 
-## Frontend
+## Web interface
 
 ### Building
 
 Make sure to install dependencies and to configure the `.env` file.
 
-```
-cd ./frontend/krushr
+```sh
+cd ./ui
 npm install
 cp .env.example .env
 npm run build # creates a dist folder containing the bundled application
