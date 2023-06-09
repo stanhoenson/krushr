@@ -16,6 +16,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
@@ -27,6 +28,7 @@ func TestDetailsRoutes(t *testing.T) {
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterDetailRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 	populateDatabaseWithDummyDetailData()
 
 	t.Run("details", func(t *testing.T) {

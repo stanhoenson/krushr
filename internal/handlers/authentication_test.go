@@ -16,6 +16,7 @@ import (
 	"github.com/stanhoenson/krushr/internal/repositories"
 	"github.com/stanhoenson/krushr/internal/services"
 	"github.com/stanhoenson/krushr/internal/utils"
+	"github.com/stanhoenson/krushr/internal/validators"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"
@@ -27,6 +28,7 @@ func TestAuthenticationRoutes(t *testing.T) {
 	env.InitializeEnvironment("../../.env")
 	handlers.RegisterAuthenticationRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
+	validators.InitializeValidators()
 
 	t.Run("authentication", func(t *testing.T) {
 		t.Run("testSignIn", func(t *testing.T) {
