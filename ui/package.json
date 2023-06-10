@@ -22,7 +22,7 @@
     "fuse.js": "^6.6.2",
     "leaflet": "^1.9.3",
     "leaflet-routing-machine": "^3.2.12",
-    "leaflet.fullscreen": "github:boybou/leaflet.fullscreen-1",
+    "leaflet.fullscreen": "github:stanhoenson/leaflet.fullscreen-1",
     "msw": "^1.2.1",
     "screenfull": "^6.0.2",
     "svelte": "^3.57.0"

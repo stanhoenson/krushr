@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 import { fireEvent, render } from "@testing-library/svelte";
 import {
-  assert,
-  expect,
-  test,
-  Mock,
-  beforeAll,
-  beforeEach,
   afterAll,
   afterEach,
+  assert,
+  beforeAll,
+  beforeEach,
+  expect,
+  Mock,
+  test,
 } from "vitest";
 
 import type { Category, Status, User } from "../../src/types/models";
@@ -19,7 +19,7 @@ const categories = [
 ] as Category[];
 
 const server = setupMockserver(
-  Object.assign({}, defaultMockServerOptions, { categories })
+  Object.assign({}, defaultMockServerOptions, { categories }),
 );
 server.listen();
 
@@ -69,7 +69,7 @@ test("should render category buttons and have correct text", async () => {
 });
 test("should render category buttons with appropriate class when they are selected", async () => {
   const selectedCategoryButton = container.querySelector(
-    ".categories .category.selected"
+    ".categories .category.selected",
   );
 
   expect(selectedCategoryButton).toBeTruthy();

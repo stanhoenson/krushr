@@ -2,14 +2,14 @@
 import "../env-mock";
 import { fireEvent, render, waitFor } from "@testing-library/svelte";
 import {
-  assert,
-  expect,
-  test,
-  Mock,
-  beforeAll,
-  beforeEach,
   afterAll,
   afterEach,
+  assert,
+  beforeAll,
+  beforeEach,
+  expect,
+  Mock,
+  test,
 } from "vitest";
 
 const server = setupMockserver();
@@ -53,27 +53,6 @@ test("should render sign in link", async () => {
 
   expect(button).toBeTruthy();
 });
-
-//TODO this doesnt want to work maybe implement mock window.location
-// test("should reroute when clicking the link", async () => {
-//   const link = container.querySelector('a.button.primary[href="/sign-in"]');
-
-//   if (!link) {
-//     throw new Error("Sign-in link not found");
-//   }
-
-//   fireEvent.click(link);
-
-//   await waitFor(
-//     () => {
-//       // Wait for the expected href change to occur
-//       return window.location.href.includes("/sign-in");
-//     },
-//     { timeout: 3000, interval: 1000 }
-//   );
-
-//   expect(window.location.href).toContain("/sign-in");
-// });
 test("should not render sign in link", async () => {
   await loadStateFromApi();
   const button = container.querySelector('a.button.primary[href="/sign-in"]');
@@ -101,3 +80,24 @@ test("should not render users link", async () => {
 
   expect(usersButton).toBeFalsy();
 });
+
+//TODO this doesnt want to work maybe implement mock window.location
+// test("should reroute when clicking the link", async () => {
+//   const link = container.querySelector('a.button.primary[href="/sign-in"]');
+
+//   if (!link) {
+//     throw new Error("Sign-in link not found");
+//   }
+
+//   fireEvent.click(link);
+
+//   await waitFor(
+//     () => {
+//       // Wait for the expected href change to occur
+//       return window.location.href.includes("/sign-in");
+//     },
+//     { timeout: 3000, interval: 1000 }
+//   );
+
+//   expect(window.location.href).toContain("/sign-in");
+// });
