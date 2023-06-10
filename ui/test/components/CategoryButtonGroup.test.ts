@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { fireEvent, render } from "@testing-library/svelte";
+import { cleanup, fireEvent, render } from "@testing-library/svelte";
 import {
   afterAll,
   afterEach,
@@ -42,6 +42,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   component.$destroy();
+  cleanup();
 });
 
 afterAll(() => server.close());

@@ -24,8 +24,8 @@ import { readFileSync } from "fs";
 
 export type MockServerOptions = {
   categories: Category[];
-  authenticatedUserNonAdminUser: User;
-  authenticatedUserAdminUser: User;
+  authenticatedNonAdminUser: User;
+  authenticatedAdminUser: User;
   statuses: Status[];
   routes: Route[];
 };
@@ -35,13 +35,13 @@ const statuses = [
   { id: 1, name: "Unpublished" },
   { id: 2, name: "Published" },
 ] as Status[];
-const authenticatedUserNonAdminUser = {
+const authenticatedNonAdminUser = {
   id: 1,
   email: "test@test.com",
   role: { id: 1, name: "Creator" },
   roleId: 1,
 } as User;
-const authenticatedUserAdminUser = {
+const authenticatedAdminUser = {
   id: 1,
   email: "admin@admin.com",
   role: { id: 1, name: "Admin" },
@@ -49,8 +49,8 @@ const authenticatedUserAdminUser = {
 } as User;
 export const defaultMockServerOptions: MockServerOptions = {
   categories: categories,
-  authenticatedUserNonAdminUser,
-  authenticatedUserAdminUser,
+  authenticatedNonAdminUser: authenticatedNonAdminUser,
+  authenticatedAdminUser: authenticatedAdminUser,
   statuses: statuses,
   routes: [
     {
@@ -62,8 +62,8 @@ export const defaultMockServerOptions: MockServerOptions = {
       categories: categories,
       status: statuses[0],
       statusId: statuses[0].id,
-      user: authenticatedUserAdminUser,
-      userId: authenticatedUserAdminUser.id,
+      user: authenticatedAdminUser,
+      userId: authenticatedAdminUser.id,
       distance: 10,
       pointsOfInterest: [
         {
@@ -74,8 +74,8 @@ export const defaultMockServerOptions: MockServerOptions = {
           images: [{ id: 1, path: "data/files/image.png" }] as Image[],
           details: [{ id: 1, text: "detail text" }] as Detail[],
           links: [] as Link[],
-          user: authenticatedUserAdminUser,
-          userId: authenticatedUserAdminUser.id,
+          user: authenticatedAdminUser,
+          userId: authenticatedAdminUser.id,
           support: false,
         },
         {
@@ -86,13 +86,52 @@ export const defaultMockServerOptions: MockServerOptions = {
           images: [{ id: 1, path: "data/files/image.png" }] as Image[],
           details: [{ id: 1, text: "detail text" }] as Detail[],
           links: [] as Link[],
-          user: authenticatedUserAdminUser,
-          userId: authenticatedUserAdminUser.id,
+          user: authenticatedAdminUser,
+          userId: authenticatedAdminUser.id,
           support: false,
         },
       ] as PointOfInterest[],
-    } as Route,
-  ],
+    },
+    {
+      id: 2,
+      name: "Route 2",
+      images: [{ id: 1, path: "data/files/image.png" }] as Image[],
+      details: [{ id: 1, text: "detail text" }] as Detail[],
+      links: [{ id: 1, url: "www.test.com", text: "testLink" }] as Link[],
+      categories: categories,
+      status: statuses[1],
+      statusId: statuses[1].id,
+      user: authenticatedAdminUser,
+      userId: authenticatedAdminUser.id,
+      distance: 10,
+      pointsOfInterest: [
+        {
+          id: 1,
+          name: "Poi 1",
+          longitude: 10.1,
+          latitude: 5.1,
+          images: [{ id: 1, path: "data/files/image.png" }] as Image[],
+          details: [{ id: 1, text: "detail text" }] as Detail[],
+          links: [] as Link[],
+          user: authenticatedAdminUser,
+          userId: authenticatedAdminUser.id,
+          support: false,
+        },
+        {
+          id: 2,
+          name: "Poi 2",
+          longitude: 12.1,
+          latitude: 6.1,
+          images: [{ id: 1, path: "data/files/image.png" }] as Image[],
+          details: [{ id: 1, text: "detail text" }] as Detail[],
+          links: [] as Link[],
+          user: authenticatedAdminUser,
+          userId: authenticatedAdminUser.id,
+          support: false,
+        },
+      ] as PointOfInterest[],
+    },
+  ] as Route[],
 };
 
 export function setNonAdmin(value: boolean) {
@@ -112,6 +151,7 @@ export function setupMockserver(
       res(ctx.set(headers), ctx.body(readFileSync("./test.png")));
     }),
     rest.get(GET_ALL_ROUTES_ENDPOINT, (req, res, ctx) => {
+      console.log("called");
       return res(ctx.json(options.routes));
     }),
     rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {
@@ -119,9 +159,9 @@ export function setupMockserver(
     }),
     rest.get(GET_ME_USER_ENDPOINT, (req, res, ctx) => {
       if (nonAdmin) {
-        return res(ctx.json(options.authenticatedUserNonAdminUser));
+        return res(ctx.json(options.authenticatedNonAdminUser));
       }
-      return res(ctx.json(options.authenticatedUserAdminUser));
+      return res(ctx.json(options.authenticatedAdminUser));
     }),
     rest.get(GET_ALL_STATUSES_ENDPOINT, (req, res, ctx) => {
       return res(ctx.json(options.statuses));

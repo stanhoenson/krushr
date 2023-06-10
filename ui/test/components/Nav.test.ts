@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import "../env-mock";
-import { fireEvent, render, waitFor } from "@testing-library/svelte";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/svelte";
 import {
   afterAll,
   afterEach,
@@ -35,6 +35,7 @@ afterEach(async () => {
   component.$destroy();
   await resetApplicationState();
   setNonAdmin(true);
+  cleanup();
 });
 
 afterAll(() => server.close());

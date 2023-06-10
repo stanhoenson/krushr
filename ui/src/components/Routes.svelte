@@ -53,6 +53,7 @@
   }
 
   onMount(async () => {
+    console.log("never mount?");
     try {
       routes = await getAllRoutes();
       let filteredRoutes = await filterRoutes(routes, fuse);

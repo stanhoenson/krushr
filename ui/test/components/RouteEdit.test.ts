@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import "../env-mock";
-import { fireEvent, render, waitFor } from "@testing-library/svelte";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/svelte";
 import {
   assert,
   expect,
@@ -25,11 +25,9 @@ beforeEach(async () => {
 });
 
 function handleRender() {
-  let renderResult = render(RouteEdit,{
-        props:{
-
-        }
-    });
+  let renderResult = render(RouteEdit, {
+    props: {},
+  });
   component = renderResult.component;
   container = renderResult.container;
   rerender = renderResult.rerender;
@@ -39,6 +37,7 @@ afterEach(async () => {
   component.$destroy();
   await resetApplicationState();
   setNonAdmin(true);
+  cleanup();
 });
 
 afterAll(() => server.close());
