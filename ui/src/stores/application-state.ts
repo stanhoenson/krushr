@@ -18,7 +18,7 @@ export const applicationState = writable<ApplicationState>({
 
 let initialized = false;
 
-async function loadStateFromApi() {
+export async function loadStateFromApi() {
   let authenticatedUser = await loadAuthenticatedUserAction();
   let categories = await loadCategoriesAction();
   let statuses = await loadStatusesAction();

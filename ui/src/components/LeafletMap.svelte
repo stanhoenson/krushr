@@ -4,7 +4,7 @@
   import { goudaCoordinates } from "../constants";
   import "leaflet-routing-machine";
   import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-  import "leaflet.fullscreen/Control.FullScreen.js";
+  import "leaflet.fullscreen/Control.FullScreen";
   import "leaflet.fullscreen/Control.FullScreen.css";
   import type {
     CoordinatesWithPosition,

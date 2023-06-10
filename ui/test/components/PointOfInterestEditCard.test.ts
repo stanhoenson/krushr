@@ -14,7 +14,6 @@ import {
 
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import { getAllCategories } from "../../src/requests/categories";
 import {
   GET_ALL_CATEGORIES_ENDPOINT,
   GET_ALL_STATUSES_ENDPOINT,
@@ -51,7 +50,8 @@ server.listen();
 let route: PostRouteBody;
 let container: HTMLElement;
 let component: PointOfInterestEditCard;
-beforeEach(() => {
+beforeEach(async () => {
+  await loadStateFromApi();
   server.resetHandlers();
   route = {
     name: "",
@@ -108,6 +108,7 @@ import type {
   PostLinkBody,
   PostRouteBody,
 } from "../../src/types/request-bodies";
+import { loadStateFromApi } from "../../src/stores/application-state";
 
 test("should delete link when delete link button is clicked", async () => {
   const deleteLinkButton = container.querySelector(
