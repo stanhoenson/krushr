@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { fireEvent, render } from "@testing-library/svelte";
+import { cleanup, fireEvent, render } from "@testing-library/svelte";
 import {
   assert,
   expect,
@@ -66,6 +66,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   component.$destroy();
+  cleanup();
 });
 
 afterAll(() => server.close());
@@ -142,7 +143,7 @@ test("should add detail when add detail button is clicked", async () => {
 
   expect(detailsBefore).lessThan(detailsAfter);
 });
-test("should not find detail delete button", async () => {
+test("should not find detail delete button when there is only one detail", async () => {
   const button = container.querySelector(".multiple.details .icon.delete-icon");
 
   expect(button).toBeNull();
