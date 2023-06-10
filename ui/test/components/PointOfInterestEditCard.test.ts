@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import "../env-mock";
 import { fireEvent, render } from "@testing-library/svelte";
 import {
   assert,
@@ -12,39 +11,7 @@ import {
   afterEach,
 } from "vitest";
 
-import { setupServer } from "msw/node";
-import { rest } from "msw";
-import {
-  GET_ALL_CATEGORIES_ENDPOINT,
-  GET_ALL_STATUSES_ENDPOINT,
-  GET_ME_USER_ENDPOINT,
-} from "../../src/requests/endpoints";
-import type { Category, Status, User } from "../../src/types/models";
-const server = setupServer(
-  rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {
-    return res(
-      ctx.json([{ id: 1, name: "Default", position: 1 }] as Category[])
-    );
-  }),
-  rest.get(GET_ME_USER_ENDPOINT, (req, res, ctx) => {
-    return res(
-      ctx.json({
-        id: 1,
-        email: "test@test.com",
-        role: { id: 1, name: "creator" },
-        roleId: 1,
-      } as User)
-    );
-  }),
-  rest.get(GET_ALL_STATUSES_ENDPOINT, (req, res, ctx) => {
-    return res(
-      ctx.json([
-        { id: 1, name: "Unpublished" },
-        { id: 2, name: "Published" },
-      ] as Status[])
-    );
-  })
-);
+const server = setupMockserver();
 server.listen();
 
 let route: PostRouteBody;
@@ -109,6 +76,7 @@ import type {
   PostRouteBody,
 } from "../../src/types/request-bodies";
 import { loadStateFromApi } from "../../src/stores/application-state";
+import { setupMockserver } from "../mock-server";
 
 test("should delete link when delete link button is clicked", async () => {
   const deleteLinkButton = container.querySelector(

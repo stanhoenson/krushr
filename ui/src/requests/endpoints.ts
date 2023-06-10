@@ -16,6 +16,9 @@ export const GET_ALL_DETAILS_ENDPOINT = `${BASE_URL}/details`;
 export const DELETE_DETAIL_BY_ID_ENDPOINT = (id: number) =>
   `${BASE_URL}/details/${id}`;
 
+export const GET_IMAGEDATA_BY_ID_ENDPOINT = (id: number) =>
+  `${BASE_URL}/imagedata/${id}`;
+
 export const GET_IMAGE_BY_ID_ENDPOINT = (id: number) =>
   `${BASE_URL}/images/${id}`;
 export const DELETE_IMAGE_BY_ID_ENDPOINT = (id: number) =>

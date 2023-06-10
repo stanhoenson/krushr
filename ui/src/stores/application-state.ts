@@ -68,6 +68,11 @@ async function loadStateFromLocalStorage() {
 
 export async function resetApplicationState() {
   localStorage.removeItem("applicationState");
+  applicationState.set({
+    authenticatedUser: null,
+    categories: [],
+    statuses: [],
+  });
 }
 
 export async function initializeApplicationState() {

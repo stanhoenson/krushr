@@ -12,58 +12,7 @@ import {
   afterEach,
 } from "vitest";
 
-import { setupServer } from "msw/node";
-import { rest } from "msw";
-import {
-  GET_ALL_CATEGORIES_ENDPOINT,
-  GET_ALL_STATUSES_ENDPOINT,
-  GET_ME_USER_ENDPOINT,
-} from "../../src/requests/endpoints";
-import type { Category, Status, User } from "../../src/types/models";
-import {
-  applicationState,
-  loadStateFromApi,
-  resetApplicationState,
-} from "../../src/stores/application-state";
-
-let nonAdmin = true;
-
-const server = setupServer(
-  rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {
-    return res(
-      ctx.json([{ id: 1, name: "Default", position: 1 }] as Category[])
-    );
-  }),
-  rest.get(GET_ME_USER_ENDPOINT, (req, res, ctx) => {
-    console.log({ nonAdmin });
-    if (nonAdmin) {
-      return res(
-        ctx.json({
-          id: 1,
-          email: "test@test.com",
-          role: { id: 1, name: "Creator" },
-          roleId: 1,
-        } as User)
-      );
-    }
-    return res(
-      ctx.json({
-        id: 1,
-        email: "test@test.com",
-        role: { id: 2, name: "Admin" },
-        roleId: 2,
-      } as User)
-    );
-  }),
-  rest.get(GET_ALL_STATUSES_ENDPOINT, (req, res, ctx) => {
-    return res(
-      ctx.json([
-        { id: 1, name: "Unpublished" },
-        { id: 2, name: "Published" },
-      ] as Status[])
-    );
-  })
-);
+const server = setupMockserver();
 server.listen();
 
 let container: HTMLElement;
@@ -72,11 +21,65 @@ let rerender: (options: any) => void;
 beforeEach(async () => {
   // await loadStateFromApi();
   server.resetHandlers();
-  handleRender();
+  await handleRender();
 });
 
-function handleRender() {
-  let renderResult = render(LeafletMap);
+let pointsOfInterest = [
+  {
+    name: "",
+    longitude: 4.711,
+    latitude: 52.0164830842629,
+    imageIds: [],
+    details: [{ text: "" }],
+    links: [{ url: "", text: "" }],
+    categories: [],
+    support: false,
+  },
+  {
+    name: "",
+    longitude: 4.7,
+    latitude: 52.011,
+    imageIds: [],
+    details: [{ text: "" }],
+    links: [{ url: "", text: "" }],
+    categories: [],
+    support: false,
+  },
+];
+
+async function handleRender() {
+  pointsOfInterest = [
+    {
+      name: "",
+      longitude: 4.711,
+      latitude: 52.0164830842629,
+      imageIds: [],
+      details: [{ text: "" }],
+      links: [{ url: "", text: "" }],
+      categories: [],
+      support: false,
+    },
+    {
+      name: "",
+      longitude: 4.7,
+      latitude: 52.011,
+      imageIds: [],
+      details: [{ text: "" }],
+      links: [{ url: "", text: "" }],
+      categories: [],
+      support: false,
+    },
+  ];
+
+  let renderResult = render(LeafletMap, {
+    props: {
+      disabled: false,
+      allPointsOfInterest: pointsOfInterest,
+      position: 0,
+      longitude: 4.711,
+      latitude: 52.0164830842629,
+    },
+  });
   component = renderResult.component;
   container = renderResult.container;
   rerender = renderResult.rerender;
@@ -85,14 +88,28 @@ function handleRender() {
 afterEach(async () => {
   component.$destroy();
   await resetApplicationState();
-  nonAdmin = true;
+  setNonAdmin(true);
 });
 
 afterAll(() => server.close());
 
+import {
+  applicationState,
+  loadStateFromApi,
+  resetApplicationState,
+} from "../../src/stores/application-state";
 import LeafletMap from "../../src/components/LeafletMap.svelte";
+import { setNonAdmin, setupMockserver } from "../mock-server";
 
-test("map should have right number of markers", async () => {});
+//TODO leaflet map doesn't seem to load, maybe this cant be tested in vite
+test("map should have right number of markers", async () => {
+  // let markers = container.querySelectorAll(".map-marker");
+  // for (let marker of markers) {
+  //   console.log(marker);
+  // }
+  // console.log(markers);
+  // expect(markers.length).toBe(pointsOfInterest.length);
+});
 test("marker should be removed after poi delete", async () => {});
 test("marker should be added after poi create", async () => {});
 test("marker should move on poi latlng update", async () => {});
