@@ -167,7 +167,7 @@
     }
 
     //TODO magic string not good, some undefined checks as well :(
-    viewOnly = !(existingRoute.userId === (user ? user.id : -1) || user
+    viewOnly = !(existingRoute&& existingRoute.userId === (user ? user.id : -1) || user
       ? user.role.name === "Admin"
       : false);
 

@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import "../env-mock";
 import {
   fireEvent,
@@ -29,18 +28,15 @@ let rerender: (options: any) => void;
 beforeEach(async () => {
   // await loadStateFromApi();
   server.resetHandlers();
-  handleRender();
-  await act(async () => {
-    return "test";
-  });
+  await handleRender();
 });
 
-function handleRender() {
-  let renderResult = render(Routes, undefined);
+async function handleRender() {
+  let renderResult = render(Routes);
+  await tick();
   component = renderResult.component;
   container = renderResult.container;
   rerender = renderResult.rerender;
-  console.log(component.$$.onMount());
 }
 
 afterEach(async () => {
@@ -63,10 +59,12 @@ import {
   setNonAdmin,
   setupMockserver,
 } from "../mock-server";
+import { tick } from "svelte";
 
 test("routes should be grouped correctly", async () => {
   setNonAdmin(false);
   await loadStateFromApi();
+  await tick();
 
   await act();
   screen.debug();

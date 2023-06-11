@@ -154,6 +154,7 @@
       <hr />
       <label class="support">Support point</label>
       <input
+                disabled={viewOnly}
         type="checkbox"
         bind:checked={pointOfInterest.support}
         on:change={handleSupportChange}

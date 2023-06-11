@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { cleanup, fireEvent, render } from "@testing-library/svelte";
 import {
   afterAll,

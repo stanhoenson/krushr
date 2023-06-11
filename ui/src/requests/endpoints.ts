@@ -57,6 +57,7 @@ export const DELETE_STATUS_BY_ID_ENDPOINT = (id: number) =>
 export const GET_ME_USER_ENDPOINT = `${BASE_URL}/users/me`;
 export const GET_ALL_USERS_ENDPOINT = `${BASE_URL}/users`;
 export const CREATE_USER_ENDPOINT = `${BASE_URL}/users`;
-export const UPDATE_USER_BY_ID_ENDPOINT = (id: number) => `${BASE_URL}/users`;
+export const UPDATE_USER_BY_ID_ENDPOINT = (id: number) =>
+  `${BASE_URL}/users/${id}`;
 export const DELETE_USER_BY_ID_ENDPOINT = (id: number) =>
   `${BASE_URL}/users/${id}`;

@@ -1,5 +1,4 @@
-// @vitest-environment jsdom
-import { cleanup, fireEvent, render } from "@testing-library/svelte";
+import { cleanup, fireEvent, render,screen } from "@testing-library/svelte";
 import {
   afterAll,
   afterEach,
@@ -19,7 +18,7 @@ const categories = [
 ] as Category[];
 
 const server = setupMockserver(
-  Object.assign({}, defaultMockServerOptions, { categories }),
+  Object.assign({}, defaultMockServerOptions, { categories })
 );
 server.listen();
 
@@ -38,6 +37,7 @@ beforeEach(async () => {
   });
   component = renderResult.component;
   container = renderResult.container;
+  await tick();
 });
 
 afterEach(() => {
@@ -53,8 +53,10 @@ import {
   loadStateFromApi,
 } from "../../src/stores/application-state";
 import { defaultMockServerOptions, setupMockserver } from "../mock-server";
+import { tick } from "svelte";
 
 test("should render category buttons and have correct text", async () => {
+    screen.debug()
   const categoryButtons = container.querySelectorAll(".categories .category");
 
   let names: string[] = [];
@@ -70,7 +72,7 @@ test("should render category buttons and have correct text", async () => {
 });
 test("should render category buttons with appropriate class when they are selected", async () => {
   const selectedCategoryButton = container.querySelector(
-    ".categories .category.selected",
+    ".categories .category.selected"
   );
 
   expect(selectedCategoryButton).toBeTruthy();

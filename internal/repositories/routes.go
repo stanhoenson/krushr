@@ -58,7 +58,7 @@ func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
 func GetPublishedRouteByID(ID uint, tx *gorm.DB) (*models.Route, error) {
 	var route models.Route
 
-	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND id = ?", constants.PublishedStatusName, ID).First(&route)
+	result := tx.Preload(clause.Associations).Joins("Status").Where("status.name = ? AND routes.id = ?", constants.PublishedStatusName, ID).First(&route)
 
 	if result.Error != nil {
 		return nil, result.Error

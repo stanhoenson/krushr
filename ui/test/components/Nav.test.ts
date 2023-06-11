@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import "../env-mock";
 import { cleanup, fireEvent, render, waitFor } from "@testing-library/svelte";
 import {

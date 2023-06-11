@@ -20,6 +20,8 @@
     "astro": "^2.1.8",
     "axios": "^1.4.0",
     "fuse.js": "^6.6.2",
+    "happy-dom": "^9.20.3",
+    "jsdom": "^22.1.0",
     "leaflet": "^1.9.3",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.fullscreen": "github:stanhoenson/leaflet.fullscreen-1",
