@@ -99,7 +99,6 @@
 
   async function existingRouteToEditableRoute(id: number) {
     existingRoute = await getRouteById(id);
-    console.log({ existingRoute });
     route = Object.assign({}, existingRoute, {
       imageIds: existingRoute.images.map((image) => image.id),
       pointsOfInterest: existingRoute.pointsOfInterest.map(
@@ -131,6 +130,7 @@
   }
 
   onMount(async () => {
+    console.log("onmounttt");
     try {
       user = await getMeUser();
     } catch (e: any) {}
@@ -167,7 +167,9 @@
     }
 
     //TODO magic string not good, some undefined checks as well :(
-    viewOnly = !(existingRoute&& existingRoute.userId === (user ? user.id : -1) || user
+    viewOnly = !((existingRoute &&
+      existingRoute.userId === (user ? user.id : -1)) ||
+    user
       ? user.role.name === "Admin"
       : false);
 
@@ -186,7 +188,6 @@
     //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
       let element = document.getElementById(`poi-${poiToScrollToAfterUpdate}`);
-      console.log("scrolling", element);
       element?.scrollIntoView({ behavior: "smooth" });
       poiToScrollToAfterUpdate = -1;
     }

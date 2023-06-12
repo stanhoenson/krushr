@@ -45,7 +45,6 @@
       fuseInstance.setCollection(routes);
 
       let fuseResults = fuseInstance.search(filter);
-      console.log(fuseResults);
       filteredRoutes = fuseResults.map((result) => result.item as Route);
     }
     routesFilteredOn = filter;

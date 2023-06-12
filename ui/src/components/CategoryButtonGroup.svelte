@@ -18,7 +18,6 @@
     categories = value.categories;
   });
 
-  console.log({ categories });
 
   onDestroy(() => {
     unsubscribe();

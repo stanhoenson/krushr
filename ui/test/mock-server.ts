@@ -138,6 +138,41 @@ export function setNonAdmin(value: boolean) {
   nonAdmin = value;
 }
 
+let mockOSMRResponse = {
+  code: "Ok",
+  waypoints: [
+    {
+      hint: "abc123",
+      distance: 0.0,
+      location: [40.712776, -74.005974],
+      name: "New York City",
+    },
+    {
+      hint: "def456",
+      distance: 0.0,
+      location: [34.052235, -118.243683],
+      name: "Los Angeles",
+    },
+  ],
+  routes: [
+    {
+      weight_name: "routability",
+      geometry: "polyline",
+      distance: 5000,
+      duration: 3600,
+      legs: [
+        {
+          summary: "",
+          weight: 5000,
+          duration: 3600,
+          steps: [],
+          distance: 5000,
+        },
+      ],
+    },
+  ],
+  uuid: "1234567890",
+};
 let nonAdmin = true;
 //TODO options maybe not so good of a name
 export function setupMockserver(
@@ -151,7 +186,6 @@ export function setupMockserver(
       res(ctx.set(headers), ctx.body(readFileSync("./test.png")));
     }),
     rest.get(GET_ALL_ROUTES_ENDPOINT, (req, res, ctx) => {
-      console.log("called");
       return res(ctx.json(options.routes));
     }),
     rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {
@@ -165,6 +199,9 @@ export function setupMockserver(
     }),
     rest.get(GET_ALL_STATUSES_ENDPOINT, (req, res, ctx) => {
       return res(ctx.json(options.statuses));
+    }),
+    rest.get(/\/route\/v1/, (req, res, ctx) => {
+      return res(ctx.json(mockOSMRResponse));
     })
   );
 }

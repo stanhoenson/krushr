@@ -3,7 +3,6 @@
 
   export let onClose: null | (() => any) = null;
   export let type: "error" | "success" = "error";
-  console.log(onClose !== null);
 </script>
 
 <div class={`alert block ${type} soft`} {...$$restProps}>

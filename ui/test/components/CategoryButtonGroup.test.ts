@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render,screen } from "@testing-library/svelte";
+import { cleanup, fireEvent, render, screen } from "@testing-library/svelte";
 import {
   afterAll,
   afterEach,
@@ -56,7 +56,6 @@ import { defaultMockServerOptions, setupMockserver } from "../mock-server";
 import { tick } from "svelte";
 
 test("should render category buttons and have correct text", async () => {
-    screen.debug()
   const categoryButtons = container.querySelectorAll(".categories .category");
 
   let names: string[] = [];

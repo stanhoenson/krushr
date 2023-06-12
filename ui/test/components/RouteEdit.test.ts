@@ -1,5 +1,11 @@
 import "../env-mock";
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/svelte";
+import {
+  cleanup,
+  fireEvent,
+  screen,
+  render,
+  waitFor,
+} from "@testing-library/svelte";
 import {
   assert,
   expect,
@@ -18,15 +24,14 @@ let container: HTMLElement;
 let component: RouteEdit;
 let rerender: (options: any) => void;
 beforeEach(async () => {
-  // await loadStateFromApi();
+  await loadStateFromApi();
   server.resetHandlers();
-  handleRender();
+  await handleRender();
 });
 
-function handleRender() {
-  let renderResult = render(RouteEdit, {
-    props: {},
-  });
+async function handleRender() {
+  let renderResult = render(RouteEdit, {});
+  await tick();
   component = renderResult.component;
   container = renderResult.container;
   rerender = renderResult.rerender;
@@ -48,10 +53,34 @@ import {
   resetApplicationState,
 } from "../../src/stores/application-state";
 import { setNonAdmin, setupMockserver } from "../mock-server";
+import { tick } from "svelte";
 
-test("buttons and inputs should be disabled for non authenticated user", async () => {});
-test("buttons and inputs should be enabled for authenticated user", async () => {});
+test("buttons and inputs should be disabled for non authenticated user", async () => {
+  let inputs = container.querySelectorAll("input");
+  for (let input of inputs) {
+    expect(input.disabled).toBeTruthy();
+  }
+});
+test("buttons and inputs should be enabled for authenticated user", async () => {
+  await loadStateFromApi();
+  let inputs = container.querySelectorAll("input");
+  for (let input of inputs) {
+    expect(input.disabled).toBeFalsy();
+  }
+});
 test("url should change on save", async () => {});
 test("should redirect on route delete", async () => {});
-test("poi delete button should be disabled with 2 poi's", async () => {});
+test("poi delete button should be disabled with 2 poi's", async () => {
+  let buttons = container.querySelectorAll("button");
+  screen.debug();
+  let poiDeleteButtonCount = 0;
+  for (let button of buttons) {
+    console.log(button.textContent);
+    if (button.textContent === "Delete point of interest") {
+      poiDeleteButtonCount++;
+      expect(button.disabled).toBeTruthy();
+    }
+  }
+  expect(poiDeleteButtonCount).toEqual(2);
+});
 test("poi delete button should delete poi", async () => {});

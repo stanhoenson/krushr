@@ -16,7 +16,6 @@
     if (password === confirmPassword) {
       try {
         user = await signUp({ email, password });
-        console.log({ user });
       } catch (e: any) {
         error = e.response.data.error;
       }

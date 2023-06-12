@@ -33,7 +33,6 @@
 
   function onMapClick(e: LeafletMouseEvent) {
     if (disabled) return;
-    console.log("updating position", position);
     longitude = Number(e.latlng.lng.toFixed(6));
     latitude = Number(e.latlng.lat.toFixed(6));
     // marker.setLatLng(e.latlng);
@@ -42,7 +41,6 @@
   //TODO sometimes pois are undefined, now i just check but shouldnt really happen look into it! PROB rewrite this
   function handlePoisUpdate(map: L.Map, pois: PutPointOfInterestBody[]) {
     let waypoints: L.LatLng[] = [];
-    console.log(position);
     let poiIndexesFound: number[] = [];
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
@@ -69,7 +67,6 @@
       if (poiIndexesFound.includes(parseInt(index))) {
         continue;
       }
-      console.log("creating", index);
       marker = L.marker([poi.latitude, poi.longitude], {
         icon: L.divIcon({
           html: `<div>${parseInt(index) + 1}</div>`,
@@ -103,7 +100,6 @@
   }
 
   onMount(() => {
-    console.log("mouunt??");
     map = L.map(element).setView(initialLatLng, initialZoom);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
