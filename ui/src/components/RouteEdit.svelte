@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LatLngTuple } from "leaflet";
 
-  import { afterUpdate, onDestroy, onMount } from "svelte";
+  import { afterUpdate, onDestroy, onMount, tick } from "svelte";
   import { goudaCoordinates } from "../constants";
   import {
     createRoute,
@@ -11,6 +11,7 @@
   } from "../requests/routes";
   import { getAllStatuses } from "../requests/statuses";
   import { getMeUser } from "../requests/users";
+  import { applicationState } from "../stores/application-state";
   import type { PointOfInterest, Route, Status, User } from "../types/models";
   import type {
     PostPointOfInterestBody,
@@ -35,9 +36,14 @@
 
   let error: string | null = null;
   let successMessage: string | null = null;
-  let user: User;
+  let user: User | null;
 
   let poiToScrollToAfterUpdate = -1;
+
+  let unsubscribe = applicationState.subscribe((applicationState) => {
+    statuses = applicationState.statuses;
+    user = applicationState.authenticatedUser;
+  });
 
   let queryParams = new URLSearchParams(window.location.search);
   let id = queryParams.get("id");
@@ -130,11 +136,10 @@
   }
 
   onMount(async () => {
-    console.log("onmounttt");
-    try {
-      user = await getMeUser();
-    } catch (e: any) {}
-    statuses = await getAllStatuses();
+    // try {
+    //   user = await getMeUser();
+    // } catch (e: any) {}
+    // statuses = await getAllStatuses();
 
     let unpublishedStatus = statuses.find(
       (status) => status.name === "Unpublished"
@@ -157,22 +162,26 @@
       };
       newPointOfInterest();
       newPointOfInterest();
+      console.log(user, !user);
+      viewOnly = !user;
     } else {
       //get existing route
       try {
         await existingRouteToEditableRoute(parseInt(id));
+        viewOnly =
+          !(user && user.role.name === "Admin") &&
+          !(user && user.id === existingRoute.userId);
       } catch (e: any) {
         window.location.href = "/404";
       }
     }
 
-    //TODO magic string not good, some undefined checks as well :(
-    viewOnly = !((existingRoute &&
-      existingRoute.userId === (user ? user.id : -1)) ||
-    user
-      ? user.role.name === "Admin"
-      : false);
+    // viewOnly = !!(
+    //   (existingRoute && existingRoute.userId === (user ? user.id : -1)) ||
+    //   (user && (user ? user.role.name === "Admin" : false))
+    // );
 
+    console.log({ viewOnly });
     // getRouteById(queryParams);
     return () => {
       if (didSomething)
@@ -181,9 +190,13 @@
   });
 
   afterUpdate(async () => {
-    if (!didSomething) {
+    if (!didSomething && !viewOnly) {
+      console.log("adding??");
       window.addEventListener("beforeunload", beforeUnloadHandler);
       didSomething = true;
+    }
+    if (viewOnly) {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
     }
     //scroll if necessary
     if (poiToScrollToAfterUpdate !== -1) {
@@ -191,6 +204,10 @@
       element?.scrollIntoView({ behavior: "smooth" });
       poiToScrollToAfterUpdate = -1;
     }
+  });
+
+  onDestroy(() => {
+    unsubscribe();
   });
 
   const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
