@@ -45,6 +45,7 @@ func GetPublishedRoutes(tx *gorm.DB) (*[]models.Route, error) {
 		Preload("Details").
 		Preload("Links").
 		Preload("Categories").
+		Preload("User").
 		Joins("LEFT JOIN statuses ON routes.status_id = statuses.id").
 		Where("statuses.name = ?", constants.PublishedStatusName).
 		Find(&routes)

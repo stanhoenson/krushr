@@ -26,7 +26,7 @@ func RegisterRouteRoutes(r *gin.Engine) {
 				}
 
 				if utils.HasRole(c, []string{constants.AdminRoleName}) {
-					return services.GetEntitiesWithAssociations[models.Route]([]string{"Images", "Status", "Links", "Details", "Categories"})
+					return services.GetEntitiesWithAssociations[models.Route]([]string{"Images", "Status", "Links", "Details", "Categories", "User"})
 				}
 
 				return services.GetRoutesWithAssociationsByUserID(user.ID)
