@@ -10,6 +10,7 @@ coverage
 # Files
 .DS_Store
 .env
+coverage.out
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -9,7 +9,7 @@ build/api:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -ldflags='-s' -o=./bin/linux_amd64/api ./cmd/api
 
 .PHONY: audit/api
-audit:
+audit/api:
 	@echo '1. Tidying and verifying module dependencies:'
 	go mod tidy
 	go mod verify
@@ -29,7 +29,7 @@ audit:
 	go test -cover ./...
 
 .PHONY: coverage/api
-coverage:
+coverage/api:
 	go test -coverprofile=coverage.out -coverpkg=./... ./...
 	go tool cover -html=coverage.out
 
