@@ -96,10 +96,7 @@ test("poi delete button should delete poi", async () => {
   }
   if (!newPoiButton) throw new Error("no new poi button found");
 
-  console.log(newPoiButton.disabled);
   await fireEvent.click(newPoiButton);
-  await tick();
-  await tick();
   await tick();
 
   let poisBefore = 0;
@@ -110,7 +107,6 @@ test("poi delete button should delete poi", async () => {
       if (!firstPoiButton) firstPoiButton = button;
     }
   }
-  console.log({ poisBefore });
 
   if (!firstPoiButton) throw new Error("no poi delete buttons found");
 

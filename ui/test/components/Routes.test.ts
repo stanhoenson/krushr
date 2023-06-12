@@ -73,7 +73,6 @@ test("routes should be grouped correctly", async () => {
   let cardItems = container.querySelectorAll(".card.item");
   expect(cardItems.length).toBe(defaultMockServerOptions.routes.length);
 });
-test("routes should render correctly", async () => {});
 test("create route button should be hidden for non authenticated user", async () => {
   let createRouteButton = container.querySelector(".button.block.primary");
   expect(createRouteButton).toBeFalsy();
