@@ -162,26 +162,26 @@
       };
       newPointOfInterest();
       newPointOfInterest();
-      console.log(user, !user);
-      viewOnly = !user;
     } else {
       //get existing route
       try {
         await existingRouteToEditableRoute(parseInt(id));
-        viewOnly =
-          !(user && user.role.name === "Admin") &&
-          !(user && user.id === existingRoute.userId);
       } catch (e: any) {
         window.location.href = "/404";
       }
     }
+
+  viewOnly =
+      !user ||
+      (existingRoute &&
+        !(user && user.role.name === "Admin") &&
+        !(user && user.id === existingRoute.userId));
 
     // viewOnly = !!(
     //   (existingRoute && existingRoute.userId === (user ? user.id : -1)) ||
     //   (user && (user ? user.role.name === "Admin" : false))
     // );
 
-    console.log({ viewOnly });
     // getRouteById(queryParams);
     return () => {
       if (didSomething)
@@ -190,6 +190,11 @@
   });
 
   afterUpdate(async () => {
+    viewOnly =
+      !user ||
+      (existingRoute &&
+        !(user && user.role.name === "Admin") &&
+        !(user && user.id === existingRoute.userId));
     if (!didSomething && !viewOnly) {
       console.log("adding??");
       window.addEventListener("beforeunload", beforeUnloadHandler);

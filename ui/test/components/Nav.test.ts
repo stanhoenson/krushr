@@ -47,6 +47,7 @@ import {
   resetApplicationState,
 } from "../../src/stores/application-state";
 import { setNonAdmin, setupMockserver } from "../mock-server";
+import { tick } from "svelte";
 
 test("should render sign in link", async () => {
   const button = container.querySelector('a.button.primary[href="/sign-in"]');
@@ -81,7 +82,7 @@ test("should not render users link", async () => {
   expect(usersButton).toBeFalsy();
 });
 
-//TODO this doesnt want to work maybe implement mock window.location
+//TODO this doesn't work maybe implement mock window.location
 // test("should reroute when clicking the link", async () => {
 //   const link = container.querySelector('a.button.primary[href="/sign-in"]');
 
@@ -91,13 +92,7 @@ test("should not render users link", async () => {
 
 //   fireEvent.click(link);
 
-//   await waitFor(
-//     () => {
-//       // Wait for the expected href change to occur
-//       return window.location.href.includes("/sign-in");
-//     },
-//     { timeout: 3000, interval: 1000 }
-//   );
+//   await tick();
 
 //   expect(window.location.href).toContain("/sign-in");
 // });

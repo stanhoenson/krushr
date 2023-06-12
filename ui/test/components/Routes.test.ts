@@ -61,6 +61,12 @@ import {
 } from "../mock-server";
 import { tick } from "svelte";
 
+test("routes should all be rendered", async () => {
+  setNonAdmin(false);
+  await loadStateFromApi();
+  let cardItems = container.querySelectorAll(".card.item");
+  expect(cardItems.length).toBe(defaultMockServerOptions.routes.length);
+});
 test("routes should be grouped correctly", async () => {
   setNonAdmin(false);
   await loadStateFromApi();

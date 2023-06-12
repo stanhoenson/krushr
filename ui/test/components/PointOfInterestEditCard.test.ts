@@ -122,7 +122,7 @@ test("should add link when add link button is clicked", async () => {
   }
 
   let linksBefore = route.pointsOfInterest[0].links.length;
-  fireEvent.click(button);
+  await fireEvent.click(button);
   let linksAfter = route.pointsOfInterest[0].links.length;
 
   expect(linksBefore).lessThan(linksAfter);

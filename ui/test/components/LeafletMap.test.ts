@@ -161,7 +161,7 @@ test("poi latlng should update on map click", async () => {
   let latitudeBefore = component.$$.ctx[3];
   let longitudeBefore = component.$$.ctx[4];
 
-  fireEvent.click(map);
+  await fireEvent.click(map);
 
   let latitudeAfter = component.$$.ctx[3];
   let longitudeAfter = component.$$.ctx[4];
