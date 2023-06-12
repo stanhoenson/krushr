@@ -171,7 +171,7 @@
       }
     }
 
-  viewOnly =
+    viewOnly =
       !user ||
       (existingRoute &&
         !(user && user.role.name === "Admin") &&

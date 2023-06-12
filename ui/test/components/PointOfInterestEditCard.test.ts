@@ -80,7 +80,7 @@ import { setupMockserver } from "../mock-server";
 
 test("should delete link when delete link button is clicked", async () => {
   const deleteLinkButton = container.querySelector(
-    ".multiple.links .icon.delete-icon",
+    ".multiple.links .icon.delete-icon"
   );
 
   if (!deleteLinkButton) {
@@ -107,7 +107,7 @@ test("should toggle category when category button is clicked", async () => {
 
   let categoriesAfter = route.pointsOfInterest[0].categories.length;
   let matchedCategory = route.pointsOfInterest[0].categories.find(
-    (category) => category.name === button.textContent,
+    (category) => category.name === button.textContent
   );
 
   expect(categoriesAfter).greaterThan(categoriesBefore);
@@ -151,7 +151,7 @@ test("should not find detail delete button when there is only one detail", async
 test("should delete detail when delete detail button is clicked", async () => {
   //add detail first
   const addDetailButton = container.querySelector(
-    ".details .button.block.secondary",
+    ".details .button.block.secondary"
   );
 
   if (!addDetailButton) {
@@ -174,9 +174,8 @@ test("should delete detail when delete detail button is clicked", async () => {
   expect(detailCountAfter).lessThan(detailCountBefore);
 });
 test("should change name when name input is changed", async () => {
-  let nameInputElement = container.querySelector<HTMLInputElement>(
-    '[name="name"]',
-  );
+  let nameInputElement =
+    container.querySelector<HTMLInputElement>('[name="name"]');
   if (!nameInputElement) throw new Error("name input element not found");
 
   let nameToSet = "test";
@@ -189,9 +188,8 @@ test("should change name when name input is changed", async () => {
   expect(nameAfter).not.toBe(nameBefore);
 });
 test("should change detail text when detail text input is changed", async () => {
-  let detailsTextArea = container.querySelector<HTMLTextAreaElement>(
-    '[name="details"]',
-  );
+  let detailsTextArea =
+    container.querySelector<HTMLTextAreaElement>('[name="details"]');
   if (!detailsTextArea) throw new Error("details text area element not found");
 
   let detailsValueToSet = "test";
@@ -206,9 +204,8 @@ test("should change detail text when detail text input is changed", async () => 
   expect(detailsTextAfter).not.toBe(detailsTextBefore);
 });
 test("should change link url and text when link url and text input are changed", async () => {
-  let linkTextInput = container.querySelector<HTMLInputElement>(
-    '[name="text"]',
-  );
+  let linkTextInput =
+    container.querySelector<HTMLInputElement>('[name="text"]');
   if (!linkTextInput) throw new Error("link text input element not found");
   let linkUrlInput = container.querySelector<HTMLInputElement>('[name="url"]');
   if (!linkUrlInput) throw new Error("link url input element not found");
