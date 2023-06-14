@@ -191,7 +191,6 @@
   });
 
   afterUpdate(async () => {
-    console.log("update",user);
     viewOnly = !!(
       !user ||
       (existingRoute &&

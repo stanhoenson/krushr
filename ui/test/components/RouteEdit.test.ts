@@ -85,7 +85,7 @@ test("poi delete button should be disabled with 2 poi's", async () => {
   }
   expect(poiDeleteButtonCount).toEqual(2);
 });
-//TODO why is this not working 
+//TODO why is this not working
 // test("poi delete button should delete poi", async () => {
 //   await loadStateFromApi();
 //   await tick();
