@@ -1,6 +1,7 @@
 name: Backend Deployment
 run-name: ${{ github.actor }} is testing, building and deploying the backend.
 on: 
+  workflow_dispatch:
   push:
     tags:
       - v*

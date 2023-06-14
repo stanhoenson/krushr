@@ -1,6 +1,7 @@
 name: Frontend Deployment
 run-name: ${{ github.actor }} is testing, building and deploying the frontend.
 on: 
+  workflow_dispatch:
   push:
     tags:
       - v*
