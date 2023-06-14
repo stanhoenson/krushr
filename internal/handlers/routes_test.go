@@ -323,7 +323,6 @@ func testCreatorPostRoute(t *testing.T, r *gin.Engine) {
 
 	var count int
 	database.Db.Raw("SELECT COUNT(*) FROM routes WHERE id = 5").Scan(&count)
-	fmt.Println(w.Body.String())
 
 	assert.Equal(t, 1, count)
 	assert.Equal(t, http.StatusOK, w.Code)

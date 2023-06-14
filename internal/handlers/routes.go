@@ -20,7 +20,6 @@ func RegisterRouteRoutes(r *gin.Engine) {
 		routes.GET("", func(c *gin.Context) {
 			GetAll(c, func(c *gin.Context) (*[]models.Route, error) {
 				user, err := utils.GetUserFromContext(c)
-				fmt.Println(c.Request)
 				if err != nil {
 					return services.GetPublishedRoutes()
 				}
