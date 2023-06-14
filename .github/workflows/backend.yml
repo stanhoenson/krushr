@@ -1,6 +1,7 @@
 name: Backend Deployment
 run-name: ${{ github.actor }} is testing, building and deploying the backend.
 on: 
+  workflow_dispatch:
   push:
     tags:
       - v*
@@ -35,7 +36,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: backend/krushr
           push: true
           tags: stanofsteel/krushr:latest
 
