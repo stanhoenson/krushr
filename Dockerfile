@@ -25,4 +25,4 @@ RUN go build -o krushr ./cmd/api
 EXPOSE 8080
 
 # Run
-CMD ["./krushr"]
+CMD ["./krushr","$FLAGS"]

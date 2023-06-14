@@ -143,20 +143,20 @@
   });
 
   afterUpdate(() => {
-    if (L.control.fullscreen && !addedFullscreenThing) {
-      L.control
-        .fullscreen({
-          position: "topleft", // change the position of the button can be topleft, topright, bottomright or bottomleft, default topleft
-          title: "Enter fullscreen mode", // change the title of the button, default Full Screen
-          titleCancel: "Exit fullscreen mode", // change the title of the button when fullscreen is on, default Exit Full Screen
-          content: undefined, // change the content of the button, can be HTML, default null
-          forceSeparateButton: true, // force separate button to detach from zoom buttons, default false
-          forcePseudoFullscreen: true, // force use of pseudo full screen even if full screen API is available, default false
-          fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
-        })
-        .addTo(map);
-      addedFullscreenThing = true;
-    }
+    // if (L.control.fullscreen && !addedFullscreenThing) {
+    //   L.control
+    //     .fullscreen({
+    //       position: "topleft", // change the position of the button can be topleft, topright, bottomright or bottomleft, default topleft
+    //       title: "Enter fullscreen mode", // change the title of the button, default Full Screen
+    //       titleCancel: "Exit fullscreen mode", // change the title of the button when fullscreen is on, default Exit Full Screen
+    //       content: undefined, // change the content of the button, can be HTML, default null
+    //       forceSeparateButton: true, // force separate button to detach from zoom buttons, default false
+    //       forcePseudoFullscreen: true, // force use of pseudo full screen even if full screen API is available, default false
+    //       fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
+    //     })
+    //     .addTo(map);
+    //   addedFullscreenThing = true;
+    // }
     try {
       handlePoisUpdate(map, allPointsOfInterest);
       error = "";
