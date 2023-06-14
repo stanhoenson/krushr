@@ -17,7 +17,7 @@
       try {
         user = await signUp({ email, password });
       } catch (e: any) {
-        error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
       }
     } else {
       error = "Passwords dont match";
@@ -30,7 +30,7 @@
         let token = await signIn({ email, password });
         window.location.href = "/";
       } catch (e: any) {
-        error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
       }
     } else {
       error = "Passwords dont match";

@@ -20,7 +20,7 @@
       let response = await deleteUser(id);
       users = await getAllUsers();
     } catch (e: any) {
-      error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
     }
   }
 

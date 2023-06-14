@@ -16,7 +16,7 @@
       let token = await signIn({ email, password: await sha256(password) });
       window.location.href = "/";
     } catch (e: any) {
-      error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
     }
   }
 

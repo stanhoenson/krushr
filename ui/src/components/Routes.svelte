@@ -76,10 +76,17 @@
   {#if user}
     <a class="button block primary" href="/routes/create">Create a new route</a>
   {/if}
-  <label>Filter</label>
-  <DelayedInput bind:loading={filtering} bind:value={filter} />
-  {#if filtering}
-    <span>Loading...</span>
+
+  {#if routes.length === 0}
+    <span>No routes...</span>
+  {:else}
+    <label>Filter</label>
+    <div class="filter-container">
+      <DelayedInput bind:loading={filtering} bind:value={filter} />
+      {#if filtering}
+        <span>Loading...</span>
+      {/if}
+    </div>
   {/if}
   {#each groupedRoutes.isUser as innerRouteGroup}
     {#if innerRouteGroup.routes.length > 0}

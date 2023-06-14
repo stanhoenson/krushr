@@ -889,6 +889,12 @@ footer p {
     margin-bottom: var(--space-m);
 }
 
+.filter-container{
+    display:flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
 /* Responsive */
 @media(max-width: 50rem) {
 	section.routes .grid,

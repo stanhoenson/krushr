@@ -99,7 +99,7 @@
       }
     } catch (e: any) {
       console.log(e);
-      error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
     }
   }
 
@@ -131,7 +131,7 @@
         }
       }
     } catch (e: any) {
-      error = e.response.data.error;
+      error = e.response ? e.reponse.data.error : e;
     }
   }
 
