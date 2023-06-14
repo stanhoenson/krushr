@@ -12,7 +12,7 @@ import {
 } from "vitest";
 
 const server = setupMockserver();
-server.listen();
+server.listen({ onUnhandledRequest: "error" });
 
 let container: HTMLElement;
 let component: LeafletMap;

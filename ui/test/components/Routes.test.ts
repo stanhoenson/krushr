@@ -70,8 +70,46 @@ test("routes should all be rendered", async () => {
 test("routes should be grouped correctly", async () => {
   setNonAdmin(false);
   await loadStateFromApi();
-  let cardItems = container.querySelectorAll(".card.item");
-  expect(cardItems.length).toBe(defaultMockServerOptions.routes.length);
+
+  let ownRouteCount = 0;
+  let othersRouteCount = 0;
+  let publishedCount = 0;
+  let unpublishedCount = 0;
+  for (const route of defaultMockServerOptions.routes) {
+    if (route.statusId === 1) unpublishedCount++;
+    else publishedCount++;
+    if (route.userId === 2) ownRouteCount++;
+    else othersRouteCount++;
+  }
+
+  let grids = container.querySelectorAll(".grid");
+  if (!grids) throw new Error("no grid containers found");
+
+  let measured = 0;
+  let measuredUnpublished = 0;
+  let measuredOthers = 0;
+
+  for (let grid of grids) {
+    let previousSibling = grid.previousElementSibling;
+    if (!previousSibling) continue;
+    let textContent = previousSibling.textContent;
+    if (!textContent) continue;
+
+    let unpublished = textContent.toLowerCase().includes("unpublished");
+    let others = textContent.toLowerCase().includes("others");
+
+    let routeCount = grid.querySelectorAll(".card.item").length;
+
+    measured += routeCount;
+    if (unpublished) measuredUnpublished += routeCount;
+    if (others) measuredOthers += routeCount;
+  }
+
+  expect(measured).toBe(defaultMockServerOptions.routes.length);
+  expect(measuredUnpublished).toBe(unpublishedCount);
+  expect(measured - measuredUnpublished).toBe(publishedCount);
+  expect(measuredOthers).toBe(othersRouteCount);
+  expect(measured - measuredOthers).toBe(ownRouteCount);
 });
 test("create route button should be hidden for non authenticated user", async () => {
   let createRouteButton = container.querySelector(".button.block.primary");

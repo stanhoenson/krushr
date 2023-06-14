@@ -36,7 +36,7 @@ const statuses = [
   { id: 2, name: "Published" },
 ] as Status[];
 const authenticatedNonAdminUser = {
-  id: 1,
+  id: 2,
   email: "test@test.com",
   role: { id: 1, name: "Creator" },
   roleId: 1,
@@ -186,6 +186,7 @@ export function setupMockserver(
       res(ctx.set(headers), ctx.body(readFileSync("./test.png")));
     }),
     rest.get(GET_ALL_ROUTES_ENDPOINT, (req, res, ctx) => {
+      console.log("huhhh");
       return res(ctx.json(options.routes));
     }),
     rest.get(GET_ALL_CATEGORIES_ENDPOINT, (req, res, ctx) => {

@@ -171,11 +171,12 @@
       }
     }
 
-    viewOnly =
+    viewOnly = !!(
       !user ||
       (existingRoute &&
         !(user && user.role.name === "Admin") &&
-        !(user && user.id === existingRoute.userId));
+        !(user && user.id === existingRoute.userId))
+    );
 
     // viewOnly = !!(
     //   (existingRoute && existingRoute.userId === (user ? user.id : -1)) ||
@@ -190,13 +191,14 @@
   });
 
   afterUpdate(async () => {
-    viewOnly =
+    console.log("update",user);
+    viewOnly = !!(
       !user ||
       (existingRoute &&
         !(user && user.role.name === "Admin") &&
-        !(user && user.id === existingRoute.userId));
+        !(user && user.id === existingRoute.userId))
+    );
     if (!didSomething && !viewOnly) {
-      console.log("adding??");
       window.addEventListener("beforeunload", beforeUnloadHandler);
       didSomething = true;
     }
