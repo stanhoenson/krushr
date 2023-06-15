@@ -714,6 +714,10 @@ form.sign-up {
 	margin: 0;
 }
 
+.card .user:last-child {
+	margin-bottom: 0;
+}
+
 .user {
 	display: flex;
 	gap: var(--space-2xs);
