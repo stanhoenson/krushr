@@ -19,6 +19,70 @@
 	--space-2xl: clamp(3.75rem, calc(3.70rem + 0.25vw), 4.00rem);
 	--space-3xl: clamp(5.63rem, calc(5.55rem + 0.38vw), 6.00rem);
 
+	/* Primary */
+	--blue-0: hsl(205, 100%, 21%);
+	--blue-1: hsl(205, 87%, 29%);
+	--blue-2: hsl(205, 82%, 33%);
+	--blue-3: hsl(205, 76%, 39%);
+	--blue-4: hsl(205, 67%, 45%);
+	--blue-5: hsl(205, 65%, 55%);
+	--blue-6: hsl(205, 74%, 65%);
+	--blue-7: hsl(205, 84%, 74%);
+	--blue-8: hsl(205, 97%, 85%);
+	--blue-9: hsl(205, 79%, 92%);
+
+	--yellow-0: hsl(15, 86%, 30%);
+	--yellow-1: hsl(22, 82%, 39%);
+	--yellow-2: hsl(29, 80%, 44%);
+	--yellow-3: hsl(36, 77%, 49%);
+	--yellow-4: hsl(42, 87%, 55%);
+	--yellow-5: hsl(44, 92%, 63%);
+	--yellow-6: hsl(48, 94%, 68%);
+	--yellow-7: hsl(48, 95%, 76%);
+	--yellow-8: hsl(48, 100%, 88%);
+	--yellow-9: hsl(49, 100%, 96%);
+
+	/* Neutrals */
+	--blue-grey-0: hsl(209, 61%, 16%);
+	--blue-grey-1: hsl(211, 39%, 23%);
+	--blue-grey-2: hsl(209, 34%, 30%);
+	--blue-grey-3: hsl(209, 28%, 39%);
+	--blue-grey-4: hsl(210, 22%, 49%);
+	--blue-grey-5: hsl(209, 23%, 60%);
+	--blue-grey-6: hsl(211, 27%, 70%);
+	--blue-grey-7: hsl(210, 31%, 80%);
+	--blue-grey-8: hsl(212, 33%, 89%);
+	--blue-grey-9: hsl(210, 36%, 96%);
+
+	/* Supporting */
+	--cyan-0: hsl(184, 91%, 17%);
+	--cyan-1: hsl(185, 84%, 25%);
+	--cyan-2: hsl(185, 81%, 29%);
+	--cyan-3: hsl(184, 77%, 34%);
+	--cyan-4: hsl(185, 62%, 45%);
+	--cyan-5: hsl(185, 57%, 50%);
+	--cyan-6: hsl(184, 65%, 59%);
+	--cyan-7: hsl(184, 80%, 74%);
+	--cyan-8: hsl(185, 94%, 87%);
+	--cyan-9: hsl(186, 100%, 94%);
+
+	--red-0: hsl(360, 92%, 20%);
+	--red-1: hsl(360, 85%, 25%);
+	--red-2: hsl(360, 79%, 32%);
+	--red-3: hsl(360, 72%, 38%);
+	--red-4: hsl(360, 67%, 44%);
+	--red-5: hsl(360, 64%, 55%);
+	--red-6: hsl(360, 71%, 66%);
+	--red-7: hsl(360, 77%, 78%);
+	--red-8: hsl(360, 82%, 89%);
+	--red-9: hsl(360, 100%, 97%);
+
+	--shadow-0: 0 1px 3px rgba(0,0,0, .12), 0 1px 2px rgba(0,0,0, .24);
+	--shadow-1: 0 3px 6px rgba(0,0,0, .15), 0 2px 4px rgba(0,0,0, .12);
+	--shadow-2: 0 10px 20px rgba(0,0,0, .15), 0 3px 6px rgba(0,0,0, .10);
+	--shadow-3: 0 15px 25px rgba(0,0,0, .15), 0 5px 10px rgba(0,0,0, .05);
+	--shadow-4: 0 20px 40px rgba(0,0,0, .2);
+
 	/* Custom */
 	--sans-serif: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif; 
 	--monospace: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
@@ -87,10 +151,10 @@
 	margin-top: -.75rem !important;
 	width: auto !important;
 	height: auto !important;
-	color: var(--background-0);
+	color: white;
 	font-weight: bold;
 	padding: .3rem .6rem;
-	background-color: var(--primary-0);
+	background-color: var(--blue-3);
 	border-radius: 1rem;
 }
 
@@ -112,19 +176,19 @@ select {
 	display: block;
 	font-family: var(--sans-serif);
 	font-size: var(--step-0);
-	color: var(--foreground-1);
+	color: var(--blue-grey-1);
 	padding: var(--space-xs);
-	background-color: var(--background-0);
-	border: 1px solid var(--background-0);
+	background-color: var(--blue-grey-9);
+	border: 1px solid var(--blue-grey-9);
 	border-radius: var(--space-2xs);
-	outline: 1px solid var(--background-2);
+	outline: 1px solid var(--blue-grey-8);
 }
 
 input.invalid,
 textarea.invalid,
 select.invalid {
-	border: 1px solid var(--error-fg-0);
-	outline: 1px solid var(--error-fg-0);
+	border: 1px solid var(--red-5);
+	outline: 1px solid var(--red-5);
 }
 
 input:focus,
@@ -133,30 +197,30 @@ select:focus,
 input.error:focus,
 textarea.error:focus, 
 select.error:focus {
-	border: 1px solid var(--primary-0);
-	outline: 1px solid var(--primary-0);
+	border: 1px solid var(--blue-3);
+	outline: 1px solid var(--blue-3);
 }
 
 input:disabled,
 textarea:disabled {
-	color: var(--foreground-4);
-	background-color: var(--background-2);
-	border: 1px solid var(--background-2);
-	outline: 1px solid var(--background-3);
+	color: var(--blue-grey-5);
+	background-color: var(--blue-grey-9);
+	border: 1px solid var(--blue-grey-9);
+	outline: 1px solid var(--blue-grey-9);
 }
 
 input.error,
 textarea.error,
 select.error {
-	border: 1px solid var(--error-0);
-	outline: 1px solid var(--error-0);
+	border: 1px solid var(--red-2);
+	outline: 1px solid var(--red-2);
 }
 
 select:disabled {
-	color: var(--foreground-4);
-	background-color: var(--background-1);
-	border: 1px solid var(--background-1);
-	outline: 1px solid var(--background-2);
+	color: var(--blue-grey-4);
+	background-color: var(--blue-grey-7);
+	border: 1px solid var(--blue-grey-7);
+	outline: 1px solid var(--blue-grey-6);
 }
 
 button {
@@ -177,7 +241,7 @@ button.button,
 .button {
 	transition: background-color 200ms;
 	cursor: pointer;
-	color: var(--foreground-0);
+	color: var(--blue-grey-0);
 	text-decoration: none;
 	padding: var(--space-xs) var(--space-s);
 	border-radius: var(--space-2xs);
@@ -202,7 +266,7 @@ button.button,
 }
 
 .icon:hover {
-	background-color: var(--error-bg-0);
+	background-color: var(--red-8);
 }
 
 .icon svg {
@@ -211,39 +275,43 @@ button.button,
 }
 
 .alert {
-    margin-top:var(--space-xs);
-    box-sizing: border-box;
+  margin-top:var(--space-xs);
+  box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	font-family: var(--monospace);
 	width: 100%;
-	color: var(--foreground-0);
+	color: var(--blue-grey-0);
 	text-decoration: none;
 	padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) var(--space-s);
 	border-radius: var(--space-2xs);
 }
 
 .alert.error {
-	color: var(--error-fg-0);
-	background-color: var(--error-bg-0);
-	border: 1px solid var(--error-bg-1);
+	color: var(--red-5);
+	background-color: var(--red-9);
+	border: 1px solid var(--red-8);
 }
 
 .alert.error.soft {
 	background-color: var(--error-bg--1);
-	border: 1px solid var(--error-bg-0);
+	border: 1px solid var(--red-9);
 }
 
 .alert.success {
-	color: var(--success-fg-0);
-	background-color: var(--success-bg-0);
-	border: 1px solid var(--success-bg-0);
+	color: var(--cyan-2);
+	background-color: var(--cyan-9);
+	border: 1px solid var(--cyan-9);
+}
+
+.alert.success > .icon:hover {
+	background-color: var(--cyan-8);
 }
 
 .alert.success.soft {
-	background-color: var(--success-bg--1);
-	border: 1px solid var(--success-bg-0);
+	background-color: var(--cyan-9);
+	border: 1px solid var(--cyan-7);
 }
 
 #half-width {
@@ -260,7 +328,7 @@ button.button,
 
 .button:hover,
 .button#active {
-	background-color: var(--background-2);
+	background-color: var(--blue-grey-9);
 }
 
 .button.block {
@@ -270,73 +338,75 @@ button.button,
 }
 
 .button.primary {
-	color: var(--background-0);
-	background-color: var(--primary-0);
+	color: white;
+	background-color: var(--blue-3);
 }
 
 .button.primary:hover {
-	background-color: var(--primary--1);
+	background-color: var(--blue-2);
 }
 
 
-.button.primary.disabled,.button.primary:disabled {
+.button.primary.disabled,
+.button.primary:disabled {
 	color: var(--background-2);
 	background-color: var(--primary-1);
 }
 
 .button.secondary {
-	color: var(--background-0);
-	background-color: var(--secondary-0);
+	color: white;
+	background-color: var(--blue-grey-0);
 }
 
 .button.secondary:hover {
-	background-color: var(--secondary-1);
+	background-color: var(--blue-grey-2);
 }
 
 .button.secondary.disabled,.button.secondary:disabled {
-	color: var(--background-3);
-	background-color: var(--secondary-1);
+	color: var(--blue-grey-7);
+	background-color: var(--blue-grey-2);
 }
 
 .button.error.soft {
-	color: var(--error-fg-0);
-	background-color: var(--error-bg--1);
+	color: var(--red-5);
+	background-color: var(--red-8);
 }
 
 .button.error.soft:hover {
-	background-color: var(--error-bg-0);
+	background-color: var(--red-9);
 }
 
 .button.error {
-	color: var(--error-fg-0);
-	background-color: var(--error-bg-0);
+	color: var(--red-3);
+	background-color: var(--red-9);
 }
 
 .button.error:hover {
-	background-color: var(--error-bg-1);
+	background-color: var(--red-8);
 }
 
-.button.error.disabled,.button.error:disabled {
-	color: var(--error-fg-1);
-	background-color: var(--error-bg-1);
+.button.error.disabled,
+.button.error:disabled {
+	color: var(--red-6);
+	background-color: var(--red-8);
 }
 
 .button.shade {
-	background-color: var(--background-2);
+	background-color: var(--blue-grey-8);
 }
 
 .button.shade:hover {
-	background-color: var(--background-3);
+	background-color: var(--blue-grey-7);
 }
 
 .category {
 	transition: background-color 200ms, border 200ms;
 	display: inline-block;
-	color: var(--foreground-1);
+	color: var(--blue-grey-1);
 	text-decoration: none;
 	padding: var(--space-2xs) var(--space-s);
-	background-color: var(--background-0);
-	border: 1px solid var(--background-2);
+	background-color: white;
+	border: 1px solid var(--blue-grey-8);
 	border-radius: var(--space-m);
 }
 
@@ -345,23 +415,22 @@ button.category{
 }
 
 .category.disabled,.category:disabled {
-	color: var(--foreground-4);
-	background-color: var(--background-1);
+	color: var(--blue-grey-4);
+	background-color: var(--blue-grey-7);
 }
 
 .category:hover {
-	background-color: var(--background-1);
+	background-color: var(--blue-grey-9);
 }
 
 .category.selected {
-	background-color: var(--background-2);
-	border: 1px solid var(--background-3);
+	background-color: var(--blue-grey-8);
+	border: 1px solid var(--blue-grey-8);
 }
 
 .card {
 	padding: var(--space-s);
-	background-color: var(--background-1);
-	border: 1px solid var(--background-2);
+	background-color: white;
 	border-radius: var(--space-2xs);
 }
 
@@ -372,20 +441,20 @@ h1 {
 .big {
 	max-width: 800px;
 	font-size: var(--step-1);
-	color: var(--foreground-2);
+	color: var(--blue-grey-2);
 	line-height: 1.4;
 }
 
 .soft {
-	color: var(--foreground-3);
+	color: var(--blue-grey-3);
 }
 
 span.pipe {
-	color: var(--background-3);
+	color: var(--blue-grey-7);
 }
 
 span.dot {
-	color: var(--background-4);
+	color: var(--blue-grey-6);
 }
 
 * {
@@ -395,8 +464,8 @@ span.dot {
 
 html {
 	font-family: var(--sans-serif);
-	color: var(--foreground-0);
-	background-color: var(--background-0);
+	color: var(--blue-grey-0);
+	background-color: var(--blue-grey-9);
 }
 
 body {
@@ -408,7 +477,7 @@ body {
 }
 
 a {
-	color: var(--primary-0);
+	color: var(--blue-3);
 }
 
 img {
@@ -424,8 +493,7 @@ p {
 /* Specific */
 header {
 	padding: var(--space-s);
-	background-color: var(--background-1);
-	border-bottom: 1px solid var(--background-2);
+	background-color: white;
 }
 
 header nav.flex {
@@ -541,7 +609,7 @@ main h1 {
 }
 
 .position .three span {
-	color: var(--foreground-1);
+	color: var(--blue-grey-1);
 	font-family: var(--monospace);
 	font-size: var(--step-1);
 	font-weight: bold;
@@ -575,7 +643,7 @@ main h1 {
 }
 
 p.upper {
-	color: var(--foreground-1);
+	color: var(--blue-grey-0);
 	font-weight: bold;
 	text-align: center;
 	text-transform: uppercase;
@@ -589,24 +657,24 @@ p.upper {
 }
 
 .entity {
-	color: var(--foreground-4);
+	color: var(--blue-grey-4);
 	margin-bottom: var(--space-2xs);
 }
 
 .entity h2 {
 	font-size: var(--step-0);
-	color: var(--foreground-0);
+	color: var(--blue-grey-0);
 	text-transform: uppercase;
 }
 
 .explanation h2 {
 	font-size: var(--step-2);
-	color: var(--foreground-1);
+	color: var(--blue-grey-1);
 	margin-bottom: var(--space-2xs);
 }
 
 .explanation p {
-	color: var(--foreground-2);
+	color: var(--blue-grey-2);
 	margin-bottom: var(--space-xs);
 }
 
@@ -654,14 +722,13 @@ form section.card {
 	box-sizing: border-box;
 	max-width: var(--max-width);
 	padding: var(--space-s);
-	background-color: var(--background-1);
-	border: 1px solid var(--background-2);
+	background-color: white;
 	border-radius: var(--space-xs);
-	box-shadow: 0 10px 20px 2px var(--background-4);
-        z-index: 1001;
+	box-shadow: var(--shadow-4);
+  z-index: 1001;
 }
-.fixed .controls{
 
+.fixed .controls{
 	display: flex;
 	flex-wrap: flex;
 }
@@ -675,7 +742,7 @@ form section.card {
 	align-items: center;
 	gap: var(--space-xs);
 	padding-right: var(--space-m);
-	border-right: 1px solid var(--background-2);
+	border-right: 1px solid var(--blue-grey-9);
 	margin-right: var(--space-m);
 }
 
@@ -685,24 +752,24 @@ form section.card {
 }
 
 p.status {
-	color: var(--foreground-4);
+	color: var(--blue-grey-4);
 	margin-bottom: var(--space-2xs);
 }
 
 p.status span {
 	text-transform: uppercase;
 	font-weight: bold;
-	color: var(--foreground-1);
+	color: var(--blue-grey-1);
 }
 
 hr {
 	margin: var(--space-m) 0;
 	border: none;
-	border-top: 1px solid var(--background-2);
+	border-top: 1px solid var(--blue-grey-9);
 }
 
 hr.soft {
-	border-top: 1px solid var(--background-1);
+	border-top: 1px solid var(--blue-grey-8);
 }
 
 form.sign-up {
@@ -745,7 +812,7 @@ form.sign-up {
 }
 
 label.invalid {
-	color: var(--error-fg-0);
+	color: var(--red-5);
 	margin-top: var(--space-2xs);
 }
 
@@ -754,24 +821,25 @@ label.invalid {
 }
 
 .links .card {
-	background-color: var(--background-2);
-	border: 1px solid var(--background-3);
+	background-color: var(--blue-grey-9);
+	border: 1px solid var(--blue-grey-8);
 }
 
 .links .card input {
-	border: 1px solid var(--background-3);
+	background-color: white;
+	border: 1px solid white;
 }
 
 .links .card input:focus {
-	border: 1px solid var(--primary-0);
+	border: 1px solid var(--blue-3);
 }
 
 .links .card .icon.delete-icon {
-	background-color: var(--error-bg-1);
+	background-color: var(--blue-grey-8);
 }
 
 .links .card .icon.delete-icon:hover {
-	background-color: var(--error-bg-2);
+	background-color: var(--red-8);
 }
 
 .table {
@@ -810,8 +878,11 @@ input#last {
 
 footer {
 	padding: var(--space-s) 0 var(--space-xl) 0;
-	background-color: var(--background-1);
-	border-top: 1px solid var(--background-2);
+	background-color: white;
+}
+
+footer nav a.button {
+	color: var(--blue-grey-3);
 }
 
 footer nav.flex {
@@ -829,24 +900,20 @@ footer p {
 	text-align: center;
 }
 
-.icon:hover {
-	background-color: var(--error-bg-0);
-}
-
 .delete-icon {
     cursor: pointer;
     position: absolute;
-	background-color: var(--error-bg--1);
+		background-color: var(--blue-grey-8);
     top: calc(.1rem + var(--space-3xs));
     right: calc(.1rem + var(--space-3xs));
 }
 
 .delete-icon svg {
-    color: var(--error-fg-0);
+    color: var(--red-3);
 }
 
 .map-marker {
-    color:red;
+    color: var(--red-2);
     background-color: white;
 }
 
@@ -869,7 +936,7 @@ footer p {
 }
 
 .image-with-delete .icon.delete-icon:hover {
-	background-color: var(--error-bg-x);
+	background-color: var(--red-8);
 }
 
 .input-with-delete {
@@ -902,6 +969,7 @@ footer p {
 /* Responsive */
 @media(max-width: 50rem) {
 	section.routes .grid,
+	.admin .grid,
 	section.grid,
 	section.card .grid {
 		grid-template-columns: 1fr;

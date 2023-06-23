@@ -22,7 +22,7 @@
         createdUser = await signUp({ email, password: await sha256(password) });
         refresh = true;
       } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+        error = e.response ? e.reponse.data.error : e;
       }
     } else {
       error = "Passwords dont match";
