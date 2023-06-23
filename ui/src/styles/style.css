@@ -357,11 +357,11 @@ button.button,
 }
 
 .button.shade {
-	background-color: var(--blue-grey-8);
+	background-color: var(--blue-grey-9);
 }
 
 .button.shade:hover {
-	background-color: var(--blue-grey-7);
+	background-color: var(--blue-grey-8);
 }
 
 .category {
@@ -929,6 +929,17 @@ footer p {
     display:flex;
     align-items: center;
     gap: var(--space-xs);
+}
+
+.filter-container input {
+	background-color: white;
+	border: 1px solid white;
+	outline: 1px solid var(--blue-grey-8);
+}
+
+.filter-container input:focus {
+	border: 1px solid var(--blue-3);
+	outline: 1px solid var(--blue-3);
 }
 
 /* Responsive */
