@@ -260,7 +260,7 @@ button.button,
 }
 
 .alert.error.soft {
-	background-color: var(--error-bg--1);
+	background-color: var(--red-8);
 	border: 1px solid var(--red-9);
 }
 
@@ -333,12 +333,12 @@ button.button,
 }
 
 .button.error.soft {
-	color: var(--red-5);
+	color: var(--red-1);
 	background-color: var(--red-8);
 }
 
 .button.error.soft:hover {
-	background-color: var(--red-9);
+	background-color: var(--red-7);
 }
 
 .button.error {
