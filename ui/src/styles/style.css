@@ -88,41 +88,6 @@
 	--monospace: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
 	--max-width: 1080px;
 	--half-width: calc(var(--max-width) / 2);
-
-	--primary--1: hsl(210, 90%, 40%);
-	--primary-0: hsl(210, 90%, 50%);
-	--primary-1: hsl(210, 40%, 50%);
-
-	--secondary-0: hsl(210, 20%, 20%);
-	--secondary-1: hsl(210, 20%, 40%);
-
-	--error-bg--1: hsla(350, 30%, 91%, 0.3);
-	--error-bg-0: hsla(350, 30%, 85%, 0.4);
-	--error-bg-1: hsla(350, 30%, 79%, 0.4);
-	--error-bg-2: hsla(350, 30%, 73%, 0.4);
-	--error-bg-x: hsla(350, 50%, 85%, 0.5);
-
-	--error-fg-0: hsl(350, 100%, 50%);
-	--error-fg-1: hsl(350, 30%, 55%);
-
-	--success-bg--1: hsl(120, 30%, 95%);
-	--success-bg-0: hsl(120, 30%, 89%);
-	--success-bg-1: hsl(120, 30%, 83%);
-
-	--success-fg-0: hsl(110, 100%, 35%);
-	--success-fg-1: hsl(120, 50%, 45%);
-
-	--foreground-0: hsl(210, 20%, 12%);
-	--foreground-1: hsl(210, 20%, 18%);
-	--foreground-2: hsl(210, 20%, 24%);
-	--foreground-3: hsl(210, 20%, 30%);
-	--foreground-4: hsl(210, 20%, 42%);
-
-	--background-0: hsl(210, 90%, 99%);
-	--background-1: hsl(210, 20%, 93%);
-	--background-2: hsl(210, 20%, 87%);
-	--background-3: hsl(210, 20%, 81%);
-	--background-4: hsl(210, 20%, 75%);
 }
 
 /* Utilities */
@@ -442,7 +407,7 @@ h1 {
 	max-width: 800px;
 	font-size: var(--step-1);
 	color: var(--blue-grey-2);
-	line-height: 1.4;
+	line-height: 1.6;
 }
 
 .soft {
