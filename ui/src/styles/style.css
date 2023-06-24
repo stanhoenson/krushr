@@ -52,7 +52,7 @@
 	--blue-grey-6: hsl(211, 27%, 70%);
 	--blue-grey-7: hsl(210, 31%, 80%);
 	--blue-grey-8: hsl(212, 33%, 89%);
-	--blue-grey-9: hsl(210, 36%, 96%);
+	--blue-grey-9: hsl(210, 36%, 94%);
 
 	/* Supporting */
 	--cyan-0: hsl(184, 91%, 17%);
@@ -179,6 +179,10 @@ textarea.error,
 select.error {
 	border: 1px solid var(--red-2);
 	outline: 1px solid var(--red-2);
+}
+
+input[type=checkbox] {
+	outline: none;
 }
 
 select:disabled {
