@@ -8,6 +8,7 @@
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
   import UsersList from "./UsersList.svelte";
+  import { getErrorMessage } from "../utils/error";
   let refresh: boolean = false;
   let email = "";
   let password = "";
@@ -21,6 +22,9 @@
       try {
         createdUser = await signUp({ email, password: await sha256(password) });
         refresh = true;
+        email = "";
+        password = "";
+        confirmPassword = "";
       } catch (e: any) {
         error = getErrorMessage(e);
       }

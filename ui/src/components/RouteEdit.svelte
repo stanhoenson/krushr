@@ -22,6 +22,7 @@
   import RouteEditCard from "./RouteEditCard.svelte";
   import RouteEditExplanation from "./RouteEditExplanation.svelte";
   import StatusSelect from "./StatusSelect.svelte";
+  import { getErrorMessage } from "../utils/error";
 
   let existingRoute: Route;
   let route: PostRouteBody;
