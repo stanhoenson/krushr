@@ -13,6 +13,7 @@
   } from "../types/misc";
   import type { PutPointOfInterestBody } from "../types/request-bodies";
   import Alert from "./Alert.svelte";
+  import { getErrorMessage } from "../utils/error";
   let element: any;
 
   export let disabled: boolean;
@@ -137,7 +138,7 @@
       handlePoisUpdate(map, allPointsOfInterest);
       error = "";
     } catch (e: any) {
-      error = e;
+      error = getErrorMessage(e);
     }
     await tick();
   });
@@ -161,7 +162,7 @@
       handlePoisUpdate(map, allPointsOfInterest);
       error = "";
     } catch (e: any) {
-      error = e;
+      error = getErrorMessage(e);
     }
   });
 </script>

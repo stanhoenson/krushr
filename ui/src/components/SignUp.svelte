@@ -6,6 +6,7 @@
   import type { User } from "../types/models";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
+  import { getErrorMessage } from "../utils/error";
   let email = "";
   let password = "";
   let confirmPassword = "";
@@ -17,7 +18,7 @@
       try {
         user = await signUp({ email, password });
       } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+        error = getErrorMessage(e);
       }
     } else {
       error = "Passwords dont match";
@@ -30,7 +31,7 @@
         let token = await signIn({ email, password });
         window.location.href = "/";
       } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+        error = getErrorMessage(e);
       }
     } else {
       error = "Passwords dont match";

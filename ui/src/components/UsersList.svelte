@@ -5,6 +5,7 @@
   import { applicationState } from "../stores/application-state";
   import type { User } from "../types/models";
   import Alert from "./Alert.svelte";
+  import { getErrorMessage } from "../utils/error";
   export let refresh: boolean = false;
 
   let users: User[] = [];
@@ -20,7 +21,7 @@
       let response = await deleteUser(id);
       users = await getAllUsers();
     } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+      error = getErrorMessage(e);
     }
   }
 

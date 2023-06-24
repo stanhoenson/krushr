@@ -6,6 +6,7 @@
   import { getMeUser } from "../requests/users";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
+  import { getErrorMessage } from "../utils/error";
 
   let email = "";
   let password = "";
@@ -16,7 +17,7 @@
       let token = await signIn({ email, password: await sha256(password) });
       window.location.href = "/";
     } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+      error = getErrorMessage(e);
     }
   }
 

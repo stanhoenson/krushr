@@ -10,6 +10,7 @@
   import RouteCard from "./RouteCard.svelte";
   import { applicationState } from "../stores/application-state";
   import DelayedInput from "./DelayedInput.svelte";
+  import { getErrorMessage } from "../utils/error";
 
   // let routes: Route[] = [];
   let error: any = null;
@@ -57,7 +58,7 @@
       let filteredRoutes = await filterRoutes(routes, fuse);
       groupedRoutes = groupRoutesByStatus(filteredRoutes, user ? user.id : -1);
     } catch (e: any) {
-      error = e;
+      error = getErrorMessage(e);
     }
   });
   onDestroy(() => {

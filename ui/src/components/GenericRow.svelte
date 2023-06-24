@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { getErrorMessage } from "../utils/error";
+
   export let item: any;
   export let blacklistedKeys: string[] = [];
   export let onDelete: (id: number) => Promise<any>;
@@ -28,7 +30,7 @@
     try {
       onSave(item.id, editableItem);
     } catch (e: any) {
-      error = e;
+      error = getErrorMessage(e);
     }
   }
   async function handleDelete() {}

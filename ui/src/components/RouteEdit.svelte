@@ -99,7 +99,8 @@
       }
     } catch (e: any) {
       console.log(e);
-      error = e.response ? e.reponse.data.error : e;
+
+      error = getErrorMessage(e);
     }
   }
 
@@ -131,7 +132,7 @@
         }
       }
     } catch (e: any) {
-      error = e.response ? e.reponse.data.error : e;
+      error = getErrorMessage(e);
     }
   }
 
@@ -258,7 +259,7 @@
           <StatusSelect disabled={viewOnly} bind:value={route.statusId} />
           <button
             disabled={viewOnly}
-            class="button thick  block primary"
+            class="button thick block primary"
             href="#">Save</button
           >
         </div>
