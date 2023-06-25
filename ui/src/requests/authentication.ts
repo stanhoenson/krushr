@@ -15,11 +15,10 @@ export async function signUp(signUpBody: SignUpBody): Promise<User> {
   return response.data;
 }
 
-export async function signIn(signInBody: SignInBody): Promise<string> {
-  const response = await axios.post<string>(SIGN_IN_ENDPOINT, signInBody, {
+export async function signIn(signInBody: SignInBody) {
+  await axios.post(SIGN_IN_ENDPOINT, signInBody, {
     withCredentials: true,
   });
-  return response.data;
 }
 
 export async function signOut(): Promise<any> {

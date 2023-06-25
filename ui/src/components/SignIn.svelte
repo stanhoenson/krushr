@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { sha256 } from "../utils/crypto";
+  import { sha256, sha256WithSalt } from "../utils/crypto";
   import { signIn } from "../requests/authentication";
   import { getMeUser } from "../requests/users";
   import Alert from "./Alert.svelte";
@@ -14,7 +14,7 @@
 
   async function handleSubmit(event: Event) {
     try {
-      let token = await signIn({ email, password: await sha256(password) });
+      await signIn({ email, password: await sha256WithSalt(password) });
       window.location.href = "/";
     } catch (e: any) {
       error = getErrorMessage(e);

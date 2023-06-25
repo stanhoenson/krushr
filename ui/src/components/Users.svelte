@@ -4,7 +4,7 @@
   import { signIn, signUp } from "../requests/authentication";
   import { getMeUser } from "../requests/users";
   import type { User } from "../types/models";
-  import { sha256 } from "../utils/crypto";
+  import { sha256, sha256WithSalt } from "../utils/crypto";
   import Alert from "./Alert.svelte";
   import InputLabel from "./InputLabel.svelte";
   import UsersList from "./UsersList.svelte";
@@ -20,7 +20,10 @@
   async function handleSubmit(event: Event) {
     if (password === confirmPassword) {
       try {
-        createdUser = await signUp({ email, password: await sha256(password) });
+        createdUser = await signUp({
+          email,
+          password: await sha256WithSalt(password),
+        });
         refresh = true;
         email = "";
         password = "";

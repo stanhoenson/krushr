@@ -60,7 +60,7 @@ func populateDatabase() {
 	}
 
 	// We have to hash here because we hash on the client as well
-	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword)), bcrypt.DefaultCost)
+	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(utils.Sha256(env.AdminPassword+"b6570a1b5af373d269be27b8c1244650")), bcrypt.DefaultCost)
 	Db.Save(&models.User{ID: 1, Email: "admin@admin.com", Password: string(passwordBytes), RoleID: 1})
 	if err != nil {
 		log.Fatal(err)
