@@ -134,7 +134,7 @@
         <label>Position</label>
         <div class="three">
           <button
-            disabled={viewOnly}
+            disabled={viewOnly || position === 0}
             on:click={handlePositionChange.bind(null, position - 1)}
             type="button"
             class={`button block secondary ${position === 0 ? "disabled" : ""}`}
@@ -142,7 +142,8 @@
           >
           <span>{uiPosition}</span>
           <button
-            disabled={viewOnly}
+            disabled={viewOnly ||
+              position === route.pointsOfInterest.length - 1}
             on:click={handlePositionChange.bind(null, position + 1)}
             type="button"
             class={`button block secondary ${
@@ -154,7 +155,7 @@
       <hr />
       <label class="support">Support point</label>
       <input
-                disabled={viewOnly}
+        disabled={viewOnly}
         type="checkbox"
         bind:checked={pointOfInterest.support}
         on:change={handleSupportChange}
