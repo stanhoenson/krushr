@@ -66,7 +66,7 @@ func TestAuthenticationRoutes(t *testing.T) {
 
 func testSignIn(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
-	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword)}
+	signInBody := models.SignInBody{Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt)}
 
 	signInBodyJson, _ := json.Marshal(signInBody)
 
@@ -166,7 +166,7 @@ func testSignUpUnauthorized(t *testing.T, r *gin.Engine) {
 func testSignUp(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -202,7 +202,7 @@ func testSignUp(t *testing.T, r *gin.Engine) {
 func testSignUpFaultyBody(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -215,7 +215,7 @@ func testSignUpFaultyBody(t *testing.T, r *gin.Engine) {
 	}
 
 	email := "admin"
-	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword)}
+	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt)}
 
 	signUpBodyJson, _ := json.Marshal(signUpBody)
 
@@ -237,7 +237,7 @@ func testSignUpFaultyBody(t *testing.T, r *gin.Engine) {
 func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -250,7 +250,7 @@ func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
 	}
 
 	email := "admin@admin.com"
-	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword)}
+	signUpBody := models.SignUpBody{Email: email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt)}
 
 	signUpBodyJson, _ := json.Marshal(signUpBody)
 
@@ -272,7 +272,7 @@ func testSignUpDuplicateEmail(t *testing.T, r *gin.Engine) {
 func testSignOut(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {

@@ -82,7 +82,7 @@ func testGetAllCategories(t *testing.T, r *gin.Engine) {
 func testDeleteCategory(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -115,7 +115,7 @@ func testDeleteCategory(t *testing.T, r *gin.Engine) {
 func testDeleteCategoryInvalidID(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -144,7 +144,7 @@ func testDeleteCategoryInvalidID(t *testing.T, r *gin.Engine) {
 func testPostCategory(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -182,7 +182,7 @@ func testPostCategory(t *testing.T, r *gin.Engine) {
 func testPutCategory(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -230,7 +230,7 @@ func testPutCategory(t *testing.T, r *gin.Engine) {
 func testPutCategoryNoRecord(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -267,7 +267,7 @@ func testPutCategoryNoRecord(t *testing.T, r *gin.Engine) {
 func testPostCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -300,7 +300,7 @@ func testPostCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 func testPutCategoryDuplicateName(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {

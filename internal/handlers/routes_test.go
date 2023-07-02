@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -34,6 +35,7 @@ var (
 func TestRoutesRoutes(t *testing.T) {
 	r := gin.Default()
 	r.Use(middleware.Authorization())
+	env.InitializeEnvironment("../../.env")
 	handlers.RegisterRouteRoutes(r)
 	database.InitializeDatabase("test.db", "test/", true)
 	validators.InitializeValidators()
@@ -129,9 +131,10 @@ func testCreatorGetAllRoutes(t *testing.T, r *gin.Engine) {
 }
 
 func testAdminGetAllRoutes(t *testing.T, r *gin.Engine) {
+	fmt.Println("HIER: " + env.AdminPassword)
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {
@@ -160,7 +163,7 @@ func testAdminGetAllRoutes(t *testing.T, r *gin.Engine) {
 func testAdminGetRoute(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {

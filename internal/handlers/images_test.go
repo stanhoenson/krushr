@@ -267,7 +267,7 @@ func testGetImageData(t *testing.T, r *gin.Engine) {
 func testDeleteImage(t *testing.T, r *gin.Engine) {
 	user, _ := repositories.GetUserByEmail("admin@admin.com")
 	signInBody := models.SignInBody{
-		Email: user.Email, Password: utils.Sha256(env.AdminPassword),
+		Email: user.Email, Password: utils.Sha256(env.AdminPassword + env.FrontendPasswordSalt),
 	}
 	token, err := services.Authenticate(&signInBody)
 	if err != nil {

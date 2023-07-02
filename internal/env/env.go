@@ -10,16 +10,17 @@ import (
 )
 
 var (
-	JWTSecret         string
-	DatabaseName      string
-	Address           string
-	DefaultRoleID     uint
-	FileStorageFolder string
-	DataFolder        string
-	ApiUrl            string
-	Domain            string
-	AdminPassword     string
-	AllowedOrigins    []string
+	JWTSecret            string
+	DatabaseName         string
+	Address              string
+	DefaultRoleID        uint
+	FileStorageFolder    string
+	DataFolder           string
+	ApiUrl               string
+	Domain               string
+	AdminPassword        string
+	FrontendPasswordSalt string
+	AllowedOrigins       []string
 )
 
 func InitializeEnvironment(path string) {
@@ -33,6 +34,7 @@ func InitializeEnvironment(path string) {
 	ApiUrl = getEnvVariable("API_URL")
 	Domain = getEnvVariable("DOMAIN")
 	AdminPassword = getEnvVariable("ADMIN_PASSWORD")
+	FrontendPasswordSalt = getEnvVariable("FRONTEND_PASSWORD_SALT")
 	AllowedOrigins = strings.Split(getEnvVariable("ALLOWED_ORIGINS"), ",")
 
 	DefaultRoleID = getUintEnvVariable("DEFAULT_ROLE_ID")
