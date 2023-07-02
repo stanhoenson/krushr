@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createImage } from "../requests/images";
+  import { v4 as uuidv4 } from "uuid";
   import type { Category } from "../types/models";
   import type {
     PostPointOfInterestBody,
@@ -92,8 +93,9 @@
   }
 
   function handleSupportChange(event: any) {
-    if (!pointOfInterest.name && event.target.checked)
-      pointOfInterest.name = "support point";
+    if (!pointOfInterest.name && event.target.checked) {
+      pointOfInterest.name = uuidv4();
+    }
     pointOfInterest = pointOfInterest;
   }
 </script>

@@ -17,6 +17,7 @@
     "@types/leaflet-routing-machine": "^3.2.4",
     "@types/leaflet.fullscreen": "^1.6.1",
     "@types/node": "^20.2.6",
+    "@types/uuid": "^9.0.2",
     "astro": "^2.1.8",
     "axios": "^1.4.0",
     "fuse.js": "^6.6.2",
@@ -27,7 +28,8 @@
     "leaflet.fullscreen": "github:stanhoenson/leaflet.fullscreen-1",
     "msw": "^1.2.1",
     "screenfull": "^6.0.2",
-    "svelte": "^3.57.0"
+    "svelte": "^3.57.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@testing-library/svelte": "^3.2.2",
