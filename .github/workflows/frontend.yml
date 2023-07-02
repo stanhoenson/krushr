@@ -26,6 +26,7 @@ jobs:
           cd ui
           echo PUBLIC_API_BASE_URL=${{ vars.PUBLIC_API_BASE_URL }} > .env
           echo PUBLIC_OSRM_URL=${{ vars.PUBLIC_OSRM_URL }} >> .env
+          echo PUBLIC_FRONTEND_PASSWORD_SALT=${{ vars.PUBLIC_FRONTEND_PASSWORD_SALT }} >> .env
           npm run build
 
       - name: Configure SSH
