@@ -15,6 +15,7 @@
   // let routes: Route[] = [];
   let error: any = null;
   let user: User | null;
+  let lastUser: User | null;
   let filter: string = "";
   let routesFilteredOn: string = "";
   let filtering: boolean = false;
@@ -66,6 +67,11 @@
   });
 
   afterUpdate(async () => {
+    if (user != lastUser) {
+      let filteredRoutes = await filterRoutes(routes, fuse);
+      groupedRoutes = groupRoutesByStatus(filteredRoutes, user ? user.id : -1);
+      lastUser = user;
+    }
     if (filter != routesFilteredOn) {
       let filteredRoutes = await filterRoutes(routes, fuse);
       groupedRoutes = groupRoutesByStatus(filteredRoutes, user ? user.id : -1);
