@@ -386,6 +386,13 @@ button.category{
 .category.disabled,.category:disabled {
 	color: var(--blue-grey-4);
 	background-color: var(--blue-grey-7);
+	border: 1px solid var(--blue-grey-7)
+}
+
+.category.disabled:hover,.category[disabled]:hover {
+	color: var(--blue-grey-4);
+	background-color: var(--blue-grey-7);
+	border: 1px solid var(--blue-grey-7)
 }
 
 .category:hover {
