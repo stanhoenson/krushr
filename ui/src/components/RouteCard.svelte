@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Route } from "../types/models";
+  import { url } from "inspector";
 
   export let route: Route;
   // let error: any = null;
@@ -36,13 +37,21 @@
         {category.name}
       {/each}
 
-      <span class="pipe">|</span>
-      {route.status.name}
+      {#if route.status.name}
+        <span class="pipe">|</span>
+        {route.status.name}
+      {/if}
     </p>
     {#each route.details as detail}
       <p>
         {detail.text}
       </p>
+    {/each}
+    <br />
+    {#each route.links as link}
+      <a href={link.url}>
+        {link.text}
+      </a>
     {/each}
     <a class="button block shade" href={`/routes/edit?id=${route.id}`}
       >Go to route</a
