@@ -48,13 +48,14 @@
       </p>
     {/each}
     {#if route.links.length != 0}
-      <br />
+      <div class="route-links">
+        {#each route.links as link}
+          <a class="block" href={link.url}>
+            {link.text}
+          </a>
+        {/each}
+      </div>
     {/if}
-    {#each route.links as link}
-      <a class="block" href={link.url}>
-        {link.text}
-      </a>
-    {/each}
     <a class="button block shade" href={`/routes/edit?id=${route.id}`}
       >Go to route</a
     >

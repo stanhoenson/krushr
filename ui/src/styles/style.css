@@ -415,6 +415,10 @@ button.category{
 	border-radius: var(--space-2xs);
 }
 
+.route-links {
+	margin-top: var(--space-2xs);
+}
+
 h1 {
 	line-height: 1.2;
 }
