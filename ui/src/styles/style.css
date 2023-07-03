@@ -404,6 +404,11 @@ button.category{
 	border: 1px solid var(--blue-grey-8);
 }
 
+.category.selected[disabled]:hover {
+	background-color: var(--blue-grey-8);
+	border: 1px solid var(--blue-grey-8);
+}
+
 .card {
 	padding: var(--space-s);
 	background-color: white;
