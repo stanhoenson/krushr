@@ -264,8 +264,8 @@ button.button,
 }
 
 .alert.error.soft {
-	background-color: var(--red-8);
-	border: 1px solid var(--red-9);
+	background-color: var(--red-9);
+	border: 1px solid var(--red-8);
 }
 
 .alert.success {

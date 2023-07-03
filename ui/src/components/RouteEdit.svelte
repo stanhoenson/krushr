@@ -229,11 +229,13 @@
   {#if route}
     <RouteEditExplanation />
     {#if id}
-      <button
-        disabled={viewOnly}
-        class="button thick block error soft mb-s"
-        on:click={handleDeleteRoute}>Delete route</button
-      >
+      {#if !viewOnly}
+        <button
+          disabled={viewOnly}
+          class="button thick block error soft mb-s"
+          on:click={handleDeleteRoute}>Delete route</button
+        >
+      {/if}
     {/if}
     <form on:submit|preventDefault={handleSave}>
       <RouteEditCard bind:route {viewOnly} />
@@ -247,47 +249,52 @@
           bind:pointOfInterest
         />
       {/each}
-      <button
-        disabled={viewOnly}
-        on:click={newPointOfInterest}
-        type="button"
-        class="button block secondary thick"
-        href="#">New point of interest</button
-      >
-      <hr class="soft" />
-      <div class="fixed">
-        <div class="controls">
-          <StatusSelect disabled={viewOnly} bind:value={route.statusId} />
-          <button
-            disabled={viewOnly}
-            class="button thick block primary"
-            href="#">Save</button
-          >
-        </div>
+      {#if !viewOnly}
+        <button
+          disabled={viewOnly}
+          on:click={newPointOfInterest}
+          type="button"
+          class="button block secondary thick"
+          href="#">New point of interest</button
+        >
+      {/if}
 
-        <div class="alerts">
-          {#if error}
-            <Alert
-              type="error"
-              onClose={() => {
-                error = "";
-              }}
+      {#if !viewOnly}
+        <hr class="soft" />
+        <div class="fixed">
+          <div class="controls">
+            <StatusSelect disabled={viewOnly} bind:value={route.statusId} />
+            <button
+              disabled={viewOnly}
+              class="button thick block primary"
+              href="#">Save</button
             >
-              {error}
-            </Alert>
-          {/if}
-          {#if successMessage}
-            <Alert
-              type="success"
-              onClose={() => {
-                successMessage = "";
-              }}
-            >
-              {successMessage}
-            </Alert>
-          {/if}
+          </div>
+
+          <div class="alerts">
+            {#if error}
+              <Alert
+                type="error"
+                onClose={() => {
+                  error = "";
+                }}
+              >
+                {error}
+              </Alert>
+            {/if}
+            {#if successMessage}
+              <Alert
+                type="success"
+                onClose={() => {
+                  successMessage = "";
+                }}
+              >
+                {successMessage}
+              </Alert>
+            {/if}
+          </div>
         </div>
-      </div>
+      {/if}
     </form>
   {:else}
     <div />

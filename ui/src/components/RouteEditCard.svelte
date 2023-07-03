@@ -100,13 +100,15 @@
           </div>
         {/each}
       </div>
-      <button
-        disabled={viewOnly}
-        type="button"
-        on:click={handleNewImage}
-        class="button block secondary"
-        href="#">New image</button
-      >
+      {#if !viewOnly}
+        <button
+          disabled={viewOnly}
+          type="button"
+          on:click={handleNewImage}
+          class="button block secondary"
+          href="#">New image</button
+        >
+      {/if}
     </div>
     <div class="info">
       <div class="flex input name">
@@ -142,13 +144,15 @@
               {/if}
             </div>
           {/each}
-          <button
-            disabled={viewOnly}
-            type="button"
-            on:click={handleNewDetail}
-            class="button block secondary"
-            href="#">New detail</button
-          >
+          {#if !viewOnly}
+            <button
+              disabled={viewOnly}
+              type="button"
+              on:click={handleNewDetail}
+              class="button block secondary"
+              href="#">New detail</button
+            >
+          {/if}
         </div>
       </div>
       <hr />
@@ -187,13 +191,15 @@
               {/if}
             </div>
           {/each}
-          <button
-            disabled={viewOnly}
-            type="button"
-            on:click={handleNewLink}
-            class="button block secondary"
-            href="#">New link</button
-          >
+          {#if !viewOnly}
+            <button
+              disabled={viewOnly}
+              type="button"
+              on:click={handleNewLink}
+              class="button block secondary"
+              href="#">New link</button
+            >
+          {/if}
         </div>
         <!-- <button type="button" class="button block error disabled" href="#" -->
         <!--   >Delete last link</button -->
