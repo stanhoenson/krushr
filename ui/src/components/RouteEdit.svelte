@@ -227,7 +227,9 @@
 
 <div class="edit">
   {#if route}
-    <RouteEditExplanation />
+    {#if !viewOnly}
+      <RouteEditExplanation />
+    {/if}
     {#if id}
       {#if !viewOnly}
         <button
