@@ -596,6 +596,10 @@ main h1 {
 	font-weight: bold;
 }
 
+a.block {
+	display: block;
+}
+
 .position label {
 	display: block;
 	text-align: center;

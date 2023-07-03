@@ -47,9 +47,11 @@
         {detail.text}
       </p>
     {/each}
-    <br />
+    {#if route.links.length != 0}
+      <br />
+    {/if}
     {#each route.links as link}
-      <a href={link.url}>
+      <a class="block" href={link.url}>
         {link.text}
       </a>
     {/each}
